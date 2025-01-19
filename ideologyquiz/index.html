@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Political Quiz</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/animations.css">
+    <link rel="stylesheet" href="../assets/css/sambut.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 2rem;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: 2em auto;
+            background: #fff;
+            padding: 1.5em;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .quiz-container h1 {
+            text-align: center;
+            margin-bottom: 1em;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .quiz-container .question {
+            font-size: 1.2em;
+            margin-bottom: 1em;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .quiz-container .options button {
+            display: block;
+            width: 100%;
+            padding: 0.75em;
+            margin: 0.5em 0;
+            background: transparent;
+            color: #000; 
+            font-size: 1em;
+            border: 2px solid #000; 
+            border-radius: 25px; 
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .quiz-container .options button:hover {
+            background: #0056b3;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .quiz-container .result {
+            text-align: center;
+            font-size: 1.2em;
+            margin-top: 1em;
+            opacity: 0;
+            animation: fadeInResult 1s forwards ease-out;
+        }
+
+        @keyframes fadeInResult {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        footer {
+            margin-top: 2rem;
+            animation: fadeIn 1.5s ease-out;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Quiz</div>
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul id="nav-links">
+            <li><a href="../index.html">Beranda</a></li>
+            <li><a href="../index.html#about">Tentang</a></li>
+            <li><a href="../index.html#projects">Hasil nganggur</a></li>
+            <li><a href="../index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="quiz-container">
+        <h1>Political Quiz</h1>
+        <div class="question" id="question">Loading question...</div>
+        <div class="options" id="options"></div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Nabz | <a href="https://github.com/LightNabz" target="_blank">GitHub</a></p>
+    </footer>
+
+    <script>
+        const questions = [
+            { text: "What is your stance on social programs?", options: ["Strongly support", "Support", "Neutral", "Oppose", "Strongly oppose"], scores: [-2, -1, 0, 1, 2] },
+            { text: "What is your stance on gun control?", options: ["Strongly support", "Support", "Neutral", "Oppose", "Strongly oppose"], scores: [-2, -1, 0, 1, 2] },
+            { text: "What is your view on climate change policies?", options: ["Strongly support", "Support", "Neutral", "Oppose", "Strongly oppose"], scores: [-2, -1, 0, 1, 2] },
+            { text: "How do you view tax cuts for the wealthy?", options: ["Strongly oppose", "Oppose", "Neutral", "Support", "Strongly support"], scores: [-2, -1, 0, 1, 2] },
+            { text: "What is your opinion on universal healthcare?", options: ["Strongly support", "Support", "Neutral", "Oppose", "Strongly oppose"], scores: [-2, -1, 0, 1, 2] },
+        ];
+
+        let currentQuestion = 0;
+        let totalScore = 0;
+
+        const questionEl = document.getElementById("question");
+        const optionsEl = document.getElementById("options");
+        const resultEl = document.getElementById("result");
+
+        function loadQuestion() {
+            if (currentQuestion < questions.length) {
+                const q = questions[currentQuestion];
+                questionEl.textContent = q.text;
+                optionsEl.innerHTML = "";
+                q.options.forEach((option, index) => {
+                    const button = document.createElement("button");
+                    button.textContent = option;
+                    button.onclick = () => selectAnswer(q.scores[index]);
+                    optionsEl.appendChild(button);
+                });
+            } else {
+                questionEl.textContent = "Quiz Complete!";
+                optionsEl.innerHTML = "";
+                const resultText = totalScore < 0 ? "You lean left" : (totalScore === 0 ? "You are centrist" : "You lean right");
+                resultEl.textContent = `Your political leaning is: ${resultText}`;
+            }
+        }
+
+        function selectAnswer(score) {
+            totalScore += score;
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        function toggleMenu() {
+            const navLinks = document.getElementById("nav-links");
+            navLinks.classList.toggle("active");
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
