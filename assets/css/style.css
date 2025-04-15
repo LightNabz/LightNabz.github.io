@@ -12,6 +12,7 @@ body {
     color: #E0D8D1;
     line-height: 1.6;
     scroll-behavior: smooth;
+    overflow-x: hidden;
 }
 
 /* LINKS */
@@ -20,7 +21,6 @@ a {
     text-decoration: none;
     transition: color 0.3s ease;
 }
-
 a:hover {
     color: #F5C2E7;
 }
@@ -55,6 +55,19 @@ nav.scrolled {
     gap: 2rem;
 }
 
+.hamburger {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+.hamburger div {
+    width: 25px;
+    height: 3px;
+    background: #fff;
+    margin: 4px 0;
+    transition: all 0.3s ease;
+}
+
 /* HERO SECTION */
 .hero {
     background-size: 50px 50px;
@@ -67,17 +80,17 @@ nav.scrolled {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     text-align: center;
 }
 
 .hero h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
-    color: #F5C2E7;
+    font-weight: bold;
 }
-
 .hero p {
+    font-size: 1.2rem;
     margin-bottom: 2rem;
     color: #F1F1F1;
 }
@@ -89,10 +102,9 @@ nav.scrolled {
     border-radius: 10px;
     font-weight: bold;
     color: #F5C2E7;
-    transition: all 0.3s ease;
     background-color: transparent;
+    transition: all 0.3s ease;
 }
-
 .btn-transparent:hover {
     background-color: #F5C2E7;
     color: #1E1A1A;
@@ -105,15 +117,14 @@ section {
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: 100vw;
-    height: 50vw;
+    width: 100%;
+    min-height: 100vh;
     padding: 2rem;
-    box-sizing: border-box;
 }
 
 /* HEADINGS */
 h2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
     margin-bottom: 1.5rem;
     color: #F5C2E7;
 }
@@ -128,8 +139,8 @@ h2 {
         10px 10px 20px #0d0d13,
         -10px -10px 20px #29293b;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 100%;
 }
-
 .box:hover {
     transform: translateY(-5px);
     box-shadow: 
@@ -145,24 +156,15 @@ footer {
     font-size: 0.9rem;
     color: #999;
 }
-
 footer a {
     color: #F5C2E7;
     text-decoration: underline;
 }
 
-/* SECTIONS */
-#about {
-    background: #181825;
-}
-
-#projects {
-    background: #1e1e2e;
-}
-
-#contact {
-    background: #181825;
-}
+/* SECTION COLORS */
+#about { background: #181825; }
+#projects { background: #1e1e2e; }
+#contact { background: #181825; }
 
 /* BACKGROUND DECOR */
 .background {
@@ -174,7 +176,6 @@ footer a {
     top: 0;
     left: 0;
 }
-
 .circle {
     position: absolute;
     width: 40px;
@@ -184,30 +185,49 @@ footer a {
     border-radius: 50%;
     animation: float 6s infinite ease-in-out;
 }
-
 @keyframes float {
     0% { transform: translateY(0) scale(1); }
     50% { transform: translateY(-40px) scale(1.1); }
     100% { transform: translateY(0) scale(1); }
 }
 
-/* RESPONSIVE */
 @media screen and (max-width: 768px) {
+    nav {
+        flex-wrap: wrap;
+    }
+
     #nav-links {
         flex-direction: column;
+        width: 100%;
+        margin-top: 1rem;
         display: none;
     }
 
-    .hamburger {
-        display: block;
-        cursor: pointer;
+    #nav-links.show {
+        display: flex;
     }
 
-    .hamburger div {
-        width: 25px;
-        height: 3px;
-        background: #fff;
-        margin: 5px;
-        transition: all 0.3s ease;
+    .hamburger {
+        display: flex;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    section {
+        padding: 1rem;
+    }
+
+    .box {
+        padding: 1rem;
     }
 }
