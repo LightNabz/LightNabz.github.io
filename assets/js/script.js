@@ -1,11 +1,11 @@
 function toggleMenu() {
-  const navLinks = document.getElementById('nav-links');
-  const hamburger = document.querySelector('.hamburger');
-  navLinks.classList.toggle('active');
-  hamburger.classList.toggle('active');
+    const navLinks = document.getElementById('nav-links');
+    const hamburger = document.querySelector('.hamburger');
+    navLinks.classList.toggle('active');
+    hamburger.classList.toggle('active');
 }
 
-// Disini buat sync repo
+/* // Sync repo dari fork orang
 const GITHUB_USERNAME = "LightNabz"; 
 
 async function fetchGitHubRepos() {
@@ -36,16 +36,44 @@ async function fetchGitHubRepos() {
     }
 }
 
-fetchGitHubRepos();
+fetchGitHubRepos(); */
 
-// Tambahin event listener untuk scroll
 window.addEventListener('scroll', function() {
     const nav = document.querySelector('nav');
     
-    // Cek posisi scroll
-    if (window.scrollY > 50) { // Kalau scroll lebih dari 50px
-        nav.classList.add('scrolled'); // Tambahin kelas scrolled
+    if (window.scrollY > 50) { 
+        nav.classList.add('scrolled');
     } else {
-        nav.classList.remove('scrolled'); // Hapus kelas scrolled kalau scroll ke atas lagi
+        nav.classList.remove('scrolled');
     }
 });
+
+const toggleButton = document.getElementById('toggle-theme');
+const themeLink = document.getElementById('theme-style');
+const containers = document.querySelectorAll('.background-container'); // ambil semua
+
+let isDark = localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme');
+
+function applyTheme() {
+  if (isDark) {
+    themeLink.href = 'assets/css/style.css';
+    containers.forEach(container => {
+      container.classList.remove('bg-[#f1f1f1]', 'bg-[#f2f2f2]');
+      container.classList.add('bg-[#181825]', 'bg-[#1E1E2E]');
+    });
+  } else {
+    themeLink.href = 'assets/css/stylel.css';
+    containers.forEach(container => {
+      container.classList.remove('bg-[#181825]', 'bg-[#1E1E2E]');
+      container.classList.add('bg-[#f1f1f1]', 'bg-[#f2f2f2]');
+    });
+  }
+  localStorage.setItem('theme', isDark ? 'dark' : 'light');
+}
+
+toggleButton.addEventListener('click', () => {
+  isDark = !isDark;
+  applyTheme();
+});
+
+applyTheme();

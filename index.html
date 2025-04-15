@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nabz githap</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" id="theme-style" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/global.css">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/sambut.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.16/24/outline.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -25,6 +25,10 @@
             <li><a href="#about">Tentang</a></li>
             <li><a href="#projects">Hasil nganggur</a></li>
             <li><a href="#contact">Contact</a></li>
+            <li>
+                <button id="toggle-theme" class="px-3 py-1 rounded bg-gray-300 dark:bg-gray-700 text-sm">
+                  Toggle Theme
+                </button>
             <li>
                 <a href="https://github.com/LightNabz" class="flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -46,34 +50,34 @@
 
     <section id="about">
         <h2 class="text-2xl font-semibold mb-4">Tentang Saya</h2>
-        <p class="text-gray-300">Saya Nabz, seorang full-stack dev yang suka ngoding sambil dengerin lagu Batak 😎</p>
+        <p class="text-gray-300">Saya Nabz, saya suka mim</p>
     </section>
 
     <section id="projects" class="bg-gray-800 py-12 px-4">
         <div class="max-w-5xl mx-auto">
-            <h2 class="text-2xl font-semibold mb-8 text-center text-white">Hasil Nganggur</h2>
+            <h2 class="text-2xl font-semibold mb-8 text-center">Hasil Nganggur</h2>
             <div class="grid md:grid-cols-3 gap-6">
                 <!-- Box 1 -->
-                <div class="bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <img src="https://via.placeholder.com/400x200" alt="Proyek 1" class="w-full h-48 object-cover rounded-lg" />
+                <div id=""class="background-container bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <img src="/assets/images/fallback.jpg" alt="Proyek 1" class="w-full h-48 object-cover rounded-lg" />
                     <div class="mt-4">
-                        <h3 class="text-lg font-bold text-white mb-2">Public Board</h3>
+                        <h3 class="text-lg font-bold mb-2">Public Board</h3>
                         <p class="text-gray-400">Terinspirasi dari papan buletin di SpongeBob dan kegabutan dev nganggur seperti saya.</p>
                     </div>
                 </div>
                 <!-- Box 2 -->
-                <div class="bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <img src="https://via.placeholder.com/400x200" alt="Proyek 2" class="w-full h-48 object-cover rounded-lg" />
+                <div class="background-container bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <img src="/assets/images/fallback.jpg" alt="Proyek 2" class="w-full h-48 object-cover rounded-lg" />
                     <div class="mt-4">
-                        <h3 class="text-lg font-bold text-white mb-2">NguliSim</h3>
+                        <h3 class="text-lg font-bold mb-2">NguliSim</h3>
                         <p class="text-gray-400">Game simulasi sebagai developer frontend, bisa dibilang seperti Duolingo tapi untuk dev fronted. (Coming soon)</p>
                     </div>
                 </div>
                 <!-- Box 3 -->
-                <div class="bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <img src="https://via.placeholder.com/400x200" alt="Proyek 3" class="w-full h-48 object-cover rounded-lg" />
+                <div class="background-container bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <img src="/assets/images/fallback.jpg" alt="Proyek 3" class="w-full h-48 object-cover rounded-lg" />
                     <div class="mt-4">
-                        <h3 class="text-lg font-bold text-white mb-2">SharkOS</h3>
+                        <h3 class="text-lg font-bold mb-2">SharkOS</h3>
                         <p class="text-gray-400">Distro linux berbasis Arch-Linux yang diperuntukkan untuk developer dan designer dengan
                             fitur rolling release yang stabil dan mudah digunakan. (Coming soon)
                         </p>
@@ -85,8 +89,8 @@
     
     <section id="contact" class="bg-gray-800 py-12 px-4">
         <div class="max-w-3xl mx-auto">
-            <div class="bg-[#1E1E2E] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                <h2 class="text-3xl font-semibold text-white mb-6 text-center">Kontak</h2>
+            <div class="background-container bg-[#1E1E2E] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <h2 class="text-3xl font-semibold mb-6 text-center">Kontak</h2>
                 <p class="text-gray-300 text-center mb-6">Mau ngobrol? Kirim aja ke:</p>
                 <ul class="space-y-4 text-gray-400 text-lg">
                     <li class="flex items-center justify-start">

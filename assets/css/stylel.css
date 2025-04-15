@@ -8,8 +8,8 @@
 /* BODY */
 body {
     font-family: 'Fira Code', monospace;
-    background: #11111B;
-    color: #E0D8D1;
+    background: rgb(239, 241, 245);
+    color: #1e1e2e;
     line-height: 1.6;
     scroll-behavior: smooth;
     overflow-x: hidden;
@@ -17,17 +17,17 @@ body {
 
 /* LINKS */
 a {
-    color: #E0D8D1;
+    color: #89b4fa;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 a:hover {
-    color: #F5C2E7;
+    color: #f38ba8;
 }
 
 /* NAVBAR */
 nav {
-    background-color: rgba(17, 17, 27, 0.8);
+    background-color: rgba(239, 241, 245, 0.8);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -36,17 +36,17 @@ nav {
     top: 0;
     z-index: 1000;
     backdrop-filter: blur(10px);
-    color: #F5C2E7;
+    color: #f38ba8;
 }
 
 nav.scrolled {
-    border-bottom: 1px solid #313244;
+    border-bottom: 1px solid rgba(239, 241, 245, 0.8);
 }
 
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
-    color: #F5C2E7;
+    color: #f38ba8;
 }
 
 #nav-links {
@@ -85,7 +85,7 @@ nav.scrolled {
 .hamburger div {
     width: 25px;
     height: 3px;
-    background: #fff;
+    background: #cdd6f4;
     margin: 4px 0;
     transition: all 0.3s ease;
 }
@@ -93,6 +93,7 @@ nav.scrolled {
 #toggle-theme {
     background-color: #F5C2E7;
     color: #1E1A1A;
+
 }
 #toggle-theme:hover {
     background-color: #DDB6F2;
@@ -102,10 +103,10 @@ nav.scrolled {
 .hero {
     background-size: 50px 50px;
     background-image: 
-        repeating-linear-gradient(0deg, rgba(137, 180, 250, 0.2) 0px, rgba(137, 180, 250, 0.2) 1px, transparent 1px, transparent 50px), 
-        repeating-linear-gradient(90deg, rgba(137, 180, 250, 0.2) 0px, rgba(137, 180, 250, 0.2) 1px, transparent 1px, transparent 50px);
+        repeating-linear-gradient(0deg, rgba(108, 112, 134, 0.1) 0px, rgba(108, 112, 134, 0.1) 1px, transparent 1px, transparent 50px), 
+        repeating-linear-gradient(90deg, rgba(108, 112, 134, 0.1) 0px, rgba(108, 112, 134, 0.1) 1px, transparent 1px, transparent 50px);
     padding: 2rem;
-    color: #F5C2E7;
+    color: #f38ba8;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -122,22 +123,22 @@ nav.scrolled {
 .hero p {
     font-size: 1.2rem;
     margin-bottom: 2rem;
-    color: #F1F1F1;
+    color: #a6adc8;
 }
 
 /* BUTTON */
 .btn-transparent {
-    border: 2px solid #F5C2E7;
+    border: 2px solid #f38ba8;
     padding: 0.5rem 1rem;
     border-radius: 10px;
     font-weight: bold;
-    color: #F5C2E7;
+    color: #f38ba8;
     background-color: transparent;
     transition: all 0.3s ease;
 }
 .btn-transparent:hover {
-    background-color: #F5C2E7;
-    color: #1E1A1A;
+    background-color: #f38ba8;
+    color: #1e1e2e;
 }
 
 /* SECTION */
@@ -156,47 +157,47 @@ section {
 h2 {
     font-size: 2.2rem;
     margin-bottom: 1.5rem;
-    color: #F5C2E7;
+    color: #f38ba8;
 }
 
-/* kotak kotakk */
+/* KOTAK-KOTAK */
 .box {
-    background: #1E1E2E;
+    background: #313244;
     border-radius: 20px;
     padding: 2rem;
     margin-bottom: 2rem;
     box-shadow: 
-        10px 10px 20px #0d0d13,
-        -10px -10px 20px #29293b;
+        10px 10px 20px #181825,
+        -10px -10px 20px #1e1e2e;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     max-width: 100%;
 }
 .box:hover {
     transform: translateY(-5px);
     box-shadow: 
-        15px 15px 30px #0d0d13,
-        -15px -15px 30px #29293b;
+        15px 15px 30px #181825,
+        -15px -15px 30px #1e1e2e;
 }
 
 /* FOOTER */
 footer {
-    background-color: #11111B;
+    background-color: rgb(239, 241, 245);
     padding: 2rem;
     text-align: center;
     font-size: 0.9rem;
-    color: #999;
+    color: #9399b2;
 }
 footer a {
-    color: #F5C2E7;
+    color: #f38ba8;
     text-decoration: underline;
 }
 
 /* SECTION COLORS */
-#about { background: #181825; }
-#projects { background: #1e1e2e; }
-#contact { background: #181825; }
+#about { background: rgb(230, 233, 239); }
+#projects { background: rgb(220, 224, 232); }
+#contact { background: rgb(230, 233, 239); }
 
-/* BACKGROUND DECOR (Penat wak)*/
+/* BACKGROUND DECOR */
 .background {
     position: fixed;
     width: 100%;
@@ -210,8 +211,8 @@ footer a {
     position: absolute;
     width: 40px;
     height: 40px;
-    background: rgba(250, 214, 165, 0.1);
-    border: 1px solid #F5C2E7;
+    background: rgba(250, 214, 165, 0.05);
+    border: 1px solid #f38ba8;
     border-radius: 50%;
     animation: float 6s infinite ease-in-out;
 }
@@ -229,10 +230,10 @@ footer a {
     #nav-links {
         position: fixed;
         top: 0;
-        right: -100%; /* awalnya ngumpet */
+        right: -100%;
         height: 100vh;
         width: 60%;
-        background-color: #1E1E2E;
+        background-color: rgb(230, 233, 239);
         flex-direction: column;
         justify-content: center;
         align-items: center;
