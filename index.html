@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/animations.css">
     <link rel="stylesheet" href="assets/css/sambut.css">
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/heroicons@2.0.16/24/outline.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
@@ -35,65 +36,74 @@
     </header>
     </nav>
 
-    <div class="background">
-        <div class="circle" style="top: 90%; left: 10%; animation-duration: 12s;"></div>
-        <div class="circle" style="top: 85%; left: 50%; animation-duration: 15s;"></div>
-        <div class="circle" style="top: 95%; left: 30%; animation-duration: 10s;"></div>
-        <div class="circle" style="top: 80%; left: 70%; animation-duration: 18s;"></div>
-        <div class="circle" style="top: 90%; left: 90%; animation-duration: 16s;"></div>
-        <div class="circle" style="top: 85%; left: 20%; animation-duration: 11s;"></div>
-        <div class="circle" style="top: 75%; left: 40%; animation-duration: 9s;"></div>
-        <div class="circle" style="top: 70%; left: 60%; animation-duration: 13s;"></div>
-        <div class="circle" style="top: 95%; left: 80%; animation-duration: 14s;"></div>
-        <div class="circle" style="top: 88%; left: 15%; animation-duration: 12s;"></div>
+    <div class="hero">
+        <h1 class="sambut-container">
+            <span class="sambut"></span>
+        </h1>            
+        <p>Cuma page developer nganggur yang sigma, gada kerjaan aseli.</p>
+        <a href="#projects" class="btn-transparent">Hasil Nganggur</a>
     </div>
 
-        <div class="hero">
-            <h1 class="sambut-container">
-                <span class="sambut"></span>
-            </h1>            
-            <p>Cuma page developer nganggur yang sigma, gada kerjaan aseli.</p>
-            <a href="#projects" class="btn-transparent">Hasil Nganggur</a>
-        </div>
-
     <section id="about">
-        <h2>Tentang Saya</h2>
-        <p>Saya Nabz, saya suka mim.</p>
+        <h2 class="text-2xl font-semibold mb-4">Tentang Saya</h2>
+        <p class="text-gray-300">Saya Nabz, seorang full-stack dev yang suka ngoding sambil dengerin lagu Batak 😎</p>
     </section>
 
-    <section id="projects">
-        <h2>My projects gw</h2>
-        <p>Takde yang menarik</p>
-        <section id="kontoner">
-        <div class="box">
-            <h3>Ideology Quiz</h3>
-            <p>Tes ideologi korang</p>
-            <a href="ideologyquiz/index.html">View page</a>
+    <section id="projects" class="bg-gray-800 py-12 px-4">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-2xl font-semibold mb-8 text-center text-white">Hasil Nganggur</h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- Box 1 -->
+                <div class="bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <img src="https://via.placeholder.com/400x200" alt="Proyek 1" class="w-full h-48 object-cover rounded-lg" />
+                    <div class="mt-4">
+                        <h3 class="text-lg font-bold text-white mb-2">Project BatakBot</h3>
+                        <p class="text-gray-400">Bot discord pemutar pantun Toba dengan AI text-to-speech. Mampuslah.</p>
+                    </div>
+                </div>
+                <!-- Box 2 -->
+                <div class="bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <img src="https://via.placeholder.com/400x200" alt="Proyek 2" class="w-full h-48 object-cover rounded-lg" />
+                    <div class="mt-4">
+                        <h3 class="text-lg font-bold text-white mb-2">FreelanceSim</h3>
+                        <p class="text-gray-400">Simulator gabut jadi programmer, validasi client toxic included 😤</p>
+                    </div>
+                </div>
+                <!-- Box 3 -->
+                <div class="bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                    <img src="https://via.placeholder.com/400x200" alt="Proyek 3" class="w-full h-48 object-cover rounded-lg" />
+                    <div class="mt-4">
+                        <h3 class="text-lg font-bold text-white mb-2">SharkOS Installer</h3>
+                        <p class="text-gray-400">Installer GUI buat distro SharkOS, khusus buat para creative devs ✨</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        
-        <div class="box">
-            <h3>Public Board</h3>
-            <p>Interactive platform where users can share their thoughts, <br>comments, or feedback in a dynamic and engaging way.</p>
-            <a href="https://nabz-publicboard.vercel.app/">View page</a>
+    </section>
+    
+    <section id="contact" class="bg-gray-800 py-12 px-4">
+        <div class="max-w-3xl mx-auto">
+            <div class="bg-[#1E1E2E] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
+                <h2 class="text-3xl font-semibold text-white mb-6 text-center">Kontak</h2>
+                <p class="text-gray-300 text-center mb-6">Mau ngobrol? Kirim aja ke:</p>
+                <ul class="space-y-4 text-gray-400 text-lg">
+                    <li class="flex items-center justify-start">
+                        <span class="text-blue-400 mr-3">💬</span>
+                        Discord: <span class="font-mono text-gray-200">LightNabz</span>
+                    </li>
+                    <li class="flex items-center justify-start">
+                        <span class="text-green-400 mr-3">📱</span>
+                        Wangsaf: <span class="font-mono text-gray-200">086969420</span>
+                    </li>
+                </ul>
+            </div>
         </div>
-        </section>
-        <section id="github-repos">
-            <div id="repos-container"></div>
-        </section>
-    </section>
-
-    <section id="contact">
-        <h2>Contact</h2>
-        <p>DM kat discord/wangsaf je lah</p>
-            <div class="box">
-                <p>My discord gw: LightNabz</p>
-                <p>Wangsaf: 086969420</p>
-            </div>      
-    </section>
+    </section>    
 
     <footer>
         <p>&copy; 2025 Nabz | <a href="https://github.com/LightNabz" target="_blank">GitHub</a></p>
     </footer>
+
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <script>
         var typed = new Typed(".sambut", {

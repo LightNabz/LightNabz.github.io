@@ -38,3 +38,14 @@ async function fetchGitHubRepos() {
 
 fetchGitHubRepos();
 
+// Tambahin event listener untuk scroll
+window.addEventListener('scroll', function() {
+    const nav = document.querySelector('nav');
+    
+    // Cek posisi scroll
+    if (window.scrollY > 50) { // Kalau scroll lebih dari 50px
+        nav.classList.add('scrolled'); // Tambahin kelas scrolled
+    } else {
+        nav.classList.remove('scrolled'); // Hapus kelas scrolled kalau scroll ke atas lagi
+    }
+});
