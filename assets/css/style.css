@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+.text {
+    --tw-text-opacity: 1;
+    color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+}
+
 /* BODY */
 body {
     font-family: 'Fira Code', monospace;
@@ -104,6 +109,12 @@ nav.scrolled {
     background-image: 
         repeating-linear-gradient(0deg, rgba(137, 180, 250, 0.2) 0px, rgba(137, 180, 250, 0.2) 1px, transparent 1px, transparent 50px), 
         repeating-linear-gradient(90deg, rgba(137, 180, 250, 0.2) 0px, rgba(137, 180, 250, 0.2) 1px, transparent 1px, transparent 50px);
+        -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
+        mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-size: 100% 100%;
+        mask-size: 100% 100%;
     padding: 2rem;
     color: #F5C2E7;
     display: flex;
@@ -114,6 +125,36 @@ nav.scrolled {
     text-align: center;
 }
 
+.hero::before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(137, 180, 250, 0.5) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 1;
+  }
+
+.spotlight {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(137, 180, 250, 0.15) 0%, transparent 80%);
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate(-50%, -20%);
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    mix-blend-mode: overlay; /* ganti ini */
+    filter: blur(20px); /* bikin glow lebih smooth */
+    z-index: 1; /* jangan di atas semua biar nggak norak */
+  }
+  
+  
 .hero h1 {
     font-size: 3rem;
     margin-bottom: 1rem;
@@ -193,7 +234,7 @@ footer a {
 
 /* SECTION COLORS */
 #about { background: #181825; }
-#projects { background: #1e1e2e; }
+#projects { background: #11111b; }
 #contact { background: #181825; }
 
 /* BACKGROUND DECOR (Penat wak)*/

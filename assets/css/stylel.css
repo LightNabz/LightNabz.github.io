@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+.text {
+    --tw-text-opacity: 1;
+    color: rgb(76, 79, 105 / var(--tw-text-opacity, 1));
+}
+
 /* BODY */
 body {
     font-family: 'Fira Code', monospace;
@@ -17,7 +22,7 @@ body {
 
 /* LINKS */
 a {
-    color: #89b4fa;
+    color: rgb(76, 79, 105);
     text-decoration: none;
     transition: color 0.3s ease;
 }
@@ -101,10 +106,19 @@ nav.scrolled {
 
 /* HERO SECTION */
 .hero {
+    position: relative;
     background-size: 50px 50px;
     background-image: 
-        repeating-linear-gradient(0deg, rgba(108, 112, 134, 0.1) 0px, rgba(108, 112, 134, 0.1) 1px, transparent 1px, transparent 50px), 
-        repeating-linear-gradient(90deg, rgba(108, 112, 134, 0.1) 0px, rgba(108, 112, 134, 0.1) 1px, transparent 1px, transparent 50px);
+        repeating-linear-gradient(0deg, rgba(108, 112, 134, 0.15) 0px, rgba(108, 112, 134, 0.15) 1px, transparent 1px, transparent 50px), 
+        repeating-linear-gradient(90deg, rgba(108, 112, 134, 0.15) 0px, rgba(108, 112, 134, 0.15) 1px, transparent 1px, transparent 50px);
+    -webkit-mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-size: 100% 100%;
+    mask-image: radial-gradient(ellipse at center, black 60%, transparent 100%);
+    mask-repeat: no-repeat;
+    mask-size: 100% 100%;
+    backdrop-filter: blur(0.5px); /* optional biar efek blur di edge */
+    z-index: 1;
     padding: 2rem;
     color: #f38ba8;
     display: flex;
@@ -113,7 +127,9 @@ nav.scrolled {
     justify-content: center;
     min-height: 100vh;
     text-align: center;
+    overflow: hidden;
 }
+
 
 .hero h1 {
     font-size: 3rem;
@@ -123,7 +139,7 @@ nav.scrolled {
 .hero p {
     font-size: 1.2rem;
     margin-bottom: 2rem;
-    color: #a6adc8;
+    color: rgb(76, 79, 105);
 }
 
 /* BUTTON */
@@ -185,7 +201,7 @@ footer {
     padding: 2rem;
     text-align: center;
     font-size: 0.9rem;
-    color: #9399b2;
+    color: rgb(76, 79, 105);
 }
 footer a {
     color: #f38ba8;

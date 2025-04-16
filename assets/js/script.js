@@ -77,3 +77,35 @@ toggleButton.addEventListener('click', () => {
 });
 
 applyTheme();
+
+const hero = document.querySelector('.hero', '#projects');
+const spotlight = document.createElement('div');
+spotlight.classList.add('spotlight');
+hero.appendChild(spotlight);
+
+let mouseX = 0, mouseY = 0;
+let spotlightX = 0, spotlightY = 0;
+
+hero.addEventListener('mousemove', (e) => {
+  const rect = hero.getBoundingClientRect();
+  mouseX = e.clientX - rect.left;
+  mouseY = e.clientY - rect.top;
+  spotlight.style.opacity = 1;
+});
+
+hero.addEventListener('mouseleave', () => {
+  spotlight.style.opacity = 0;
+});
+
+function animate() {
+  // Smooth interpolation
+  spotlightX += (mouseX - spotlightX) * 0.1;
+  spotlightY += (mouseY - spotlightY) * 0.1;
+
+  spotlight.style.left = `${spotlightX}px`;
+  spotlight.style.top = `${spotlightY}px`;
+
+  requestAnimationFrame(animate);
+}
+
+animate();
