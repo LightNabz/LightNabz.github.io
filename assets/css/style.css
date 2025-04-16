@@ -48,6 +48,10 @@ nav.scrolled {
     border-bottom: 1px solid #313244;
 }
 
+nav > * {
+    flex: 0 0 auto;
+}
+
 .logo {
     font-size: 1.5rem;
     font-weight: bold;
@@ -95,20 +99,12 @@ nav.scrolled {
     transition: all 0.3s ease;
 }
 
-#toggle-theme {
-    background-color: #F5C2E7;
-    color: #1E1A1A;
-}
-#toggle-theme:hover {
-    background-color: #DDB6F2;
-}
-
 /* HERO SECTION */
 .hero {
     background-size: 50px 50px;
     background-image: 
-        repeating-linear-gradient(0deg, rgba(137, 180, 250, 0.2) 0px, rgba(137, 180, 250, 0.2) 1px, transparent 1px, transparent 50px), 
-        repeating-linear-gradient(90deg, rgba(137, 180, 250, 0.2) 0px, rgba(137, 180, 250, 0.2) 1px, transparent 1px, transparent 50px);
+        repeating-linear-gradient(0deg, rgba(137, 180, 250, 0.1) 0px, rgba(137, 180, 250, 0.1) 1px, transparent 1px, transparent 50px), 
+        repeating-linear-gradient(90deg, rgba(137, 180, 250, 0.1) 0px, rgba(137, 180, 250, 0.1) 1px, transparent 1px, transparent 50px);
         -webkit-mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
         mask-image: radial-gradient(circle at center, black 30%, transparent 100%);
         -webkit-mask-repeat: no-repeat;
@@ -153,7 +149,6 @@ nav.scrolled {
     filter: blur(20px); /* bikin glow lebih smooth */
     z-index: 1; /* jangan di atas semua biar nggak norak */
   }
-  
   
 .hero h1 {
     font-size: 3rem;
@@ -268,6 +263,7 @@ footer a {
     }
 
     #nav-links {
+        display: none;
         position: fixed;
         top: 0;
         right: -100%; /* awalnya ngumpet */

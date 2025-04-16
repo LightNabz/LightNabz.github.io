@@ -95,15 +95,6 @@ nav.scrolled {
     transition: all 0.3s ease;
 }
 
-#toggle-theme {
-    background-color: #F5C2E7;
-    color: #1E1A1A;
-
-}
-#toggle-theme:hover {
-    background-color: #DDB6F2;
-}
-
 /* HERO SECTION */
 .hero {
     position: relative;
@@ -130,6 +121,34 @@ nav.scrolled {
     overflow: hidden;
 }
 
+.hero::before {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(239, 241, 245, 0.5) 0%, transparent 70%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    z-index: 1;
+  }
+
+.spotlight {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(230, 233, 239, 0.15) 0%, transparent 80%);
+    pointer-events: none;
+    border-radius: 50%;
+    transform: translate(-50%, -20%);
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    mix-blend-mode: overlay; /* ganti ini */
+    filter: blur(20px); /* bikin glow lebih smooth */
+    z-index: 1; /* jangan di atas semua biar nggak norak */
+  }
 
 .hero h1 {
     font-size: 3rem;

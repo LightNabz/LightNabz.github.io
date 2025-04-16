@@ -50,10 +50,13 @@ window.addEventListener('scroll', function() {
 
 const toggleButton = document.getElementById('toggle-theme');
 const themeLink = document.getElementById('theme-style');
-const containers = document.querySelectorAll('.background-container'); // ambil semua
+const containers = document.querySelectorAll('.background-container');
+const moonIcon = document.getElementById('moon-icon');
+const sunIcon = document.getElementById('sun-icon');
 
 let isDark = localStorage.getItem('theme') === 'dark' || !localStorage.getItem('theme');
 
+// Your existing theme logic
 function applyTheme() {
   if (isDark) {
     themeLink.href = 'assets/css/style.css';
@@ -71,14 +74,35 @@ function applyTheme() {
   localStorage.setItem('theme', isDark ? 'dark' : 'light');
 }
 
+// New button state handler
+function updateButtonState() {
+  // Toggle icons
+  moonIcon.classList.toggle('hidden', !isDark);
+  sunIcon.classList.toggle('hidden', isDark);
+  
+  // Toggle dark class for styling
+  document.documentElement.classList.toggle('dark', isDark);
+  
+  // Add animations
+  const activeIcon = isDark ? moonIcon : sunIcon;
+  activeIcon.animate([
+    { transform: 'scale(1)', opacity: 1 },
+    { transform: 'scale(0)', opacity: 0 },
+    { transform: 'scale(1)', opacity: 1 }
+  ], { duration: 300 });
+}
+
 toggleButton.addEventListener('click', () => {
   isDark = !isDark;
-  applyTheme();
+  applyTheme(); // Your existing theme logic
+  updateButtonState(); // New button handling
 });
 
+// Initial setup
 applyTheme();
+updateButtonState();
 
-const hero = document.querySelector('.hero', '#projects');
+const hero = document.querySelector('.hero');
 const spotlight = document.createElement('div');
 spotlight.classList.add('spotlight');
 hero.appendChild(spotlight);
