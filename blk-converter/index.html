@@ -27,18 +27,8 @@
       max-width: 680px;
     }
 
-    h1 {
-      font-size: 1.3rem;
-      font-weight: 600;
-      color: #fff;
-      margin-bottom: 0.25rem;
-    }
-
-    .subtitle {
-      font-size: 0.85rem;
-      color: #666;
-      margin-bottom: 1.5rem;
-    }
+    h1 { font-size: 1.3rem; font-weight: 600; color: #fff; margin-bottom: 0.25rem; }
+    .subtitle { font-size: 0.85rem; color: #666; margin-bottom: 1.5rem; }
 
     .drop-zone {
       border: 1.5px dashed #2a2d3a;
@@ -49,15 +39,12 @@
       transition: border-color 0.2s, background 0.2s;
       background: #12141e;
     }
-    .drop-zone:hover, .drop-zone.drag-over {
-      border-color: #4a9eff;
-      background: #131a2e;
-    }
+    .drop-zone:hover, .drop-zone.drag-over { border-color: #4a9eff; background: #131a2e; }
     .drop-zone input[type="file"] { display: none; }
     .drop-zone .icon { font-size: 2rem; margin-bottom: 0.5rem; }
     .drop-zone .label { font-size: 0.95rem; font-weight: 500; color: #ccc; }
     .drop-zone .hint { font-size: 0.8rem; color: #555; margin-top: 0.25rem; }
-    .drop-zone .file-name { font-size: 0.8rem; color: #4a9eff; margin-top: 0.5rem; }
+    .drop-zone .file-name { font-size: 0.8rem; color: #4a9eff; margin-top: 0.5rem; min-height: 1.2em; }
 
     .actions {
       display: flex;
@@ -94,6 +81,89 @@
       margin-bottom: 0.75rem;
     }
 
+    /* ---- Offset panel ---- */
+    .offset-panel {
+      background: #12141e;
+      border: 1px solid #2a2d3a;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1rem;
+      display: none;
+    }
+    .offset-panel.visible { display: block; }
+    .offset-panel h2 {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #555;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      margin-bottom: 0.85rem;
+    }
+
+    .offset-layout {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    /* D-pad */
+    .dpad {
+      display: grid;
+      grid-template-columns: repeat(3, 36px);
+      grid-template-rows: repeat(3, 36px);
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .dpad button {
+      padding: 0;
+      width: 36px;
+      height: 36px;
+      font-size: 1rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dpad .center-reset {
+      background: #1a1520;
+      border-color: #3a2a3a;
+      color: #664466;
+      font-size: 0.75rem;
+    }
+    .dpad .center-reset:hover { background: #2a1a2a; color: #f06060; border-color: #f06060; }
+
+    /* inputs */
+    .offset-inputs { display: flex; flex-direction: column; gap: 0.55rem; flex: 1; min-width: 160px; }
+    .input-row { display: flex; align-items: center; gap: 0.5rem; }
+    .input-row label { font-size: 0.8rem; color: #555; width: 60px; }
+    .input-row input[type="number"] {
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 6px;
+      padding: 5px 8px;
+      color: #e0e0e0;
+      font-size: 0.82rem;
+      font-family: 'Courier New', monospace;
+      width: 110px;
+      outline: none;
+    }
+    .input-row input[type="number"]:focus { border-color: #4a9eff; }
+    .step-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.1rem; }
+    .step-row label { font-size: 0.8rem; color: #444; width: 60px; }
+    .step-row input[type="number"] {
+      background: #1a1d27;
+      border: 1px solid #222535;
+      border-radius: 6px;
+      padding: 5px 8px;
+      color: #666;
+      font-size: 0.78rem;
+      font-family: 'Courier New', monospace;
+      width: 110px;
+      outline: none;
+    }
+    .offset-hint { font-size: 0.7rem; color: #333; margin-top: 0.5rem; }
+
     textarea {
       width: 100%;
       font-family: 'Courier New', monospace;
@@ -109,12 +179,7 @@
     }
     textarea:focus { border-color: #3a4a6a; }
 
-    .footer {
-      margin-top: 1.25rem;
-      font-size: 0.75rem;
-      color: #3a3d4a;
-      text-align: center;
-    }
+    .footer { margin-top: 1.25rem; font-size: 0.75rem; color: #3a3d4a; text-align: center; }
   </style>
 </head>
 <body>
@@ -138,24 +203,64 @@
 
   <div class="stats" id="statsMsg"></div>
 
-  <textarea id="output" rows="18" placeholder="Converted JSON will appear here..." readonly></textarea>
+  <!-- Offset panel — appears after convert -->
+  <div class="offset-panel" id="offsetPanel">
+    <h2>Move drawing</h2>
+    <div class="offset-layout">
 
-  <div class="footer">BLK coords (thousandths) are scaled ÷1000 to match wtdraw normalized screen space</div>
+      <div class="dpad">
+        <div></div>
+        <button id="btnUp">↑</button>
+        <div></div>
+        <button id="btnLeft">←</button>
+        <button class="center-reset" id="btnReset" title="Reset offset">✕</button>
+        <button id="btnRight">→</button>
+        <div></div>
+        <button id="btnDown">↓</button>
+        <div></div>
+      </div>
+
+      <div class="offset-inputs">
+        <div class="input-row">
+          <label>Offset X</label>
+          <input type="number" id="offsetX" value="0" step="0.001">
+        </div>
+        <div class="input-row">
+          <label>Offset Y</label>
+          <input type="number" id="offsetY" value="0" step="0.001">
+        </div>
+        <div class="step-row">
+          <label>Arrow step</label>
+          <input type="number" id="stepSize" value="0.001" step="0.0001" min="0.000001">
+        </div>
+        <div class="offset-hint">Units are wtdraw screen space (1 mrad = 0.001)</div>
+      </div>
+
+    </div>
+  </div>
+
+  <textarea id="output" rows="16" placeholder="Converted JSON will appear here..." readonly></textarea>
+  <div class="footer">BLK coords (thousandths/mrad) scaled ÷1000 → wtdraw normalized screen space</div>
 </div>
 
 <script>
-const dropZone = document.getElementById('dropZone');
-const fileInput = document.getElementById('fileInput');
-const convertBtn = document.getElementById('convertBtn');
+const dropZone    = document.getElementById('dropZone');
+const fileInput   = document.getElementById('fileInput');
+const convertBtn  = document.getElementById('convertBtn');
 const downloadBtn = document.getElementById('downloadBtn');
-const output = document.getElementById('output');
-const statusMsg = document.getElementById('statusMsg');
-const statsMsg = document.getElementById('statsMsg');
-const fileName = document.getElementById('fileName');
+const output      = document.getElementById('output');
+const statusMsg   = document.getElementById('statusMsg');
+const statsMsg    = document.getElementById('statsMsg');
+const fileName    = document.getElementById('fileName');
+const offsetPanel = document.getElementById('offsetPanel');
+const offsetXEl   = document.getElementById('offsetX');
+const offsetYEl   = document.getElementById('offsetY');
+const stepEl      = document.getElementById('stepSize');
 
 let rawContent = '';
-let jsonResult = '';
+let convertedBase = null; // clean converted object, no offset applied
 
+// ---- File loading ----
 dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
 dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
 dropZone.addEventListener('drop', e => {
@@ -177,22 +282,27 @@ function loadFile(f) {
     statsMsg.textContent = '';
     output.value = '';
     downloadBtn.disabled = true;
+    offsetPanel.classList.remove('visible');
+    convertedBase = null;
+    resetOffset();
   };
   reader.readAsText(f);
 }
 
+// ---- Convert ----
 convertBtn.addEventListener('click', () => {
   try {
-    const result = convertBlkToWtdraw(rawContent);
-    jsonResult = JSON.stringify(result, null, 2);
-    output.value = jsonResult;
+    convertedBase = convertBlkToWtdraw(rawContent);
+    resetOffset();
+    renderOutput();
     downloadBtn.disabled = false;
-    const total = Object.keys(result).length;
-    const lines = Object.values(result).filter(o => o.type === 'line').length;
-    const quads = Object.values(result).filter(o => o.type === 'quad').length;
+    const total = Object.keys(convertedBase).length;
+    const lines = Object.values(convertedBase).filter(o => o.type === 'line').length;
+    const quads = Object.values(convertedBase).filter(o => o.type === 'quad').length;
     statusMsg.className = 'status ok';
     statusMsg.textContent = 'Converted!';
-    statsMsg.textContent = `lines: ${lines}  |  quads: ${quads}  |  total objects: ${total}`;
+    statsMsg.textContent = `lines: ${lines}  |  quads: ${quads}  |  total: ${total}`;
+    offsetPanel.classList.add('visible');
   } catch(err) {
     statusMsg.className = 'status err';
     statusMsg.textContent = 'Parse error: ' + err.message;
@@ -200,8 +310,60 @@ convertBtn.addEventListener('click', () => {
   }
 });
 
+// ---- Offset helpers ----
+function getOffsetX() { return parseFloat(offsetXEl.value) || 0; }
+function getOffsetY() { return parseFloat(offsetYEl.value) || 0; }
+function getStep()    { return Math.abs(parseFloat(stepEl.value)) || 0.001; }
+function resetOffset() { offsetXEl.value = '0'; offsetYEl.value = '0'; }
+
+function nudge(dx, dy) {
+  if (!convertedBase) return;
+  const step = getStep();
+  offsetXEl.value = (getOffsetX() + dx * step).toFixed(6);
+  offsetYEl.value = (getOffsetY() + dy * step).toFixed(6);
+  renderOutput();
+}
+
+document.getElementById('btnUp').addEventListener('click',    () => nudge(0, -1));
+document.getElementById('btnDown').addEventListener('click',  () => nudge(0,  1));
+document.getElementById('btnLeft').addEventListener('click',  () => nudge(-1, 0));
+document.getElementById('btnRight').addEventListener('click', () => nudge( 1, 0));
+document.getElementById('btnReset').addEventListener('click', () => { if (!convertedBase) return; resetOffset(); renderOutput(); });
+
+offsetXEl.addEventListener('input', () => { if (convertedBase) renderOutput(); });
+offsetYEl.addEventListener('input', () => { if (convertedBase) renderOutput(); });
+
+// ---- Apply offset & render ----
+function applyOffset(base, dx, dy) {
+  const out = {};
+  for (const [key, obj] of Object.entries(base)) {
+    if (obj.type === 'line') {
+      out[key] = { ...obj,
+        start: { x: obj.start.x + dx, y: obj.start.y + dy },
+        end:   { x: obj.end.x   + dx, y: obj.end.y   + dy },
+      };
+    } else if (obj.type === 'quad') {
+      out[key] = { ...obj,
+        tl: { x: obj.tl.x + dx, y: obj.tl.y + dy },
+        tr: { x: obj.tr.x + dx, y: obj.tr.y + dy },
+        br: { x: obj.br.x + dx, y: obj.br.y + dy },
+        bl: { x: obj.bl.x + dx, y: obj.bl.y + dy },
+      };
+    } else {
+      out[key] = { ...obj };
+    }
+  }
+  return out;
+}
+
+function renderOutput() {
+  const shifted = applyOffset(convertedBase, getOffsetX(), getOffsetY());
+  output.value = JSON.stringify(shifted, null, 2);
+}
+
+// ---- Download uses whatever's currently in the output box ----
 downloadBtn.addEventListener('click', () => {
-  const blob = new Blob([jsonResult], { type: 'application/json' });
+  const blob = new Blob([output.value], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url;
@@ -210,7 +372,7 @@ downloadBtn.addEventListener('click', () => {
   URL.revokeObjectURL(url);
 });
 
-// ---- BLK Parser ----
+// ======== BLK Parser ========
 function stripComments(text) {
   text = text.replace(/\/\*[\s\S]*?\*\//g, ' ');
   text = text.replace(/\/\/.*/g, '');
@@ -231,7 +393,7 @@ function parseTypedValue(typeCode, valStr) {
     case 'p2': { const p = valStr.split(',').map(s => parseFloat(s.trim())); return {x: p[0], y: p[1]}; }
     case 'p3': { const p = valStr.split(',').map(s => parseFloat(s.trim())); return {x: p[0], y: p[1], z: p[2]}; }
     case 'p4': { const p = valStr.split(',').map(s => parseFloat(s.trim())); return {x: p[0], y: p[1], z: p[2], w: p[3]}; }
-    case 'c': { const p = valStr.split(',').map(s => parseInt(s.trim())); return {r: p[0], g: p[1], b: p[2], a: p[3]}; }
+    case 'c':  { const p = valStr.split(',').map(s => parseInt(s.trim())); return {r: p[0], g: p[1], b: p[2], a: p[3]}; }
     default: return valStr;
   }
 }
@@ -291,7 +453,6 @@ function ensureArray(v) {
   return [v];
 }
 
-// BLK line coords are in thousandths (mrad) — wtdraw uses normalized screen space
 const SCALE = 1 / 1000;
 
 function convertBlkToWtdraw(text) {
@@ -299,14 +460,13 @@ function convertBlkToWtdraw(text) {
   const out = {};
   let idx = 0;
 
-  // drawLines
   const drawLines = ensureArray(blk['drawLines']);
   for(const dl of drawLines) {
     if(!dl) continue;
     const lines = ensureArray(dl['line']);
     for(const lineObj of lines) {
       if(!lineObj || lineObj['line'] === undefined) continue;
-      const p = lineObj['line']; // p4: x=x1, y=y1, z=x2, w=y2
+      const p = lineObj['line'];
       out[String(idx)] = {
         name: 'Line' + idx,
         type: 'line',
@@ -318,7 +478,6 @@ function convertBlkToWtdraw(text) {
     }
   }
 
-  // drawQuads
   const drawQuads = ensureArray(blk['drawQuads']);
   for(const dq of drawQuads) {
     if(!dq) continue;
