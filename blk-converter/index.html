@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BLK → wtdraw JSON Converter</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: #0f1117;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 12px;
+      padding: 2rem;
+      width: 100%;
+      max-width: 680px;
+    }
+
+    h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 0.25rem;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 1.5rem;
+    }
+
+    .drop-zone {
+      border: 1.5px dashed #2a2d3a;
+      border-radius: 10px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: #12141e;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #4a9eff;
+      background: #131a2e;
+    }
+    .drop-zone input[type="file"] { display: none; }
+    .drop-zone .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .drop-zone .label { font-size: 0.95rem; font-weight: 500; color: #ccc; }
+    .drop-zone .hint { font-size: 0.8rem; color: #555; margin-top: 0.25rem; }
+    .drop-zone .file-name { font-size: 0.8rem; color: #4a9eff; margin-top: 0.5rem; }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.25rem 0 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    button {
+      background: #1e2130;
+      border: 1px solid #2a2d3a;
+      border-radius: 8px;
+      padding: 8px 18px;
+      cursor: pointer;
+      font-size: 0.875rem;
+      color: #ccc;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    button:hover:not(:disabled) { background: #252838; border-color: #3a3d4a; color: #fff; }
+    button:disabled { opacity: 0.35; cursor: not-allowed; }
+    button.primary { background: #1a3a6e; border-color: #2a5aae; color: #7ab8ff; }
+    button.primary:hover:not(:disabled) { background: #1f4480; }
+
+    .status { font-size: 0.82rem; }
+    .status.ok { color: #4caf7d; }
+    .status.err { color: #f06060; }
+    .status.info { color: #666; }
+
+    .stats {
+      font-size: 0.78rem;
+      color: #555;
+      font-family: 'Courier New', monospace;
+      margin-bottom: 0.75rem;
+    }
+
+    textarea {
+      width: 100%;
+      font-family: 'Courier New', monospace;
+      font-size: 0.78rem;
+      border: 1px solid #2a2d3a;
+      border-radius: 8px;
+      padding: 10px;
+      background: #12141e;
+      color: #a0c8ff;
+      resize: vertical;
+      outline: none;
+      line-height: 1.5;
+    }
+    textarea:focus { border-color: #3a4a6a; }
+
+    .footer {
+      margin-top: 1.25rem;
+      font-size: 0.75rem;
+      color: #3a3d4a;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <h1>BLK → wtdraw JSON</h1>
+  <p class="subtitle">War Thunder sight converter for <a href="https://solawk.github.io/wtdraw/" target="_blank" style="color:#4a9eff;text-decoration:none;">solawk.github.io/wtdraw</a></p>
+
+  <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
+    <input type="file" id="fileInput" accept=".blk,.txt">
+    <div class="icon">📂</div>
+    <div class="label">Click or drop your .blk file here</div>
+    <div class="hint">Accepts .blk sight files</div>
+    <div class="file-name" id="fileName"></div>
+  </div>
+
+  <div class="actions">
+    <button class="primary" id="convertBtn" disabled>Convert to JSON</button>
+    <button id="downloadBtn" disabled>Download .json</button>
+    <span class="status info" id="statusMsg"></span>
+  </div>
+
+  <div class="stats" id="statsMsg"></div>
+
+  <textarea id="output" rows="18" placeholder="Converted JSON will appear here..." readonly></textarea>
+
+  <div class="footer">BLK coords (thousandths) are scaled ÷1000 to match wtdraw normalized screen space</div>
+</div>
+
+<script>
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('fileInput');
+const convertBtn = document.getElementById('convertBtn');
+const downloadBtn = document.getElementById('downloadBtn');
+const output = document.getElementById('output');
+const statusMsg = document.getElementById('statusMsg');
+const statsMsg = document.getElementById('statsMsg');
+const fileName = document.getElementById('fileName');
+
+let rawContent = '';
+let jsonResult = '';
+
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const f = e.dataTransfer.files[0];
+  if (f) loadFile(f);
+});
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
+
+function loadFile(f) {
+  fileName.textContent = f.name;
+  const reader = new FileReader();
+  reader.onload = e => {
+    rawContent = e.target.result;
+    convertBtn.disabled = false;
+    statusMsg.className = 'status info';
+    statusMsg.textContent = 'File loaded — hit convert';
+    statsMsg.textContent = '';
+    output.value = '';
+    downloadBtn.disabled = true;
+  };
+  reader.readAsText(f);
+}
+
+convertBtn.addEventListener('click', () => {
+  try {
+    const result = convertBlkToWtdraw(rawContent);
+    jsonResult = JSON.stringify(result, null, 2);
+    output.value = jsonResult;
+    downloadBtn.disabled = false;
+    const total = Object.keys(result).length;
+    const lines = Object.values(result).filter(o => o.type === 'line').length;
+    const quads = Object.values(result).filter(o => o.type === 'quad').length;
+    statusMsg.className = 'status ok';
+    statusMsg.textContent = 'Converted!';
+    statsMsg.textContent = `lines: ${lines}  |  quads: ${quads}  |  total objects: ${total}`;
+  } catch(err) {
+    statusMsg.className = 'status err';
+    statusMsg.textContent = 'Parse error: ' + err.message;
+    console.error(err);
+  }
+});
+
+downloadBtn.addEventListener('click', () => {
+  const blob = new Blob([jsonResult], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'sight_wtdraw.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ---- BLK Parser ----
+function stripComments(text) {
+  text = text.replace(/\/\*[\s\S]*?\*\//g, ' ');
+  text = text.replace(/\/\/.*/g, '');
+  return text;
+}
+
+function parseBool(s) {
+  return s.toLowerCase() === 'yes' || s.toLowerCase() === 'true';
+}
+
+function parseTypedValue(typeCode, valStr) {
+  valStr = valStr.trim();
+  switch(typeCode) {
+    case 't': return valStr.replace(/^["']|["']$/g, '');
+    case 'b': return parseBool(valStr);
+    case 'i': return parseInt(valStr);
+    case 'r': return parseFloat(valStr);
+    case 'p2': { const p = valStr.split(',').map(s => parseFloat(s.trim())); return {x: p[0], y: p[1]}; }
+    case 'p3': { const p = valStr.split(',').map(s => parseFloat(s.trim())); return {x: p[0], y: p[1], z: p[2]}; }
+    case 'p4': { const p = valStr.split(',').map(s => parseFloat(s.trim())); return {x: p[0], y: p[1], z: p[2], w: p[3]}; }
+    case 'c': { const p = valStr.split(',').map(s => parseInt(s.trim())); return {r: p[0], g: p[1], b: p[2], a: p[3]}; }
+    default: return valStr;
+  }
+}
+
+function parseBlk(text) {
+  text = stripComments(text);
+  text = text.replace(/(\w)\{/g, '$1 {');
+
+  let p = 0;
+  const src = text + ' }';
+  const len = src.length;
+
+  function sw() { while(p < len && /\s/.test(src[p])) p++; }
+  function ri() { sw(); let s=''; while(p<len && /[\w.]/.test(src[p])) s+=src[p++]; return s; }
+
+  function pb() {
+    const o = {};
+    while(p < len) {
+      sw();
+      if(p >= len || src[p] === '}') { if(src[p]==='}') p++; break; }
+      const id = ri();
+      if(!id) { p++; continue; }
+      sw();
+      if(src[p] === ':') {
+        p++;
+        const tc = ri();
+        sw();
+        if(src[p]==='=') p++;
+        sw();
+        let vr=''; let iq=false;
+        while(p<len){ const ch=src[p]; if(!iq&&(ch===';'||ch==='\n'||ch==='}')) break; if(ch==='"'||ch==="'") iq=!iq; vr+=ch; p++; }
+        if(src[p]===';') p++;
+        const v = parseTypedValue(tc, vr.trim());
+        if(o[id]!==undefined){ if(!Array.isArray(o[id])) o[id]=[o[id]]; o[id].push(v); } else o[id]=v;
+      } else if(src[p]==='=') {
+        p++;
+        let vr='';
+        while(p<len && src[p]!==';' && src[p]!=='{' && src[p]!=='}' && src[p]!=='\n') vr+=src[p++];
+        if(src[p]===';') p++;
+        if(o[id]!==undefined){ if(!Array.isArray(o[id])) o[id]=[o[id]]; o[id].push(vr.trim()); } else o[id]=vr.trim();
+      } else if(src[p]==='{') {
+        p++;
+        const child=pb();
+        if(o[id]!==undefined){ if(!Array.isArray(o[id])) o[id]=[o[id]]; o[id].push(child); } else o[id]=child;
+      } else { p++; }
+    }
+    return o;
+  }
+
+  sw(); if(src[p]==='{') p++;
+  return pb();
+}
+
+function ensureArray(v) {
+  if(v === undefined || v === null) return [];
+  if(Array.isArray(v)) return v;
+  return [v];
+}
+
+// BLK line coords are in thousandths (mrad) — wtdraw uses normalized screen space
+const SCALE = 1 / 1000;
+
+function convertBlkToWtdraw(text) {
+  const blk = parseBlk(text);
+  const out = {};
+  let idx = 0;
+
+  // drawLines
+  const drawLines = ensureArray(blk['drawLines']);
+  for(const dl of drawLines) {
+    if(!dl) continue;
+    const lines = ensureArray(dl['line']);
+    for(const lineObj of lines) {
+      if(!lineObj || lineObj['line'] === undefined) continue;
+      const p = lineObj['line']; // p4: x=x1, y=y1, z=x2, w=y2
+      out[String(idx)] = {
+        name: 'Line' + idx,
+        type: 'line',
+        start: { x: p.x * SCALE, y: p.y * SCALE },
+        end:   { x: p.z * SCALE, y: p.w * SCALE },
+        selected: false
+      };
+      idx++;
+    }
+  }
+
+  // drawQuads
+  const drawQuads = ensureArray(blk['drawQuads']);
+  for(const dq of drawQuads) {
+    if(!dq) continue;
+    const quads = ensureArray(dq['quad']);
+    for(const quadObj of quads) {
+      if(!quadObj) continue;
+      const tl = quadObj['tl'] || {x:0,y:0};
+      const tr = quadObj['tr'] || {x:0,y:0};
+      const br = quadObj['br'] || {x:0,y:0};
+      const bl = quadObj['bl'] || {x:0,y:0};
+      out[String(idx)] = {
+        name: 'Quad' + idx,
+        type: 'quad',
+        tl: { x: tl.x * SCALE, y: tl.y * SCALE },
+        tr: { x: tr.x * SCALE, y: tr.y * SCALE },
+        br: { x: br.x * SCALE, y: br.y * SCALE },
+        bl: { x: bl.x * SCALE, y: bl.y * SCALE },
+        selected: false
+      };
+      idx++;
+    }
+  }
+
+  if(idx === 0) throw new Error('No drawLines or drawQuads found — check your .blk file has these blocks');
+  return out;
+}
+</script>
+</body>
+</html>
