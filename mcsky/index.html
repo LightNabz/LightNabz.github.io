@@ -5,216 +5,114 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>Skybox Generator</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap');
+:root{--dark:#0a0a0a;--panel:#111;--card:#181818;--border:#252525;--accent:#4f7cff;--accent2:#ff4f7c;--text:#e0e0e0;--muted:#505050;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--dark);color:var(--text);font-family:'IBM Plex Mono',monospace;font-size:13px;overflow:hidden;}
+body{display:flex;flex-direction:column;height:100dvh;}
 
-  :root {
-    --dark:   #0a0a0a;
-    --panel:  #111111;
-    --card:   #181818;
-    --border: #252525;
-    --accent: #4f7cff;
-    --accent2:#ff4f7c;
-    --text:   #e0e0e0;
-    --muted:  #505050;
-    --sidebar:220px;
-  }
+header{height:48px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;z-index:20;}
+.logo{font-size:13px;font-weight:600;letter-spacing:3px;}
+.sub{font-size:10px;color:var(--muted);letter-spacing:1px;font-family:'IBM Plex Sans',sans-serif;}
+.hdr-right{margin-left:auto;display:flex;gap:6px;align-items:center;}
+.hdr-kbd{font-size:9px;color:var(--muted);border:1px solid var(--border);border-radius:3px;padding:2px 6px;}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.body{display:flex;flex:1;overflow:hidden;min-height:0;}
 
-  html, body {
-    height: 100%; background: var(--dark); color: var(--text);
-    font-family: 'IBM Plex Mono', monospace; font-size: 13px;
-    overflow: hidden; touch-action: none;
-  }
-  body { display: flex; flex-direction: column; height: 100dvh; }
+aside{width:220px;background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0;z-index:10;}
+aside::-webkit-scrollbar{width:4px;}
+aside::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.sec-cap{font-size:9px;letter-spacing:2px;color:var(--muted);padding:14px 14px 6px;text-transform:uppercase;}
+.sec-div{height:1px;background:var(--border);margin:8px 14px;}
+.btn{display:flex;align-items:center;gap:8px;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:8px 12px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;width:calc(100% - 28px);margin:3px 14px;transition:border-color .15s,color .15s,background .15s,opacity .15s;letter-spacing:.3px;text-align:left;}
+.btn:hover:not(:disabled){background:#1e1e1e;border-color:var(--accent);color:var(--accent);}
+.btn:active:not(:disabled){background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn:disabled{color:var(--muted);cursor:not-allowed;pointer-events:none;opacity:.4;}
+.btn.accent{background:var(--accent);color:#fff;border-color:var(--accent);font-weight:600;}
+.btn.accent:hover:not(:disabled){background:#6b93ff;}
+.btn.danger{background:transparent;color:var(--accent2);border-color:var(--accent2);}
+.btn.danger:hover:not(:disabled){background:var(--accent2);color:#fff;}
+.btn.hidden{display:none!important;}
+.slider-row{padding:4px 14px 2px;}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--border);border-radius:2px;outline:none;cursor:pointer;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;}
+.slider-val{font-size:10px;color:var(--muted);margin-top:3px;}
+.info-lbl{font-size:9px;color:var(--muted);padding:8px 14px;line-height:1.6;white-space:pre-wrap;}
 
-  /* ── HEADER ── */
-  header {
-    height: 48px; background: var(--panel);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; padding: 0 16px; gap: 12px;
-    flex-shrink: 0; z-index: 20;
-  }
-  .logo { font-size: 13px; font-weight: 600; letter-spacing: 3px; }
-  .sub  { font-size: 10px; color: var(--muted); letter-spacing: 1px; font-family: 'IBM Plex Sans', sans-serif; }
-  .hdr-right { margin-left: auto; display: flex; gap: 6px; align-items: center; }
-  .hdr-kbd {
-    font-size: 9px; color: var(--muted); border: 1px solid var(--border);
-    border-radius: 3px; padding: 2px 6px; letter-spacing: 0.5px;
-  }
+main{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;min-width:0;}
+.toolbar{height:36px;background:var(--panel);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 12px;gap:6px;flex-shrink:0;z-index:5;}
+.toolbar-label{font-size:10px;font-weight:600;letter-spacing:2px;color:var(--accent);margin-right:4px;}
+.toolbar-hint{font-size:9px;color:var(--muted);margin-left:auto;}
+.zoom-btn{background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:3px;width:26px;height:24px;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .15s,color .15s;font-family:monospace;flex-shrink:0;touch-action:manipulation;user-select:none;}
+.zoom-btn:hover{border-color:var(--accent);color:var(--accent);}
+.zoom-fit{width:auto;padding:0 8px;font-size:10px;}
 
-  /* ── BODY ── */
-  .body { display: flex; flex: 1; overflow: hidden; min-height: 0; }
+/* PAGES — translate-based pan, no scroll */
+.page{position:absolute;inset:0;display:flex;overflow:hidden;}
+.vp{flex:1;overflow:hidden;position:relative;background:var(--dark); display:flex; align-items:center; justify-content:center;}
+.pan-layer{position:absolute;top:0;left:0;transform-origin:0 0;}
 
-  /* ── SIDEBAR ── */
-  aside {
-    width: var(--sidebar); background: var(--panel);
-    border-right: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    overflow-y: auto; flex-shrink: 0; z-index: 10;
-  }
-  aside::-webkit-scrollbar { width: 4px; }
-  aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+/* drop zone */
+#drop-zone.drop-full-content{border:1px dashed var(--border);border-radius:8px;padding:40px 48px;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;max-width:440px;touch-action:manipulation;}
+.page.drop-full .vp.drop-zone-full{ border: none; border-radius: 12px; padding: 40px 48px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(10,10,10,0.3); cursor: pointer; transition: all .2s; }
+.page.drop-full .vp.drop-zone-full.drag-over{ border-color: var(--accent); background: rgba(14,21,32,0.5); }
+/* .page.drop-full .pan-layer{ position: static; transform: none !important; } */
+#drop-zone.drag-over{border-color:var(--accent);background:#0e1520;}
+#drop-zone .icon{font-size:28px;margin-bottom:12px;color:var(--muted);}
+#drop-zone p{color:var(--muted);font-size:11px;line-height:1.7;}
+#drop-zone strong{color:var(--text);}
+#preview-img,#cubemap-preview{border-radius:6px;border:1px solid var(--border);display:none;max-width:none;user-select:none;-webkit-user-drag:none;}
 
-  .sec-cap { font-size: 9px; letter-spacing: 2px; color: var(--muted); padding: 14px 14px 6px; text-transform: uppercase; }
-  .sec-div { height: 1px; background: var(--border); margin: 8px 14px; }
+/* smoothing */
+#page-smooth{flex-direction:column;display:none;}
+#canvas-wrap{position:relative;display:inline-block;}
+#smooth-canvas{display:block;touch-action:none;cursor:crosshair;user-select:none;}
+.face-label{position:absolute;left:10px;font-size:10px;font-weight:600;letter-spacing:2px;color:var(--accent);pointer-events:none;text-shadow:0 1px 3px #000c;}
 
-  /* ── BUTTONS ── */
-  .btn {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--card); color: var(--text);
-    border: 1px solid var(--border); border-radius: 5px;
-    padding: 8px 12px; font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px; cursor: pointer;
-    width: calc(100% - 28px); margin: 3px 14px;
-    transition: border-color 0.15s, color 0.15s, background 0.15s, opacity 0.15s;
-    letter-spacing: 0.3px; text-align: left;
-  }
-  .btn:hover:not(:disabled):not(.no-hover) { background: #1e1e1e; border-color: var(--accent); color: var(--accent); }
-  .btn:active:not(:disabled) { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn:disabled { color: var(--muted); cursor: not-allowed; pointer-events: none; opacity: 0.45; }
-  .btn.accent  { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
-  .btn.accent:hover:not(:disabled) { background: #6b93ff; }
-  .btn.danger  { background: transparent; color: var(--accent2); border-color: var(--accent2); }
-  .btn.danger:hover:not(:disabled) { background: var(--accent2); color: #fff; }
-  .btn.hidden  { display: none !important; }
+/* progress */
+#progress-overlay{position:absolute;inset:0;background:rgba(10,10,10,.88);display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;z-index:100;}
+#progress-overlay.visible{display:flex;}
+#progress-overlay p{font-size:11px;letter-spacing:1px;color:var(--muted);}
+.prog-wrap{width:240px;height:3px;background:var(--border);border-radius:2px;overflow:hidden;}
+.prog-fill{height:100%;background:var(--accent);width:0%;transition:width .1s;border-radius:2px;}
 
-  /* ── SLIDERS ── */
-  .slider-row { padding: 4px 14px 2px; }
-  input[type=range] {
-    -webkit-appearance: none; width: 100%; height: 4px;
-    background: var(--border); border-radius: 2px; outline: none; cursor: pointer;
-  }
-  input[type=range]::-webkit-slider-thumb {
-    -webkit-appearance: none; width: 16px; height: 16px;
-    border-radius: 50%; background: var(--accent); cursor: pointer;
-  }
-  .slider-val { font-size: 10px; color: var(--muted); margin-top: 3px; }
+.statusbar{height:26px;background:var(--panel);border-top:1px solid var(--border);display:flex;align-items:center;padding:0 12px;font-size:10px;color:var(--muted);letter-spacing:.3px;flex-shrink:0;gap:6px;z-index:5;}
+.status-dot{width:6px;height:6px;border-radius:50%;background:var(--muted);flex-shrink:0;}
+.status-dot.active{background:var(--accent);}
+.status-dot.done{background:#4caf50;}
 
-  /* ── MAIN ── */
-  main { flex: 1; overflow: hidden; display: flex; flex-direction: column; position: relative; min-width: 0; }
+/* MOBILE FAB */
+#mobile-fab{display:none;position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(17,17,17,.97);border:1px solid var(--border);border-radius:18px;padding:10px 14px;gap:8px;align-items:center;z-index:200;box-shadow:0 4px 28px #0009;width:calc(100vw - 24px);max-width:480px;flex-direction:column;}
+.fab-row{display:flex;align-items:center;gap:8px;width:100%;}
+.fab-btn{background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:8px 14px;font-family:'IBM Plex Mono',monospace;font-size:12px;cursor:pointer;touch-action:manipulation;white-space:nowrap;flex:1;text-align:center;transition:background .12s,color .12s;}
+.fab-btn:active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.fab-btn:disabled{opacity:.4;pointer-events:none;}
+.fab-sep{width:1px;height:28px;background:var(--border);flex-shrink:0;}
+.fab-slider-row{display:flex;align-items:center;gap:10px;width:100%;}
+.fab-lbl{font-size:10px;color:var(--muted);white-space:nowrap;min-width:80px;}
+.fab-lbl b{color:var(--text);}
+#fab-bs,#fab-bo{flex:1;height:4px;background:var(--border);border-radius:2px;outline:none;-webkit-appearance:none;cursor:pointer;}
+#fab-bs::-webkit-slider-thumb,#fab-bo::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--accent);}
 
-  /* ── TOOLBAR ── */
-  .toolbar {
-    height: 36px; background: var(--panel);
-    border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; padding: 0 12px; gap: 8px; flex-shrink: 0; z-index: 5;
-  }
-  .toolbar-label { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: var(--accent); }
-  .toolbar-hint  { font-size: 9px; color: var(--muted); margin-left: auto; }
-  .zoom-btn {
-    background: var(--card); color: var(--text); border: 1px solid var(--border);
-    border-radius: 3px; width: 26px; height: 24px; font-size: 15px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color 0.15s, color 0.15s; font-family: monospace; flex-shrink: 0;
-    touch-action: manipulation;
-  }
-  .zoom-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .zoom-fit { width: auto; padding: 0 8px; font-size: 10px; }
+#mobile-menu-btn{display:none;background:var(--card);color:var(--text);border:1px solid var(--border);border-radius:5px;padding:5px 10px;font-family:'IBM Plex Mono',monospace;font-size:11px;cursor:pointer;touch-action:manipulation;}
+#mobile-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:50;}
+#mobile-overlay.open{display:block;}
+aside.sheet{position:fixed!important;bottom:0;left:0;right:0;top:auto!important;width:100%!important;max-height:72dvh;border-right:none!important;border-top:1px solid var(--border)!important;border-radius:16px 16px 0 0;z-index:300;display:flex!important;}
 
-  /* ── PAGES ── */
-  .page { position: absolute; inset: 0; overflow: hidden; display: flex; }
-
-  /* PAGE 0 — drop / preview */
-  #page-preview { flex-direction: column; }
-  #preview-scroll {
-    flex: 1; overflow: auto; position: relative;
-    display: flex; align-items: center; justify-content: center;
-    background: var(--dark);
-  }
-  #preview-scroll::-webkit-scrollbar { width: 8px; height: 8px; }
-  #preview-scroll::-webkit-scrollbar-track { background: var(--panel); }
-  #preview-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-  #preview-inner {
-    display: flex; align-items: center; justify-content: center;
-    min-width: 100%; min-height: 100%;
-  }
-  .drop-zone {
-    border: 1px dashed var(--border); border-radius: 8px;
-    padding: 40px 48px; text-align: center; cursor: pointer;
-    transition: border-color 0.2s, background 0.2s; max-width: 440px;
-    touch-action: manipulation;
-  }
-  .drop-zone.drag-over { border-color: var(--accent); background: #0e1520; }
-  .drop-zone .icon { font-size: 28px; margin-bottom: 12px; color: var(--muted); }
-  .drop-zone p { color: var(--muted); font-size: 11px; line-height: 1.7; }
-  .drop-zone strong { color: var(--text); }
-  #preview-img, #cubemap-preview {
-    border-radius: 6px; border: 1px solid var(--border);
-    display: none; max-width: none;
-  }
-
-  /* PAGE 1 — smoothing canvas */
-  #page-smooth { flex-direction: column; }
-  #scroll-wrap {
-    flex: 1; overflow: auto;
-    display: flex; align-items: flex-start; justify-content: center;
-    background: var(--dark);
-  }
-  #scroll-wrap::-webkit-scrollbar { width: 8px; height: 8px; }
-  #scroll-wrap::-webkit-scrollbar-track { background: var(--panel); }
-  #scroll-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-  #canvas-wrap { position: relative; display: inline-block; margin: 16px auto; flex-shrink: 0; }
-  #smooth-canvas { display: block; touch-action: none; cursor: crosshair; }
-  .face-label {
-    position: absolute; left: 10px;
-    font-size: 10px; font-weight: 600; letter-spacing: 2px;
-    color: var(--accent); pointer-events: none; text-shadow: 0 1px 3px #000a;
-  }
-
-  /* ── STATUS ── */
-  .statusbar {
-    height: 26px; background: var(--panel); border-top: 1px solid var(--border);
-    display: flex; align-items: center; padding: 0 12px;
-    font-size: 10px; color: var(--muted); letter-spacing: 0.3px;
-    flex-shrink: 0; gap: 6px; z-index: 5;
-  }
-  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
-  .status-dot.active { background: var(--accent); }
-  .status-dot.done   { background: #4caf50; }
-
-  /* ── PROGRESS ── */
-  #progress-overlay {
-    position: absolute; inset: 0; background: rgba(10,10,10,0.88);
-    display: none; flex-direction: column; align-items: center; justify-content: center;
-    gap: 16px; z-index: 100;
-  }
-  #progress-overlay.visible { display: flex; }
-  #progress-overlay p { font-size: 11px; letter-spacing: 1px; color: var(--muted); }
-  .prog-wrap { width: 240px; height: 3px; background: var(--border); border-radius: 2px; overflow: hidden; }
-  .prog-fill  { height: 100%; background: var(--accent); width: 0%; transition: width 0.1s; border-radius: 2px; }
-
-  .info-lbl { font-size: 9px; color: var(--muted); padding: 8px 14px; line-height: 1.6; white-space: pre-wrap; }
-
-  /* ── MOBILE MENU BUTTON ── */
-  #mobile-menu-btn {
-    display: none; background: var(--card); color: var(--text);
-    border: 1px solid var(--border); border-radius: 5px;
-    padding: 5px 10px; font-family: 'IBM Plex Mono', monospace;
-    font-size: 11px; cursor: pointer; touch-action: manipulation;
-  }
-  #mobile-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.55); z-index: 50;
-  }
-  #mobile-overlay.open { display: block; }
-  aside.sheet {
-    position: fixed !important; bottom: 0; left: 0; right: 0; top: auto !important;
-    width: 100% !important; max-height: 75dvh;
-    border-right: none !important; border-top: 1px solid var(--border) !important;
-    border-radius: 16px 16px 0 0; z-index: 60; display: flex !important;
-  }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
-    aside { display: none; }
-    #mobile-menu-btn { display: block; }
-    .sub { display: none; }
-    .hdr-kbd { display: none; }
-    .logo { font-size: 11px; letter-spacing: 2px; }
-    .toolbar-hint { display: none; }
-    header { padding: 0 12px; gap: 8px; }
-  }
+@media(max-width:600px){
+  aside{display:none;}
+  #mobile-menu-btn{display:block;}
+  #mobile-fab{display:flex;}
+  .sub,.hdr-kbd,.toolbar-hint{display:none;}
+  .logo{font-size:11px;letter-spacing:2px;}
+  header{padding:0 12px;gap:8px;}
+  .statusbar{display:none;}
+  #btn-undo, #btn-redo, #btn-reset{display:none !important;}
+  .slider-row:has(#brush-size),
+  .slider-row:has(#brush-opacity)
+  {display:none;}
+  .mobile-hide { display: none !important; }
+}
 </style>
 </head>
 <body>
@@ -223,6 +121,7 @@
   <span class="logo">SKYBOX GENERATOR</span>
   <span class="sub">image → minecraft cubemap · 1024 px faces</span>
   <div class="hdr-right">
+    <span class="hdr-kbd" id="hdr-hint">scroll=zoom · RMB=pan</span>
     <button id="mobile-menu-btn">☰ Menu</button>
   </div>
 </header>
@@ -233,11 +132,9 @@
   <aside id="sidebar">
     <div class="sec-cap">Source</div>
     <button class="btn" id="btn-open">⊕  Open Image</button>
-
     <div class="sec-div"></div>
     <div class="sec-cap">Generate</div>
     <button class="btn accent" id="btn-gen">⟳  Generate Cubemap</button>
-
     <div class="sec-div"></div>
     <div class="sec-cap">Smoothing</div>
     <button class="btn" id="btn-smooth" disabled>⬡  Open Smoothing Canvas</button>
@@ -245,64 +142,82 @@
     <button class="btn" id="btn-undo" disabled>↶  Undo</button>
     <button class="btn" id="btn-redo" disabled>↷  Redo</button>
     <button class="btn danger" id="btn-reset" disabled>↺  Reset Smoothing</button>
-
     <div class="sec-div"></div>
-    <div class="sec-cap">Brush Size</div>
+    <div class="sec-cap mobile-hide">Brush Size</div>
     <div class="slider-row">
       <input type="range" id="brush-size" min="10" max="250" value="60">
       <div class="slider-val" id="brush-size-lbl">60 px</div>
     </div>
-    <div class="sec-cap">Brush Opacity</div>
+    <div class="sec-cap mobile-hide">Brush Opacity</div>
     <div class="slider-row">
       <input type="range" id="brush-opacity" min="1" max="40" value="8">
       <div class="slider-val" id="brush-opacity-lbl">8%</div>
     </div>
-
-    <div class="sec-div"></div>
+    <div class="sec-div mobile-hide"></div>
     <div class="sec-cap">Export</div>
     <button class="btn" id="btn-save">↓  Save as PNG…</button>
-
     <div style="flex:1"></div>
     <div class="info-lbl" id="info-lbl">No image loaded</div>
   </aside>
 
   <main>
     <div class="toolbar">
-      <span class="toolbar-label" id="toolbar-label">PREVIEW</span>
-      <button class="zoom-btn" id="zoom-out" title="Zoom out">−</button>
-      <button class="zoom-btn" id="zoom-in"  title="Zoom in">+</button>
-      <button class="zoom-btn zoom-fit" id="zoom-fit" title="Fit to view">⊡ Fit</button>
-      <span class="toolbar-hint" id="toolbar-hint">scroll=zoom · RMB=pan</span>
+      <span class="toolbar-label" id="tlabel">PREVIEW</span>
+      <button class="zoom-btn" id="zoom-out">−</button>
+      <button class="zoom-btn" id="zoom-in">+</button>
+      <button class="zoom-btn zoom-fit" id="zoom-fit">⊡ Fit</button>
+      <span class="toolbar-hint">scroll=zoom · RMB/MMB=pan · LMB=erase (smooth mode)</span>
     </div>
 
     <!-- PAGE 0: preview/drop -->
-    <div class="page" id="page-preview">
-      <div id="preview-scroll">
-        <div id="preview-inner">
-          <div class="drop-zone" id="drop-zone">
+    <div class="page drop-full" id="page-preview">
+      <div class="vp drop-zone-full" id="prev-vp">
+        <div class="pan-layer" id="prev-pan">
+          <div id="drop-zone" class="drop-full-content">
             <div class="icon">⊹</div>
-            <p><strong>Drop an equirectangular image here</strong><br>or tap to browse<br><br>PNG · JPG · JPEG</p>
+            <p><strong>Drop an image here</strong><br>or tap to browse<br><br>PNG · JPG · JPEG</p>
           </div>
-          <img id="preview-img" alt="source preview">
+          <img id="preview-img" alt="">
           <canvas id="cubemap-preview"></canvas>
         </div>
       </div>
     </div>
 
     <!-- PAGE 1: smooth -->
-    <div class="page" id="page-smooth" style="display:none;flex-direction:column;">
-      <div id="scroll-wrap">
-        <div id="canvas-wrap">
-          <canvas id="smooth-canvas"></canvas>
+    <div class="page" id="page-smooth">
+      <div class="vp" id="smooth-vp">
+        <div class="pan-layer" id="smooth-pan">
+          <div id="canvas-wrap">
+            <canvas id="smooth-canvas"></canvas>
+          </div>
         </div>
       </div>
     </div>
 
     <div id="progress-overlay">
-      <p id="progress-msg">PROJECTING CUBEMAP FACES…</p>
+      <p id="progress-msg">PROJECTING…</p>
       <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
     </div>
   </main>
+</div>
+
+<!-- MOBILE FLOATING BAR -->
+<div id="mobile-fab">
+  <div class="fab-row">
+    <button class="fab-btn" id="fab-undo" disabled>↶ Undo</button>
+    <div class="fab-sep"></div>
+    <button class="fab-btn" id="fab-redo" disabled>↷ Redo</button>
+    <div class="fab-sep"></div>
+    <button class="fab-btn" id="fab-reset" disabled style="color:var(--accent2);border-color:var(--accent2);">↺ Reset</button>
+  </div>
+  <div class="fab-slider-row">
+    <span class="fab-lbl">Size: <b id="fab-sz-lbl">60</b>px</span>
+    <input type="range" id="fab-bs" min="10" max="250" value="60">
+  </div>
+  <div class="fab-slider-row">
+    <span class="fab-lbl">Opacity: <b id="fab-op-lbl">8</b>%</span>
+    <input type="range" id="fab-bo" min="1" max="40" value="8">
+  </div>
 </div>
 
 <div class="statusbar">
@@ -313,485 +228,494 @@
 <input type="file" id="file-input" accept=".png,.jpg,.jpeg" style="display:none">
 
 <script>
-// ─────────────────────────────────────
-//  CONSTANTS & STATE
-// ─────────────────────────────────────
-const FACE_NAMES  = ['bottom','back','top'];
-const FACE_LABELS = ['BOTTOM','BACK','TOP'];
-const FACE_SIZE   = 1024;
-const ZOOM_MIN = 0.06, ZOOM_MAX = 5.0, ZOOM_STEP = 0.14;
-const PREV_ZOOM_MIN = 0.04, PREV_ZOOM_MAX = 5.0, PREV_ZOOM_STEP = 0.12;
+// ── CONSTANTS ──
+const FACE_NAMES=['bottom','back','top'],FACE_LABELS=['BOTTOM','BACK','TOP'],FACE_SIZE=1024;
+const ZOOM_MIN=0.04,ZOOM_MAX=8,ZOOM_STEP=0.15;
 
-let sourceImg = null, srcW = 0, srcH = 0;
-let allFaces = {}, resultCanvas = null;
-let midArrays = {}, topArrays = {};
-let undoStack = [], redoStack = [];
-let brushSize = 60, brushOpacity = 0.08;
-let smoothZoom = 0.30, previewZoom = 1.0;
-let inSmoothMode = false;
-let drawing = false, panning = false, panStart = {x:0,y:0};
-let prevPanning = false, prevPanStart = {x:0,y:0};
-let pinchDist0 = null, pinchZoom0 = null;
-let prevPinchDist0 = null, prevPinchZoom0 = null, prevTouchPan = null;
+// ── STATE ──
+let sourceImg=null,srcW=0,srcH=0;
+let allFaces={},resultCanvas=null;
+let midArrays={},topArrays={};
+let undoStack=[],redoStack=[];
+let brushSize=60,brushOpacity=0.08;
+// per-page zoom & pan (pan = translate of .pan-layer)
+let hasImage = false;
+let pZoom=1,pPan={x:0,y:0};   // preview
+let sZoom=0.3,sPan={x:0,y:0}; // smooth
+let inSmooth=false;
+// pointer tracking
+let drawing=false,panActive=false;
+let panStart={x:0,y:0},panOrigin={x:0,y:0};
+// pinch
+let pinchD0=null,pinchZ0=null,pinchP0=null,pinchM0=null;
 
-// ─────────────────────────────────────
-//  DOM REFS
-// ─────────────────────────────────────
-const $ = id => document.getElementById(id);
-const btnOpen    = $('btn-open'),   btnGen     = $('btn-gen');
-const btnSmooth  = $('btn-smooth'), btnBack    = $('btn-back');
-const btnUndo    = $('btn-undo'),   btnRedo    = $('btn-redo');
-const btnReset   = $('btn-reset'),  btnSave    = $('btn-save');
-const fileInput  = $('file-input'), dropZone   = $('drop-zone');
-const previewImg = $('preview-img'),cubemapPrev= $('cubemap-preview');
-const pagePreview= $('page-preview'),pageSmooth= $('page-smooth');
-const toolbarLabel=$('toolbar-label'),toolbarHint=$('toolbar-hint');
-const progressEl = $('progress-overlay'), progressMsg=$('progress-msg'), progFill=$('prog-fill');
-const infoLbl    = $('info-lbl'), statusMsg=$('status-msg'), statusDot=$('status-dot');
-const brushSlider= $('brush-size'), brushLbl=$('brush-size-lbl');
-const opacSlider = $('brush-opacity'), opacLbl=$('brush-opacity-lbl');
-const zoomInBtn  = $('zoom-in'), zoomOutBtn=$('zoom-out'), zoomFitBtn=$('zoom-fit');
-const previewScroll=$('preview-scroll'), previewInner=$('preview-inner');
-const scrollWrap = $('scroll-wrap'), canvasWrap=$('canvas-wrap');
-const smoothCanvas=$('smooth-canvas'), sidebar=$('sidebar');
-const mobileMenuBtn=$('mobile-menu-btn'), mobileOverlay=$('mobile-overlay');
-const sCtx = smoothCanvas.getContext('2d', {willReadFrequently:true});
+// ── DOM ──
+const $=id=>document.getElementById(id);
+const btnOpen=$('btn-open'),btnGen=$('btn-gen');
+const btnSmooth=$('btn-smooth'),btnBack=$('btn-back');
+const btnUndo=$('btn-undo'),btnRedo=$('btn-redo'),btnReset=$('btn-reset'),btnSave=$('btn-save');
+const fileInput=$('file-input'),dropZone=$('drop-zone');
+const previewImg=$('preview-img'),cubePrev=$('cubemap-preview');
+const pagePrev=$('page-preview'),pageSmooth=$('page-smooth');
+const prevVp=$('prev-vp'),prevPan=$('prev-pan');
+const smoothVp=$('smooth-vp'),smoothPanEl=$('smooth-pan'),canvasWrap=$('canvas-wrap');
+const smoothCanvas=$('smooth-canvas');
+const sCtx=smoothCanvas.getContext('2d',{willReadFrequently:true});
+const progEl=$('progress-overlay'),progMsg=$('progress-msg'),progFill=$('prog-fill');
+const infoLbl=$('info-lbl'),statusMsg=$('status-msg'),statusDot=$('status-dot');
+const brushSz=$('brush-size'),brushSzLbl=$('brush-size-lbl');
+const brushOp=$('brush-opacity'),brushOpLbl=$('brush-opacity-lbl');
+const fabUndo=$('fab-undo'),fabRedo=$('fab-redo'),fabReset=$('fab-reset');
+const fabSzLbl=$('fab-sz-lbl'),fabOpLbl=$('fab-op-lbl');
+const fabBs=$('fab-bs'),fabBo=$('fab-bo');
+const sidebar=$('sidebar'),mobileBtn=$('mobile-menu-btn'),mobileOverlay=$('mobile-overlay');
 
-// ─────────────────────────────────────
-//  STATUS
-// ─────────────────────────────────────
-function setStatus(msg, state='idle') {
-  statusMsg.textContent = msg;
-  statusDot.className = 'status-dot'+(state==='active'?' active':state==='done'?' done':'');
+// ── STATUS ──
+function setStatus(msg,s='idle'){
+  statusMsg.textContent=msg;
+  statusDot.className='status-dot'+(s==='active'?' active':s==='done'?' done':'');
 }
 
-// ─────────────────────────────────────
-//  MOBILE SIDEBAR SHEET
-// ─────────────────────────────────────
-mobileMenuBtn.addEventListener('click', () => {
-  sidebar.classList.add('sheet');
-  mobileOverlay.classList.add('open');
+// ── TRANSFORM ──
+// Apply zoom+pan to the correct page, clamped so you can always reach any part
+function applyT(){
+  if(inSmooth){
+    const cw=Math.round(FACE_SIZE*sZoom),ch=Math.round(FACE_SIZE*3*sZoom);
+    const vw=smoothVp.clientWidth,vh=smoothVp.clientHeight;
+    // allow pan up to half a viewport beyond content edges
+    const hw=vw*.5,hh=vh*.5;
+    sPan.x=clamp(sPan.x,Math.min(0,vw-cw)-hw,Math.max(0,vw-cw)+hw);
+    sPan.y=clamp(sPan.y,Math.min(0,vh-ch)-hh,Math.max(0,vh-ch)+hh);
+    smoothPanEl.style.transform=`translate(${sPan.x}px,${sPan.y}px)`;
+  } else if (!hasImage) {
+    // No image: force centered, no pan - CSS flex handles positioning
+    pPan.x = 0;
+    pPan.y = 0;
+    pZoom = 1;
+    prevPan.style.position = 'static';
+    prevPan.style.transform = '';
+  } else {
+    prevPan.style.position = 'absolute';
+    const el=activePreviewEl();
+    if(!el){previewPan.style.transform='';return;}
+    const cw=el.offsetWidth,ch=el.offsetHeight;
+    const vw=prevVp.clientWidth,vh=prevVp.clientHeight;
+    const hw=vw*.5,hh=vh*.5;
+    pPan.x=clamp(pPan.x,Math.min(0,vw-cw)-hw,Math.max(0,vw-cw)+hw);
+    pPan.y=clamp(pPan.y,Math.min(0,vh-ch)-hh,Math.max(0,vh-ch)+hh);
+    prevPan.style.transform=`translate(${pPan.x}px,${pPan.y}px)`;
+  }
+}
+function clamp(v,mn,mx){return Math.max(mn,Math.min(mx,v));}
+function activePreviewEl(){
+  if(cubePrev.style.display!=='none') return cubePrev;
+  if(previewImg.style.display!=='none') return previewImg;
+  return dropZone;
+}
+function center(mode){
+  if(mode==='smooth'){
+    const cw=Math.round(FACE_SIZE*sZoom),ch=Math.round(FACE_SIZE*3*sZoom);
+    sPan.x=(smoothVp.clientWidth-cw)/2;sPan.y=(smoothVp.clientHeight-ch)/2;
+  } else {
+    const el=activePreviewEl();if(!el)return;
+    const cw=el.offsetWidth||0,ch=el.offsetHeight||0;
+    pPan.x=(prevVp.clientWidth-cw)/2;pPan.y=(prevVp.clientHeight-ch)/2;
+  }
+  applyT();
+}
+
+// ── ZOOM ──
+function zoomAt(factor,px,py,mode){
+  // px,py in viewport coords
+  if(mode==='smooth'){
+    const old=sZoom;sZoom=clamp(sZoom*factor,ZOOM_MIN,ZOOM_MAX);
+    const r=sZoom/old;sPan.x=px-(px-sPan.x)*r;sPan.y=py-(py-sPan.y)*r;
+    rebuildCanvas();
+  } else {
+    const el=activePreviewEl();if(!el)return;
+    const iw=el.naturalWidth||el.width||el.offsetWidth||1;
+    const ih=el.naturalHeight||el.height||el.offsetHeight||1;
+    const old=pZoom;pZoom=clamp(pZoom*factor,ZOOM_MIN,ZOOM_MAX);
+    const r=pZoom/old;pPan.x=px-(px-pPan.x)*r;pPan.y=py-(py-pPan.y)*r;
+    el.style.width=Math.round(iw*pZoom)+'px';el.style.height=Math.round(ih*pZoom)+'px';
+    applyT();
+  }
+}
+function vpCenter(vp){return{x:vp.clientWidth/2,y:vp.clientHeight/2};}
+function doZoomIn(){const m=inSmooth?'smooth':'preview';const vp=inSmooth?smoothVp:prevVp;const c=vpCenter(vp);zoomAt(1+ZOOM_STEP,c.x,c.y,m);}
+function doZoomOut(){const m=inSmooth?'smooth':'preview';const vp=inSmooth?smoothVp:prevVp;const c=vpCenter(vp);zoomAt(1/(1+ZOOM_STEP),c.x,c.y,m);}
+function doFit(){
+  if(inSmooth){
+    const vw=smoothVp.clientWidth,vh=smoothVp.clientHeight;
+    sZoom=clamp(Math.min(vw/FACE_SIZE,vh/(FACE_SIZE*3))*.96,ZOOM_MIN,ZOOM_MAX);
+    rebuildCanvas();center('smooth');
+  } else if (!hasImage) {
+    return;
+  } else {
+    const el=activePreviewEl();if(!el||!el.offsetWidth)return;
+    const iw=el.naturalWidth||el.width||el.offsetWidth||1;
+    const ih=el.naturalHeight||el.height||el.offsetHeight||1;
+    pZoom=clamp(Math.min((prevVp.clientWidth-32)/iw,(prevVp.clientHeight-32)/ih),ZOOM_MIN,ZOOM_MAX);
+    el.style.width=Math.round(iw*pZoom)+'px';el.style.height=Math.round(ih*pZoom)+'px';
+    setTimeout(()=>center('preview'),10);
+  }
+}
+$('zoom-in').addEventListener('click',doZoomIn);
+$('zoom-out').addEventListener('click',doZoomOut);
+$('zoom-fit').addEventListener('click',doFit);
+
+// ── WHEEL ──
+function onWheel(e,mode,vp){
+  e.preventDefault();
+  const r=vp.getBoundingClientRect();
+  zoomAt(e.deltaY<0?1+ZOOM_STEP:1/(1+ZOOM_STEP),e.clientX-r.left,e.clientY-r.top,mode);
+}
+smoothVp.addEventListener('wheel',e=>onWheel(e,'smooth',smoothVp),{passive:false});
+prevVp.addEventListener('wheel',e=>{
+  if (!hasImage) return;
+  onWheel(e,'preview',prevVp);
+},{passive:false});
+
+// ── MOUSE PAN ──
+function startPan(cx,cy){
+  panActive=true;panStart={x:cx,y:cy};
+  panOrigin=inSmooth?{...sPan}:{...pPan};
+  document.body.style.cursor='grabbing';
+}
+function movePan(cx,cy){
+  if(!panActive)return;
+  const dx=cx-panStart.x,dy=cy-panStart.y;
+  if(inSmooth){sPan.x=panOrigin.x+dx;sPan.y=panOrigin.y+dy;}
+  else{pPan.x=panOrigin.x+dx;pPan.y=panOrigin.y+dy;}
+  applyT();
+}
+function endPan(){panActive=false;document.body.style.cursor='';}
+
+smoothVp.addEventListener('mousedown',e=>{
+  if(e.button===1||e.button===2){e.preventDefault();startPan(e.clientX,e.clientY);}
+  else if(e.button===0&&inSmooth){e.preventDefault();pushUndo();drawing=true;doErase(e.clientX,e.clientY);}
 });
-mobileOverlay.addEventListener('click', closeMobile);
-function closeMobile() {
-  sidebar.classList.remove('sheet');
-  if(window.innerWidth <= 600) sidebar.style.display = '';
-  mobileOverlay.classList.remove('open');
-}
-document.querySelectorAll('aside .btn').forEach(b => {
-  b.addEventListener('click', () => { if(window.innerWidth <= 600) closeMobile(); });
+smoothVp.addEventListener('contextmenu',e=>e.preventDefault());
+prevVp.addEventListener('mousedown',e=>{
+  if (!hasImage) return;
+  if(e.button===1||e.button===2){e.preventDefault();startPan(e.clientX,e.clientY);}
+  else if (e.button === 0) {
+    e.preventDefault();
+  }
 });
+prevVp.addEventListener('contextmenu',e=>e.preventDefault());
+window.addEventListener('mousemove',e=>{movePan(e.clientX,e.clientY);if(drawing)doErase(e.clientX,e.clientY);});
+window.addEventListener('mouseup',e=>{if(e.button===1||e.button===2)endPan();if(e.button===0){drawing=false;endPan();}});
 
-// ─────────────────────────────────────
-//  FILE OPEN
-// ─────────────────────────────────────
-btnOpen.addEventListener('click', () => fileInput.click());
-fileInput.addEventListener('change', e => loadFile(e.target.files[0]));
-dropZone.addEventListener('click', () => fileInput.click());
-dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
-dropZone.addEventListener('drop', e => {
-  e.preventDefault(); dropZone.classList.remove('drag-over');
-  const f = e.dataTransfer.files[0]; if(f) loadFile(f);
-});
+// ── TOUCH ──
+function tDist(t){const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy);}
+function tMid(t,vp){const r=vp.getBoundingClientRect();return{x:(t[0].clientX+t[1].clientX)/2-r.left,y:(t[0].clientY+t[1].clientY)/2-r.top};}
 
-function loadFile(file) {
-  if(!file) return;
-  const url = URL.createObjectURL(file);
-  const img = new Image();
-  img.onload = () => {
-    srcW = img.width; srcH = img.height;
-    const oc = document.createElement('canvas');
-    oc.width = srcW; oc.height = srcH;
-    oc.getContext('2d').drawImage(img, 0, 0);
-    sourceImg = oc.getContext('2d').getImageData(0, 0, srcW, srcH);
-    URL.revokeObjectURL(url);
-    previewImg.src = oc.toDataURL();
-    previewImg.style.display = 'block';
-    cubemapPrev.style.display = 'none';
-    dropZone.style.display    = 'none';
-    previewImg.onload = () => fitPreviewToView();
-    infoLbl.textContent = `${file.name}\n${srcW} × ${srcH} px`;
-    setStatus(`Loaded: ${file.name}`, 'done');
-  };
-  img.src = url;
+function onTouchStart(e,mode,vp){
+  if (!hasImage && mode === 'preview') return;
+  e.preventDefault();
+  if(e.touches.length===1){
+    if(mode==='smooth'&&inSmooth){pushUndo();drawing=true;doErase(e.touches[0].clientX,e.touches[0].clientY);}
+    else{drawing=false;startPan(e.touches[0].clientX,e.touches[0].clientY);}
+  } else if(e.touches.length===2){
+    drawing=false;endPan();
+    pinchD0=tDist(e.touches);
+    pinchZ0=inSmooth?sZoom:pZoom;
+    pinchP0=inSmooth?{...sPan}:{...pPan};
+    pinchM0=tMid(e.touches,vp);
+  }
 }
-
-// ─────────────────────────────────────
-//  CUBEMAP PROJECTION
-// ─────────────────────────────────────
-function getPixel(data, w, h, ix, iy) {
-  ix = Math.max(0, Math.min(w-1, Math.round(ix)));
-  iy = Math.max(0, Math.min(h-1, Math.round(iy)));
-  const i = (iy*w+ix)*4;
-  return [data[i], data[i+1], data[i+2]];
-}
-
-function projectFace(srcData, srcW, srcH, faceId, faceSize) {
-  const rr = faceSize + 2;
-  const out = new Uint8ClampedArray(faceSize*faceSize*4);
-  for(let row=0; row<faceSize; row++) {
-    for(let col=0; col<faceSize; col++) {
-      const u = ((col+1+0.5)/rr)*2-1, v = ((row+1+0.5)/rr)*2-1;
-      let x,y,z;
-      switch(faceId) {
-        case 'front':  x= 1;y= u;z=-v; break;
-        case 'back':   x=-1;y=-u;z=-v; break;
-        case 'left':   x= u;y=-1;z=-v; break;
-        case 'right':  x=-u;y= 1;z=-v; break;
-        case 'top':    x= v;y= u;z= 1; break;
-        case 'bottom': x=-v;y= u;z=-1; break;
-      }
-      const r=Math.sqrt(x*x+y*y+z*z);
-      const ix=((Math.atan2(y,x)+Math.PI)/(2*Math.PI)*srcW)%srcW;
-      const iy=(Math.acos(Math.max(-1,Math.min(1,z/r)))/Math.PI)*(srcH-1);
-      const [r0,g0,b0]=getPixel(srcData.data,srcW,srcH,ix,iy);
-      const p=(row*faceSize+col)*4;
-      out[p]=r0; out[p+1]=g0; out[p+2]=b0; out[p+3]=255;
+function onTouchMove(e,mode,vp){
+  if (!hasImage && mode === 'preview') return;
+  e.preventDefault();
+  if(e.touches.length===1){
+    if(mode==='smooth'&&drawing)doErase(e.touches[0].clientX,e.touches[0].clientY);
+    else movePan(e.touches[0].clientX,e.touches[0].clientY);
+  } else if(e.touches.length===2&&pinchD0!=null){
+    const scale=tDist(e.touches)/pinchD0;
+    const mid=tMid(e.touches,vp);
+    if(inSmooth){
+      sZoom=clamp(pinchZ0*scale,ZOOM_MIN,ZOOM_MAX);
+      const r=sZoom/pinchZ0;
+      sPan.x=mid.x-(pinchM0.x-pinchP0.x)*r;
+      sPan.y=mid.y-(pinchM0.y-pinchP0.y)*r;
+      rebuildCanvas();
+    } else {
+      const el=activePreviewEl();if(!el)return;
+      const iw=el.naturalWidth||el.width||1,ih=el.naturalHeight||el.height||1;
+      pZoom=clamp(pinchZ0*scale,ZOOM_MIN,ZOOM_MAX);
+      const r=pZoom/pinchZ0;
+      pPan.x=mid.x-(pinchM0.x-pinchP0.x)*r;
+      pPan.y=mid.y-(pinchM0.y-pinchP0.y)*r;
+      el.style.width=Math.round(iw*pZoom)+'px';el.style.height=Math.round(ih*pZoom)+'px';
+      applyT();
     }
   }
-  return new ImageData(out, faceSize, faceSize);
+}
+function onTouchEnd(e){
+  if(e.touches.length<2)pinchD0=null;
+  if(!e.touches.length){drawing=false;endPan();}
+  if(e.touches.length===1){startPan(e.touches[0].clientX,e.touches[0].clientY);}
+}
+smoothVp.addEventListener('touchstart',e=>onTouchStart(e,'smooth',smoothVp),{passive:false});
+smoothVp.addEventListener('touchmove', e=>onTouchMove(e,'smooth',smoothVp),{passive:false});
+smoothVp.addEventListener('touchend',  onTouchEnd,{passive:false});
+prevVp.addEventListener('touchstart',e=>onTouchStart(e,'preview',prevVp),{passive:false, capture: false});
+prevVp.addEventListener('touchmove', e=>onTouchMove(e,'preview',prevVp),{passive:false});
+prevVp.addEventListener('touchend',  onTouchEnd,{passive:false});
+
+// ── ERASE ──
+function doErase(clientX,clientY){
+  const rect=smoothCanvas.getBoundingClientRect();
+  const cx=(clientX-rect.left)*(FACE_SIZE/rect.width);
+  const cy=(clientY-rect.top)*(FACE_SIZE*3/rect.height);
+  const s=FACE_SIZE,row=Math.floor(cy/s);
+  if(row<0||row>=3)return;
+  const fid=FACE_NAMES[row];
+  const px=clamp(Math.floor(cx),0,s-1),py=clamp(Math.floor(cy-row*s),0,s-1);
+  const r=Math.max(1,brushSize),top=topArrays[fid];
+  const y0=Math.max(0,py-r),y1=Math.min(s,py+r),x0=Math.max(0,px-r),x1=Math.min(s,px+r);
+  for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++){
+    const mask=Math.max(0,1-Math.sqrt((y-py)**2+(x-px)**2)/r);
+    const idx=(y*s+x)*4+3;top[idx]=Math.max(0,top[idx]-mask*255*brushOpacity);
+  }
+  sCtx.putImageData(compositeFace(fid),0,FACE_NAMES.indexOf(fid)*s);
+  setStatus(`Erasing ${fid.toUpperCase()} @ (${px},${py})  brush ${brushSize}px  zoom ${sZoom.toFixed(2)}×`,'active');
 }
 
-async function generateCubemap() {
-  if(!sourceImg) { setStatus('⚠  No image loaded.'); return; }
-  progressEl.classList.add('visible');
-  setStatus('Projecting…','active');
-  const ids=['front','back','left','right','top','bottom'];
-  allFaces={};
-  for(let i=0;i<ids.length;i++) {
-    const fid=ids[i];
-    progressMsg.textContent=`PROJECTING: ${fid.toUpperCase()} (${i+1}/6)`;
-    progFill.style.width=`${(i/6)*100}%`;
-    await new Promise(r=>setTimeout(r,0));
-    allFaces[fid]=projectFace(sourceImg,srcW,srcH,fid,FACE_SIZE);
+// ── MOBILE SIDEBAR ──
+mobileBtn.addEventListener('click',()=>{sidebar.classList.add('sheet');mobileOverlay.classList.add('open');});
+mobileOverlay.addEventListener('click',closeMobile);
+function closeMobile(){if(window.innerWidth<=600)sidebar.style.display='';sidebar.classList.remove('sheet');mobileOverlay.classList.remove('open');}
+document.querySelectorAll('aside .btn').forEach(b=>b.addEventListener('click',()=>{if(window.innerWidth<=600)closeMobile();}));
+
+// ── FILE OPEN ──
+btnOpen.addEventListener('click',()=>fileInput.click());
+fileInput.addEventListener('change',e=>loadFile(e.target.files[0]));
+dropZone.addEventListener('click',()=>fileInput.click());
+dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag-over');});
+dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag-over');const f=e.dataTransfer.files[0];if(f)loadFile(f);});
+
+function loadFile(file){
+  if(!file)return;
+  const url=URL.createObjectURL(file);
+  const img=new Image();
+  img.onload=()=>{
+    srcW=img.width;srcH=img.height;
+    const oc=document.createElement('canvas');oc.width=srcW;oc.height=srcH;
+    oc.getContext('2d').drawImage(img,0,0);
+    sourceImg=oc.getContext('2d').getImageData(0,0,srcW,srcH);
+    URL.revokeObjectURL(url);
+    previewImg.src=oc.toDataURL();
+    previewImg.style.display='block';cubePrev.style.display='none';dropZone.style.display='none';
+    previewImg.onload=()=>{
+      hasImage = true;
+      pZoom=1;setTimeout(()=>doFit(),10);
+    };
+    infoLbl.textContent=`${file.name}\n${srcW} × ${srcH} px`;
+    // Reset all for new image
+    allFaces = {};
+    resultCanvas = null;
+    btnSmooth.disabled = true;
+    btnGen.disabled = false;
+    undoStack = [];
+    redoStack = [];
+    midArrays = {};
+    topArrays = {};
+    if (inSmooth) {
+      inSmooth = false;
+      pageSmooth.style.display = 'none';
+      pagePrev.style.display = 'flex';
+      $('tlabel').textContent = 'PREVIEW';
+      $('hdr-hint').textContent = 'scroll=zoom · RMB=pan';
+      btnSmooth.classList.remove('hidden');
+      btnBack.classList.add('hidden');
+      btnUndo.disabled = true;
+      btnRedo.disabled = true;
+      btnReset.disabled = true;
+      syncFab(false);
+    }
+    setStatus(`Loaded new image: ${file.name} (cubemap reset)`,'done');
+  };
+  img.src=url;
+}
+
+// ── PROJECTION ──
+function getPixel(data,w,h,ix,iy){
+  ix=clamp(Math.round(ix),0,w-1);iy=clamp(Math.round(iy),0,h-1);
+  const i=(iy*w+ix)*4;return[data[i],data[i+1],data[i+2]];
+}
+function projectFace(sd,sw,sh,fid,fs){
+  const rr=fs+2,out=new Uint8ClampedArray(fs*fs*4);
+  for(let row=0;row<fs;row++)for(let col=0;col<fs;col++){
+    const u=((col+1.5)/rr)*2-1,v=((row+1.5)/rr)*2-1;
+    let x,y,z;
+    switch(fid){
+      case'front':x=1;y=u;z=-v;break;case'back':x=-1;y=-u;z=-v;break;
+      case'left':x=u;y=-1;z=-v;break;case'right':x=-u;y=1;z=-v;break;
+      case'top':x=v;y=u;z=1;break;case'bottom':x=-v;y=u;z=-1;break;
+    }
+    const r=Math.sqrt(x*x+y*y+z*z);
+    const ix=((Math.atan2(y,x)+Math.PI)/(2*Math.PI)*sw)%sw;
+    const iy=(Math.acos(clamp(z/r,-1,1))/Math.PI)*(sh-1);
+    const[r0,g0,b0]=getPixel(sd.data,sw,sh,ix,iy);
+    const p=(row*fs+col)*4;out[p]=r0;out[p+1]=g0;out[p+2]=b0;out[p+3]=255;
   }
-  progFill.style.width='100%';
-  progressMsg.textContent='BUILDING LAYOUT…';
+  return new ImageData(out,fs,fs);
+}
+async function generateCubemap(){
+  if(!sourceImg){setStatus('⚠  No image loaded.');return;}
+  progEl.classList.add('visible');setStatus('Projecting…','active');
+  const ids=['front','back','left','right','top','bottom'];allFaces={};
+  for(let i=0;i<ids.length;i++){
+    progMsg.textContent=`PROJECTING: ${ids[i].toUpperCase()} (${i+1}/6)`;
+    progFill.style.width=`${i/6*100}%`;
+    await new Promise(r=>setTimeout(r,0));
+    allFaces[ids[i]]=projectFace(sourceImg,srcW,srcH,ids[i],FACE_SIZE);
+  }
+  progFill.style.width='100%';progMsg.textContent='BUILDING LAYOUT…';
   await new Promise(r=>setTimeout(r,0));
   resultCanvas=buildLayout(allFaces);
-  cubemapPrev.width=resultCanvas.width; cubemapPrev.height=resultCanvas.height;
-  cubemapPrev.getContext('2d').drawImage(resultCanvas,0,0);
-  previewImg.style.display='none'; dropZone.style.display='none';
-  cubemapPrev.style.display='block';
-  fitPreviewToView();
-  progressEl.classList.remove('visible'); progFill.style.width='0%';
+  cubePrev.width=resultCanvas.width;cubePrev.height=resultCanvas.height;
+  cubePrev.getContext('2d').drawImage(resultCanvas,0,0);
+  hasImage = true;
+  previewImg.style.display='none';dropZone.style.display='none';cubePrev.style.display='block';
+  progEl.classList.remove('visible');progFill.style.width='0%';
   btnSmooth.disabled=false;
+  pZoom=1;setTimeout(()=>doFit(),10);
   setStatus('Cubemap ready — smooth seams or export.','done');
 }
-
-function buildLayout(faces) {
-  const c=document.createElement('canvas');
-  c.width=FACE_SIZE*3; c.height=FACE_SIZE*2;
+function buildLayout(f){
+  const c=document.createElement('canvas');c.width=FACE_SIZE*3;c.height=FACE_SIZE*2;
   const ctx=c.getContext('2d');
-  ctx.putImageData(faces['bottom'],0,0);
-  ctx.putImageData(faces['top'],FACE_SIZE,0);
-  ctx.putImageData(faces['back'],FACE_SIZE*2,0);
-  ctx.putImageData(faces['left'],0,FACE_SIZE);
-  ctx.putImageData(faces['front'],FACE_SIZE,FACE_SIZE);
-  ctx.putImageData(faces['right'],FACE_SIZE*2,FACE_SIZE);
+  ctx.putImageData(f['bottom'],0,0);ctx.putImageData(f['top'],FACE_SIZE,0);
+  ctx.putImageData(f['back'],FACE_SIZE*2,0);ctx.putImageData(f['left'],0,FACE_SIZE);
+  ctx.putImageData(f['front'],FACE_SIZE,FACE_SIZE);ctx.putImageData(f['right'],FACE_SIZE*2,FACE_SIZE);
   return c;
 }
+btnGen.addEventListener('click',generateCubemap);
 
-btnGen.addEventListener('click', generateCubemap);
-
-// ─────────────────────────────────────
-//  SMOOTHING LAYERS
-// ─────────────────────────────────────
-function buildLayers() {
-  const s=FACE_SIZE, half=s>>1;
-  undoStack=[]; redoStack=[];
-  for(const fid of FACE_NAMES) {
-    const origD=allFaces[fid].data;
-    const l2=new Uint8ClampedArray(origD);
-    for(let row=0;row<s;row++) for(let col=half;col<s;col++) {
-      const mc=half-1-(col-half), src=(row*s+mc)*4, dst=(row*s+col)*4;
-      l2[dst]=origD[src]; l2[dst+1]=origD[src+1]; l2[dst+2]=origD[src+2]; l2[dst+3]=255;
+// ── SMOOTHING LAYERS ──
+function buildLayers(){
+  const s=FACE_SIZE,half=s>>1;undoStack=[];redoStack=[];
+  for(const fid of FACE_NAMES){
+    const od=allFaces[fid].data;
+    const l2=new Uint8ClampedArray(od);
+    for(let row=0;row<s;row++)for(let col=half;col<s;col++){
+      const mc=half-1-(col-half),src=(row*s+mc)*4,dst=(row*s+col)*4;
+      l2[dst]=od[src];l2[dst+1]=od[src+1];l2[dst+2]=od[src+2];l2[dst+3]=255;
     }
     midArrays[fid]=l2;
     const top=new Uint8ClampedArray(s*s*4);
-    for(let row=0;row<s;row++) for(let col=half;col<s;col++) {
-      const src=(row*s+col)*4;
-      top[src]=origD[src]; top[src+1]=origD[src+1]; top[src+2]=origD[src+2]; top[src+3]=255;
+    for(let row=0;row<s;row++)for(let col=half;col<s;col++){
+      const src=(row*s+col)*4;top[src]=od[src];top[src+1]=od[src+1];top[src+2]=od[src+2];top[src+3]=255;
     }
     topArrays[fid]=top;
   }
 }
-
-function compositeFace(fid) {
-  const s=FACE_SIZE, mid=midArrays[fid], top=topArrays[fid];
+function compositeFace(fid){
+  const s=FACE_SIZE,mid=midArrays[fid],top=topArrays[fid];
   const out=new Uint8ClampedArray(s*s*4);
-  for(let i=0;i<s*s;i++) {
-    const b=i*4, a=top[b+3]/255;
-    out[b]  =mid[b]  *(1-a)+top[b]  *a;
-    out[b+1]=mid[b+1]*(1-a)+top[b+1]*a;
-    out[b+2]=mid[b+2]*(1-a)+top[b+2]*a;
-    out[b+3]=255;
-  }
-  return new ImageData(out, s, s);
+  for(let i=0;i<s*s;i++){const b=i*4,a=top[b+3]/255;out[b]=mid[b]*(1-a)+top[b]*a;out[b+1]=mid[b+1]*(1-a)+top[b+1]*a;out[b+2]=mid[b+2]*(1-a)+top[b+2]*a;out[b+3]=255;}
+  return new ImageData(out,s,s);
 }
-
-function rebuildCanvas() {
+function rebuildCanvas(){
   const s=FACE_SIZE;
-  if(smoothCanvas.width!==s||smoothCanvas.height!==s*3) {
-    smoothCanvas.width=s; smoothCanvas.height=s*3;
-  }
-  smoothCanvas.style.width  = Math.round(s*smoothZoom)+'px';
-  smoothCanvas.style.height = Math.round(s*3*smoothZoom)+'px';
-  canvasWrap.style.width    = Math.round(s*smoothZoom)+'px';
-  canvasWrap.style.height   = Math.round(s*3*smoothZoom)+'px';
-  for(let i=0;i<FACE_NAMES.length;i++) sCtx.putImageData(compositeFace(FACE_NAMES[i]),0,i*s);
-  sCtx.strokeStyle='#4f7cff88'; sCtx.setLineDash([6,6]); sCtx.lineWidth=2;
+  if(smoothCanvas.width!==s||smoothCanvas.height!==s*3){smoothCanvas.width=s;smoothCanvas.height=s*3;}
+  const cw=Math.round(s*sZoom),ch=Math.round(s*3*sZoom);
+  smoothCanvas.style.width=cw+'px';smoothCanvas.style.height=ch+'px';
+  canvasWrap.style.width=cw+'px';canvasWrap.style.height=ch+'px';
+  for(let i=0;i<FACE_NAMES.length;i++)sCtx.putImageData(compositeFace(FACE_NAMES[i]),0,i*s);
+  sCtx.strokeStyle='#4f7cff99';sCtx.setLineDash([6,6]);sCtx.lineWidth=2;
   for(let i=1;i<3;i++){sCtx.beginPath();sCtx.moveTo(0,i*s);sCtx.lineTo(s,i*s);sCtx.stroke();}
   sCtx.setLineDash([]);
-  updateLabels();
+  updateLabels();applyT();
 }
-
-function updateLabels() {
+function updateLabels(){
   canvasWrap.querySelectorAll('.face-label').forEach(el=>el.remove());
   FACE_LABELS.forEach((lbl,i)=>{
-    const el=document.createElement('div');
-    el.className='face-label'; el.textContent=lbl;
-    el.style.top=(Math.round(i*FACE_SIZE*smoothZoom)+14)+'px';
-    canvasWrap.appendChild(el);
+    const el=document.createElement('div');el.className='face-label';el.textContent=lbl;
+    el.style.top=(Math.round(i*FACE_SIZE*sZoom)+14)+'px';canvasWrap.appendChild(el);
   });
 }
 
-// ─────────────────────────────────────
-//  OPEN / CLOSE SMOOTHING
-// ─────────────────────────────────────
-btnSmooth.addEventListener('click', () => {
-  if(!allFaces['bottom']) { setStatus('⚠  Generate cubemap first.'); return; }
-  buildLayers(); inSmoothMode=true;
-  pagePreview.style.display='none'; pageSmooth.style.display='flex';
-  toolbarLabel.textContent='SMOOTHING CANVAS';
-  toolbarHint.textContent='scroll=zoom · RMB=pan · LMB=erase';
-  $('hdr-hint').textContent='LMB=erase · scroll=zoom';
-  btnSmooth.classList.add('hidden'); btnBack.classList.remove('hidden');
-  btnUndo.disabled=false; btnRedo.disabled=false; btnReset.disabled=false;
-  setTimeout(()=>{ fitSmoothToView(); setStatus('Smoothing Canvas — LMB=erase  scroll=zoom  RMB=pan','active'); },10);
+// ── OPEN / CLOSE SMOOTH ──
+btnSmooth.addEventListener('click',()=>{
+  if(!allFaces['bottom']){setStatus('⚠  Generate cubemap first.');return;}
+buildLayers();inSmooth=true;
+  btnGen.disabled=true;
+  pagePrev.style.display='none';pageSmooth.style.display='flex';
+  $('tlabel').textContent='SMOOTHING CANVAS';
+  $('hdr-hint').textContent='LMB=erase · scroll=zoom · RMB=pan';
+  btnSmooth.classList.add('hidden');btnBack.classList.remove('hidden');
+  btnUndo.disabled=false;btnRedo.disabled=false;btnReset.disabled=false;
+  syncFab(true);
+  sZoom=0.3;sPan={x:0,y:0};
+  setTimeout(()=>{rebuildCanvas();setTimeout(()=>{doFit();setStatus('Smoothing Canvas — LMB=erase  scroll=zoom  RMB/MMB=pan','active');},30);},10);
 });
-
-btnBack.addEventListener('click', () => {
-  if(!confirm('Leaving will lock in your changes. Proceed?')) return;
-  for(const fid of FACE_NAMES) allFaces[fid]=compositeFace(fid);
-  resultCanvas=buildLayout(allFaces);
-  cubemapPrev.getContext('2d').drawImage(resultCanvas,0,0);
-  inSmoothMode=false;
-  pageSmooth.style.display='none'; pagePreview.style.display='flex';
-  toolbarLabel.textContent='PREVIEW'; toolbarHint.textContent='scroll=zoom · RMB=pan';
-  $('hdr-hint').textContent='scroll=zoom · RMB=pan';
-  btnBack.classList.add('hidden'); btnSmooth.classList.remove('hidden');
-  btnUndo.disabled=true; btnRedo.disabled=true; btnReset.disabled=true;
+btnBack.addEventListener('click',()=>{
+  if(!confirm('Leaving will lock in your changes. Proceed?'))return;
+  for(const fid of FACE_NAMES)allFaces[fid]=compositeFace(fid);
+resultCanvas=buildLayout(allFaces);
+  cubePrev.getContext('2d').drawImage(resultCanvas,0,0);
+  inSmooth=false;
+  btnGen.disabled=false;
+  pageSmooth.style.display='none';pagePrev.style.display='flex';
+  $('tlabel').textContent='PREVIEW';$('hdr-hint').textContent='scroll=zoom · RMB=pan';
+  btnBack.classList.add('hidden');btnSmooth.classList.remove('hidden');
+  btnUndo.disabled=true;btnRedo.disabled=true;btnReset.disabled=true;
+  syncFab(false);setTimeout(()=>doFit(),10);
   setStatus('Smoothed faces merged — ready to export.','done');
 });
 
-// ─────────────────────────────────────
-//  ERASE BRUSH
-// ─────────────────────────────────────
-function canvasPos(clientX, clientY) {
-  const rect=smoothCanvas.getBoundingClientRect();
-  return {
-    x:(clientX-rect.left)*(smoothCanvas.width/rect.width),
-    y:(clientY-rect.top) *(smoothCanvas.height/rect.height)
-  };
-}
+// ── UNDO / REDO / RESET ──
+function pushUndo(){const s={};for(const f of FACE_NAMES)s[f]=topArrays[f].slice();undoStack.push(s);redoStack=[];}
+function doUndo(){if(!undoStack.length)return;const c={};for(const f of FACE_NAMES)c[f]=topArrays[f].slice();redoStack.push(c);const p=undoStack.pop();for(const f of FACE_NAMES)topArrays[f]=p[f];rebuildCanvas();setStatus('Undone.');}
+function doRedo(){if(!redoStack.length)return;const c={};for(const f of FACE_NAMES)c[f]=topArrays[f].slice();undoStack.push(c);const n=redoStack.pop();for(const f of FACE_NAMES)topArrays[f]=n[f];rebuildCanvas();setStatus('Redone.');}
+function doReset(){if(!inSmooth)return;buildLayers();rebuildCanvas();setStatus('Overlays reset.');}
+btnUndo.addEventListener('click',doUndo);btnRedo.addEventListener('click',doRedo);btnReset.addEventListener('click',doReset);
+fabUndo.addEventListener('click',doUndo);fabRedo.addEventListener('click',doRedo);fabReset.addEventListener('click',doReset);
 
-function widgetToFace(cx, cy) {
-  const s=FACE_SIZE, row=Math.floor(cy/s);
-  if(row<0||row>=3) return null;
-  return {fid:FACE_NAMES[row], px:Math.max(0,Math.min(s-1,Math.floor(cx))), py:Math.max(0,Math.min(s-1,Math.floor(cy-row*s)))};
-}
+// ── FAB ──
+function syncFab(on){fabUndo.disabled=!on;fabRedo.disabled=!on;fabReset.disabled=!on;}
 
-function eraseAt(cx, cy) {
-  const hit=widgetToFace(cx,cy); if(!hit) return;
-  const {fid,px,py}=hit, s=FACE_SIZE, r=Math.max(1,brushSize), top=topArrays[fid];
-  const y0=Math.max(0,py-r),y1=Math.min(s,py+r),x0=Math.max(0,px-r),x1=Math.min(s,px+r);
-  for(let row=y0;row<y1;row++) for(let col=x0;col<x1;col++) {
-    const mask=Math.max(0,1-Math.sqrt((row-py)**2+(col-px)**2)/r);
-    const idx=(row*s+col)*4+3;
-    top[idx]=Math.max(0,top[idx]-mask*255*brushOpacity);
+// ── SLIDERS (sync desktop + fab) ──
+function syncBrush(sz,op){
+  brushSize=sz;brushOpacity=op/100;
+  brushSz.value=sz;brushSzLbl.textContent=sz+' px';
+  brushOp.value=op;brushOpLbl.textContent=op+'%';
+  fabBs.value=sz;fabSzLbl.textContent=sz;
+  fabBo.value=op;fabOpLbl.textContent=op;
+}
+brushSz.addEventListener('input',e=>syncBrush(+e.target.value,+brushOp.value));
+brushOp.addEventListener('input',e=>syncBrush(+brushSz.value,+e.target.value));
+fabBs.addEventListener('input',e=>syncBrush(+e.target.value,+brushOp.value));
+fabBo.addEventListener('input',e=>syncBrush(+brushSz.value,+e.target.value));
+
+// Initial center for drop zone
+setTimeout(() => {
+  if (!hasImage) {
+    pPan = {x: 0, y: 0};
+    pZoom = 1;
+    applyT();
   }
-  sCtx.putImageData(compositeFace(fid),0,FACE_NAMES.indexOf(fid)*s);
-  setStatus(`Erasing ${fid.toUpperCase()} @ (${px},${py})  brush ${brushSize}px  zoom ${smoothZoom.toFixed(2)}×`,'active');
-}
+}, 100);
 
-// ─────────────────────────────────────
-//  UNDO / REDO
-// ─────────────────────────────────────
-function pushUndo() {
-  const snap={}; for(const fid of FACE_NAMES) snap[fid]=topArrays[fid].slice();
-  undoStack.push(snap); redoStack=[];
-}
-btnUndo.addEventListener('click',()=>{
-  if(!undoStack.length) return;
-  const cur={}; for(const fid of FACE_NAMES) cur[fid]=topArrays[fid].slice();
-  redoStack.push(cur);
-  const prev=undoStack.pop(); for(const fid of FACE_NAMES) topArrays[fid]=prev[fid];
-  rebuildCanvas(); setStatus('Undone.');
-});
-btnRedo.addEventListener('click',()=>{
-  if(!redoStack.length) return;
-  const cur={}; for(const fid of FACE_NAMES) cur[fid]=topArrays[fid].slice();
-  undoStack.push(cur);
-  const next=redoStack.pop(); for(const fid of FACE_NAMES) topArrays[fid]=next[fid];
-  rebuildCanvas(); setStatus('Redone.');
-});
-btnReset.addEventListener('click',()=>{
-  if(!inSmoothMode) return;
-  buildLayers(); rebuildCanvas(); setStatus('Overlays reset.');
-});
-
-// ─────────────────────────────────────
-//  MOUSE — SMOOTH CANVAS
-// ─────────────────────────────────────
-smoothCanvas.addEventListener('mousedown', e=>{
-  e.preventDefault();
-  if(e.button===0) { pushUndo(); drawing=true; const p=canvasPos(e.clientX,e.clientY); eraseAt(p.x,p.y); }
-  else if(e.button===1||e.button===2) { panning=true; panStart={x:e.clientX,y:e.clientY}; smoothCanvas.style.cursor='grabbing'; }
-});
-smoothCanvas.addEventListener('contextmenu',e=>e.preventDefault());
-
-// ─────────────────────────────────────
-//  MOUSE — PREVIEW PAN
-// ─────────────────────────────────────
-previewScroll.addEventListener('mousedown', e=>{
-  if(e.button===2||e.button===1) {
-    e.preventDefault(); prevPanning=true; prevPanStart={x:e.clientX,y:e.clientY};
-    previewScroll.style.cursor='grabbing';
+// ── SAVE ──
+btnSave.addEventListener('click',async()=>{
+  if(!resultCanvas){setStatus('⚠  Nothing to save yet.');return;}
+  if(window.showSaveFilePicker){
+    try{
+      const h=await window.showSaveFilePicker({suggestedName:'cloud1.png',types:[{description:'PNG Image',accept:{'image/png':['.png']}}]});
+      const w=await h.createWritable();
+      await new Promise((res,rej)=>resultCanvas.toBlob(async b=>{try{await w.write(b);await w.close();res();}catch(e){rej(e);};},'image/png'));
+      setStatus(`Saved → ${h.name}`,'done');return;
+    }catch(e){if(e.name==='AbortError')return;}
   }
-});
-previewScroll.addEventListener('contextmenu',e=>e.preventDefault());
-
-window.addEventListener('mousemove', e=>{
-  if(drawing) { const p=canvasPos(e.clientX,e.clientY); eraseAt(p.x,p.y); }
-  if(panning) { scrollWrap.scrollLeft-=e.clientX-panStart.x; scrollWrap.scrollTop-=e.clientY-panStart.y; panStart={x:e.clientX,y:e.clientY}; }
-  if(prevPanning) { previewScroll.scrollLeft-=e.clientX-prevPanStart.x; previewScroll.scrollTop-=e.clientY-prevPanStart.y; prevPanStart={x:e.clientX,y:e.clientY}; }
-});
-window.addEventListener('mouseup', e=>{
-  if(e.button===0) drawing=false;
-  if(e.button===1||e.button===2) {
-    panning=false; smoothCanvas.style.cursor='crosshair';
-    prevPanning=false; previewScroll.style.cursor='';
-  }
-});
-
-// ─────────────────────────────────────
-//  WHEEL ZOOM
-// ─────────────────────────────────────
-scrollWrap.addEventListener('wheel',e=>{ e.preventDefault(); e.deltaY<0?doZoomIn():doZoomOut(); },{passive:false});
-previewScroll.addEventListener('wheel',e=>{
-  e.preventDefault();
-  if(e.deltaY<0) previewZoom=Math.min(PREV_ZOOM_MAX,previewZoom+PREV_ZOOM_STEP);
-  else           previewZoom=Math.max(PREV_ZOOM_MIN,previewZoom-PREV_ZOOM_STEP);
-  applyPreviewZoom();
-},{passive:false});
-
-// ─────────────────────────────────────
-//  TOUCH — SMOOTH CANVAS
-// ─────────────────────────────────────
-function touchDist(t) { const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY; return Math.sqrt(dx*dx+dy*dy); }
-
-smoothCanvas.addEventListener('touchstart',e=>{
-  e.preventDefault();
-  if(e.touches.length===1) { pushUndo(); drawing=true; const p=canvasPos(e.touches[0].clientX,e.touches[0].clientY); eraseAt(p.x,p.y); }
-  else if(e.touches.length===2) { drawing=false; pinchDist0=touchDist(e.touches); pinchZoom0=smoothZoom; }
-},{passive:false});
-smoothCanvas.addEventListener('touchmove',e=>{
-  e.preventDefault();
-  if(e.touches.length===1&&drawing) { const p=canvasPos(e.touches[0].clientX,e.touches[0].clientY); eraseAt(p.x,p.y); }
-  else if(e.touches.length===2&&pinchDist0) { smoothZoom=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,pinchZoom0*(touchDist(e.touches)/pinchDist0))); rebuildCanvas(); }
-},{passive:false});
-smoothCanvas.addEventListener('touchend',e=>{ if(e.touches.length<2) pinchDist0=null; if(!e.touches.length) drawing=false; },{passive:false});
-
-// ─────────────────────────────────────
-//  TOUCH — PREVIEW
-// ─────────────────────────────────────
-previewScroll.addEventListener('touchstart',e=>{
-  e.preventDefault();
-  if(e.touches.length===1) prevTouchPan={x:e.touches[0].clientX,y:e.touches[0].clientY};
-  else if(e.touches.length===2) { prevTouchPan=null; prevPinchDist0=touchDist(e.touches); prevPinchZoom0=previewZoom; }
-},{passive:false});
-previewScroll.addEventListener('touchmove',e=>{
-  e.preventDefault();
-  if(e.touches.length===1&&prevTouchPan) {
-    previewScroll.scrollLeft-=e.touches[0].clientX-prevTouchPan.x;
-    previewScroll.scrollTop -=e.touches[0].clientY-prevTouchPan.y;
-    prevTouchPan={x:e.touches[0].clientX,y:e.touches[0].clientY};
-  } else if(e.touches.length===2&&prevPinchDist0) {
-    previewZoom=Math.max(PREV_ZOOM_MIN,Math.min(PREV_ZOOM_MAX,prevPinchZoom0*(touchDist(e.touches)/prevPinchDist0)));
-    applyPreviewZoom();
-  }
-},{passive:false});
-previewScroll.addEventListener('touchend',e=>{ if(e.touches.length<2) prevPinchDist0=null; if(!e.touches.length) prevTouchPan=null; },{passive:false});
-
-// ─────────────────────────────────────
-//  ZOOM CONTROLS
-// ─────────────────────────────────────
-function doZoomIn()  { if(inSmoothMode){smoothZoom=Math.min(ZOOM_MAX,smoothZoom+ZOOM_STEP);rebuildCanvas();}else{previewZoom=Math.min(PREV_ZOOM_MAX,previewZoom+PREV_ZOOM_STEP);applyPreviewZoom();} }
-function doZoomOut() { if(inSmoothMode){smoothZoom=Math.max(ZOOM_MIN,smoothZoom-ZOOM_STEP);rebuildCanvas();}else{previewZoom=Math.max(PREV_ZOOM_MIN,previewZoom-PREV_ZOOM_STEP);applyPreviewZoom();} }
-
-function fitSmoothToView() {
-  const vw=scrollWrap.clientWidth,vh=scrollWrap.clientHeight;
-  smoothZoom=Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,Math.min(vw/FACE_SIZE,vh/(FACE_SIZE*3))*0.96));
-  rebuildCanvas();
-}
-function applyPreviewZoom() {
-  const el=cubemapPrev.style.display!=='none'?cubemapPrev:previewImg.style.display!=='none'?previewImg:null;
-  if(!el) return;
-  const iw=el.naturalWidth||el.width||1, ih=el.naturalHeight||el.height||1;
-  el.style.width=Math.round(iw*previewZoom)+'px'; el.style.height=Math.round(ih*previewZoom)+'px';
-}
-function fitPreviewToView() {
-  const el=cubemapPrev.style.display!=='none'?cubemapPrev:previewImg.style.display!=='none'?previewImg:null;
-  if(!el) return;
-  const vw=previewScroll.clientWidth-32, vh=previewScroll.clientHeight-32;
-  const iw=el.naturalWidth||el.width||1, ih=el.naturalHeight||el.height||1;
-  previewZoom=Math.max(PREV_ZOOM_MIN,Math.min(PREV_ZOOM_MAX,Math.min(vw/iw,vh/ih)));
-  applyPreviewZoom();
-}
-
-zoomInBtn.addEventListener('click',  doZoomIn);
-zoomOutBtn.addEventListener('click', doZoomOut);
-zoomFitBtn.addEventListener('click', ()=>{ if(inSmoothMode) fitSmoothToView(); else fitPreviewToView(); });
-
-// ─────────────────────────────────────
-//  SLIDERS
-// ─────────────────────────────────────
-brushSlider.addEventListener('input',e=>{ brushSize=+e.target.value; brushLbl.textContent=brushSize+' px'; });
-opacSlider.addEventListener('input', e=>{ brushOpacity=e.target.value/100; opacLbl.textContent=e.target.value+'%'; });
-
-// ─────────────────────────────────────
-//  SAVE — user picks filename
-// ─────────────────────────────────────
-btnSave.addEventListener('click', async () => {
-  if(!resultCanvas) { setStatus('⚠  Nothing to save yet.'); return; }
-
-  // Chrome/Edge desktop: native "Save As" dialog
-  if(window.showSaveFilePicker) {
-    try {
-      const handle = await window.showSaveFilePicker({
-        suggestedName: 'skybox_cubemap.png',
-        types: [{ description: 'PNG Image', accept: {'image/png':['.png']} }]
-      });
-      const writable = await handle.createWritable();
-      await new Promise((res,rej) => {
-        resultCanvas.toBlob(async blob => {
-          try { await writable.write(blob); await writable.close(); res(); } catch(e){rej(e);}
-        }, 'image/png');
-      });
-      setStatus(`Saved → ${handle.name}`,'done');
-      return;
-    } catch(e) { if(e.name==='AbortError') return; }
-  }
-
-  // Fallback: prompt then download
-  const name = prompt('File name (no extension):', 'skybox_cubemap');
-  if(name===null) return;
-  const filename = (name.trim()||'skybox_cubemap').replace(/\.png$/i,'')+'.png';
-  const a=document.createElement('a');
-  a.download=filename; a.href=resultCanvas.toDataURL('image/png'); a.click();
-  setStatus(`Saved → ${filename}`,'done');
+  const fn='cloud1.png';
+  const a=document.createElement('a');a.download=fn;a.href=resultCanvas.toDataURL('image/png');a.click();
+  setStatus(`Saved → ${fn}`,'done');
 });
 </script>
 </body>
