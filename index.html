@@ -223,6 +223,28 @@
             overflow: hidden;
         }
 
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            
+            /* Using your --border variable for the lines */
+            background-image: 
+                linear-gradient(to right, var(--border) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+            background-size: 45px 45px; /* Adjust size to match your screenshot */
+
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 75%);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 75%);
+        }          
+
+        /* Make sure your content stays on top */
+        .hero > * {
+            position: relative;
+            z-index: 1;
+        }
+
         .hero-noise {
             position: absolute;
             inset: 0;
