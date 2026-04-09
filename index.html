@@ -3,131 +3,662 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nabz githap</title>
-    <link rel="stylesheet" id="theme-style" href="assets/css/style.css">
-    <link rel="stylesheet" href="assets/css/global.css">
-    <link rel="stylesheet" href="assets/css/animations.css">
-    <link rel="stylesheet" href="assets/css/sambut.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Nabz — Developer</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0a0a0a;
+            --bg-card: #111111;
+            --bg-card-hover: #161616;
+            --border: rgba(255,255,255,0.07);
+            --border-hover: rgba(255,255,255,0.14);
+            --text-primary: #f0ede8;
+            --text-secondary: #888;
+            --text-muted: #444;
+            --accent: #c8ff57;
+            --accent-dim: rgba(200,255,87,0.08);
+            --accent-dim2: rgba(200,255,87,0.15);
+            --font-display: 'Syne', sans-serif;
+            --font-mono: 'DM Mono', monospace;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.25rem 2.5rem;
+            background: rgba(10,10,10,0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.3s;
+        }
+        nav.scrolled { border-bottom-color: var(--border); }
+
+        .logo {
+            font-family: var(--font-display);
+            font-weight: 800;
+            font-size: 18px;
+            letter-spacing: -0.5px;
+            color: var(--text-primary);
+        }
+        .logo span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            letter-spacing: 0.02em;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover { color: var(--text-primary); }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .github-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            padding: 6px 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .github-link:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+            background: rgba(255,255,255,0.04);
+        }
+        .github-link svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .hamburger div {
+            width: 22px;
+            height: 1.5px;
+            background: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 8rem 2.5rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-noise {
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+            pointer-events: none;
+            opacity: 0.4;
+        }
+
+        .hero-glow {
+            position: absolute;
+            top: -20%;
+            left: -10%;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(ellipse, rgba(200,255,87,0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .hero-tag {
+            font-size: 12px;
+            color: var(--accent);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero-tag::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 800;
+            line-height: 0.95;
+            letter-spacing: -2px;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .hero h1 .typed-line {
+            display: block;
+            color: var(--accent);
+            font-style: italic;
+            min-height: 1.1em;
+        }
+
+        .hero-sub {
+            margin-top: 2rem;
+            max-width: 480px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .hero-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 2.5rem;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #0a0a0a;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-primary:hover {
+            background: #d4ff6a;
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+            display: inline-block;
+        }
+        .btn-ghost:hover {
+            color: var(--text-primary);
+            border-color: var(--border-hover);
+        }
+
+        /* ─── SECTIONS ─── */
+        section {
+            padding: 6rem 2.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.75rem, 3vw, 2.5rem);
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+        }
+
+        /* ─── ABOUT ─── */
+        #about {
+            border-top: 1px solid var(--border);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .about-text p {
+            color: var(--text-secondary);
+            line-height: 1.9;
+            margin-bottom: 1rem;
+        }
+
+        .about-text p strong {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .about-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: var(--bg-card);
+            transition: background 0.2s;
+        }
+        .stat-row:not(:last-child) {
+            border-bottom: 1px solid var(--border);
+        }
+        .stat-row:hover { background: var(--bg-card-hover); }
+        .stat-label { color: var(--text-secondary); font-size: 13px; }
+        .stat-value { color: var(--accent); font-size: 13px; font-weight: 500; }
+
+        /* ─── PROJECTS ─── */
+        #projects { border-top: 1px solid var(--border); }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--border);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .project-card {
+            background: var(--bg-card);
+            padding: 1.75rem;
+            transition: background 0.2s;
+            cursor: default;
+            position: relative;
+        }
+        .project-card:hover { background: var(--bg-card-hover); }
+
+        .project-number {
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+        }
+
+        .project-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: var(--accent-dim);
+            border: 1px solid var(--accent-dim2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.25rem;
+            font-size: 16px;
+        }
+
+        .project-name {
+            font-family: var(--font-display);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.6rem;
+        }
+
+        .project-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .project-badge {
+            display: inline-block;
+            margin-top: 1rem;
+            font-size: 11px;
+            padding: 3px 10px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            letter-spacing: 0.06em;
+        }
+        .project-badge.live {
+            border-color: var(--accent-dim2);
+            color: var(--accent);
+            background: var(--accent-dim);
+        }
+
+        /* ─── CONTACT ─── */
+        #contact { border-top: 1px solid var(--border); }
+
+        .contact-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem;
+            max-width: 560px;
+        }
+
+        .contact-desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 2rem;
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .contact-item:last-child { border-bottom: none; }
+
+        .contact-platform {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .contact-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        .contact-handle {
+            color: var(--text-primary);
+            font-size: 13px;
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 1100px;
+            margin: 0 auto;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        footer a:hover { color: var(--text-primary); }
+
+        /* ─── MOBILE ─── */
+        @media (max-width: 768px) {
+            nav { padding: 1rem 1.25rem; }
+            .nav-links { display: none; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: rgba(10,10,10,0.97); padding: 1.5rem; gap: 1.25rem; border-bottom: 1px solid var(--border); }
+            .nav-links.active { display: flex; }
+            .hamburger { display: flex; }
+            .hero { padding: 7rem 1.25rem 3rem; }
+            section { padding: 4rem 1.25rem; }
+            .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+            .projects-grid { grid-template-columns: 1fr; }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem 1.25rem; }
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up {
+            opacity: 0;
+            animation: fadeUp 0.6s ease forwards;
+        }
+        .fade-up:nth-child(1) { animation-delay: 0.1s; }
+        .fade-up:nth-child(2) { animation-delay: 0.2s; }
+        .fade-up:nth-child(3) { animation-delay: 0.35s; }
+        .fade-up:nth-child(4) { animation-delay: 0.5s; }
+
+        .typed-cursor { color: var(--accent); }
+    </style>
 </head>
 <body>
-    <nav>
-        <div class="logo">Githap</div>
-        <div class="hamburger" onclick="toggleMenu()">
-            <div></div>
-            <div></div>
-            <div></div>
-        </div>
-    <header>
-        <ul id="nav-links">
-            <li><a href="/">Beranda</a></li>
-            <li><a href="#about">Tentang</a></li>
-            <li><a href="#projects">Hasil nganggur</a></li>
-            <li><a href="#contact">Contact</a></li>
-            <li>
-                <button id="toggle-theme" class="p-2 rounded-full transition-all duration-300">
-                    <span id="moon-icon" class="hidden">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
-                        </svg>
-                    </span>
-                    <span id="sun-icon">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"/>
-                        </svg>
-                    </span>
-                </button>
-            </li>
-                <a href="https://github.com/LightNabz" class="flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.11.793-.26.793-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.495.998.108-.775.419-1.305.762-1.605-2.665-.306-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.304-.535-1.524.117-3.176 0 0 1.007-.322 3.301 1.23a11.52 11.52 0 013.004-.404c1.02.004 2.047.137 3.003.403 2.292-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.12 3.177.77.84 1.232 1.91 1.232 3.22 0 4.609-2.805 5.619-5.475 5.92.429.37.823 1.103.823 2.222 0 1.605-.014 2.896-.014 3.287 0 .32.19.694.8.576 4.765-1.592 8.2-6.09 8.2-11.386 0-6.627-5.373-12-12-12z" />
-                  </svg>
-                </a>
-              </li>
-        </ul>
-    </header>
-    </nav>
 
+<nav id="main-nav">
+    <div class="logo">Nabz<span>.</span></div>
+    <div class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
+        <div></div><div></div><div></div>
+    </div>
+    <ul class="nav-links" id="nav-links">
+        <li><a href="#about" onclick="closeMenu()">About</a></li>
+        <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
+        <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+        <a href="https://github.com/LightNabz" class="github-link" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.11.793-.26.793-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.495.998.108-.775.419-1.305.762-1.605-2.665-.306-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.304-.535-1.524.117-3.176 0 0 1.007-.322 3.301 1.23a11.52 11.52 0 013.004-.404c1.02.004 2.047.137 3.003.403 2.292-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.12 3.177.77.84 1.232 1.91 1.232 3.22 0 4.609-2.805 5.619-5.475 5.92.429.37.823 1.103.823 2.222 0 1.605-.014 2.896-.014 3.287 0 .32.19.694.8.576 4.765-1.592 8.2-6.09 8.2-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            GitHub
+        </a>
+    </div>
+</nav>
+
+<main>
+    <!-- HERO -->
     <div class="hero">
-        <h1 class="sambut-container">
-            <span class="sambut"></span>
-        </h1>            
-        <p>Cuma page developer nganggur yang sigma, gada kerjaan aseli.</p>
-        <a href="#projects" class="btn-transparent">Hasil Nganggur</a>
+        <div class="hero-noise"></div>
+        <div class="hero-glow"></div>
+        <div class="fade-up hero-tag">Available for collabs</div>
+        <h1 class="fade-up">
+            Nabz<br>
+            <span class="typed-line"><span class="typed-hero"></span></span>
+        </h1>
+        <p class="fade-up hero-sub">
+            Frontend developer. Meme enthusiast. Occasionally writes code that works on the first try (rare).
+            Based somewhere with WiFi.
+        </p>
+        <div class="fade-up hero-actions">
+            <a href="#projects" class="btn-primary">See my work</a>
+            <a href="#contact" class="btn-ghost">Get in touch</a>
+        </div>
     </div>
 
+    <!-- ABOUT -->
     <section id="about">
-        <h2 class="text-2xl font-semibold mb-4">Tentang Saya</h2>
-        <p class="text">Saya Nabz, saya suka mim</p>
-    </section>
-
-    <section id="projects" class="bg-gray-800 py-12 px-4">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-2xl font-semibold mb-8 text-center">Hasil Nganggur</h2>
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Box 1 -->
-                <div id=""class="background-container bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <img src="/assets/images/fallback.jpg" alt="Proyek 1" class="w-full h-48 object-cover rounded-lg" />
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold mb-2">Public Board</h3>
-                        <p class="text">Terinspirasi dari papan buletin di SpongeBob dan kegabutan dev nganggur seperti saya.</p>
-                    </div>
+        <p class="section-label">01 — About</p>
+        <h2 class="section-title">Who's this guy</h2>
+        <div class="about-grid">
+            <div class="about-text">
+                <p>Hey, I'm <strong>Nabz</strong> — a frontend developer who got into coding because of a dangerous mix of free time and curiosity. I build things for the web, sometimes they work great, sometimes they just work.</p>
+                <p>I'm into clean interfaces, Linux tinkering, and memes that hit a little too close to home. When I'm not pushing commits, I'm probably tweaking my Arch setup or overthinking a CSS property.</p>
+                <p>Open to <strong>projects, collabs, or just talking tech</strong> if you've got something interesting.</p>
+            </div>
+            <div class="about-stats">
+                <div class="stat-row">
+                    <span class="stat-label">Focus</span>
+                    <span class="stat-value">Frontend Dev</span>
                 </div>
-                <!-- Box 2 -->
-                <div class="background-container bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <img src="/assets/images/fallback.jpg" alt="Proyek 2" class="w-full h-48 object-cover rounded-lg" />
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold mb-2">NguliSim</h3>
-                        <p class="text">Game simulasi sebagai developer frontend, bisa dibilang seperti Duolingo tapi untuk dev fronted. (Coming soon)</p>
-                    </div>
+                <div class="stat-row">
+                    <span class="stat-label">OS of choice</span>
+                    <span class="stat-value">Arch, btw</span>
                 </div>
-                <!-- Box 3 -->
-                <div class="background-container bg-[#181825] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                    <img src="/assets/images/fallback.jpg" alt="Proyek 3" class="w-full h-48 object-cover rounded-lg" />
-                    <div class="mt-4">
-                        <h3 class="text-lg font-bold mb-2">SharkOS</h3>
-                        <p class="text">Distro linux berbasis Arch-Linux yang diperuntukkan untuk developer dan designer dengan
-                            fitur rolling release yang stabil dan mudah digunakan. (Coming soon)
-                        </p>
-                    </div>
+                <div class="stat-row">
+                    <span class="stat-label">Vibe</span>
+                    <span class="stat-value">Sigma grindset (ironic)</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Currently building</span>
+                    <span class="stat-value">NguliSim, SharkOS</span>
+                </div>
+                <div class="stat-row">
+                    <span class="stat-label">Status</span>
+                    <span class="stat-value">Open to work</span>
                 </div>
             </div>
         </div>
     </section>
-    
-    <section id="contact" class="bg-gray-800 py-12 px-4">
-        <div class="max-w-3xl mx-auto">
-            <div class="background-container bg-[#1E1E2E] rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
-                <h2 class="text-3xl font-semibold mb-6 text-center">Kontak</h2>
-                <p class="text text-center mb-6">Mau ngobrol? Kirim aja ke:</p>
-                <ul class="space-y-4 text text-lg">
-                    <li class="flex items-center justify-start">
-                        <span class="text-blue-400 mr-3">💬</span>
-                        Discord: <span class="font-mono text"> LightNabz</span>
-                    </li>
-                    <li class="flex items-center justify-start">
-                        <span class="text-green-400 mr-3">📱</span>
-                        Wangsaf: <span class="font-mono text"> 086969420</span>
-                    </li>
-                </ul>
+
+    <!-- PROJECTS -->
+    <section id="projects">
+        <p class="section-label">02 — Projects</p>
+        <h2 class="section-title">Things I built</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <div class="project-number">001</div>
+                <div class="project-icon">📋</div>
+                <div class="project-name">Public Board</div>
+                <p class="project-desc">A public bulletin board inspired by the one in SpongeBob and the developer's chronic free time. Post stuff, read stuff, vibe.</p>
+                <span class="project-badge live">Live</span>
+            </div>
+            <div class="project-card">
+                <div class="project-number">002</div>
+                <div class="project-icon">💻</div>
+                <div class="project-name">NguliSim</div>
+                <p class="project-desc">Frontend dev simulator — like Duolingo but instead of learning Spanish you learn how to suffer through CSS layouts and client feedback.</p>
+                <span class="project-badge">Coming soon</span>
+            </div>
+            <div class="project-card">
+                <div class="project-number">003</div>
+                <div class="project-icon">🦈</div>
+                <div class="project-name">SharkOS</div>
+                <p class="project-desc">Arch-based Linux distro built for developers and designers. Rolling release, stable, and doesn't require a PhD to install.</p>
+                <span class="project-badge">Coming soon</span>
             </div>
         </div>
-    </section>    
+    </section>
 
-    <footer>
-        <p>&copy; 2025 Nabz | <a href="https://github.com/LightNabz" target="_blank">GitHub</a></p>
-    </footer>
+    <!-- CONTACT -->
+    <section id="contact">
+        <p class="section-label">03 — Contact</p>
+        <h2 class="section-title">Say something</h2>
+        <div class="contact-card">
+            <p class="contact-desc">Got a project, a question, or just want to talk about Linux for 3 hours? Hit me up anywhere below.</p>
+            <ul class="contact-list">
+                <li class="contact-item">
+                    <span class="contact-platform">
+                        <span class="contact-dot"></span>
+                        Discord
+                    </span>
+                    <span class="contact-handle">LightNabz</span>
+                </li>
+                <li class="contact-item">
+                    <span class="contact-platform">
+                        <span class="contact-dot"></span>
+                        WhatsApp
+                    </span>
+                    <span class="contact-handle">086969420</span>
+                </li>
+                <li class="contact-item">
+                    <span class="contact-platform">
+                        <span class="contact-dot"></span>
+                        GitHub
+                    </span>
+                    <a href="https://github.com/LightNabz" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none;">@LightNabz</a>
+                </li>
+            </ul>
+        </div>
+    </section>
+</main>
 
-    <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
-    <script>
-        var typed = new Typed(".sambut", {
-            strings:["Welcome to Proyek Gabut", "Masih ongoing", "Enggan ngoding"],
-            typeSpeed: 150,
-            backSpeed: 150,
-            loop: true
-        })
-    </script>
-    <script src="assets/js/script.js"></script>
+<footer>
+    <span>&copy; 2025 Nabz</span>
+    <a href="https://github.com/LightNabz" target="_blank" rel="noopener">github.com/LightNabz</a>
+</footer>
+
+<script>
+    // Nav scroll
+    window.addEventListener('scroll', () => {
+        document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Hamburger
+    function toggleMenu() {
+        document.getElementById('nav-links').classList.toggle('active');
+    }
+    function closeMenu() {
+        document.getElementById('nav-links').classList.remove('active');
+    }
+
+    // Typed.js
+    new Typed('.typed-hero', {
+        strings: ['builds things.', 'writes code.', 'loves memes.', 'touches grass rarely.'],
+        typeSpeed: 70,
+        backSpeed: 40,
+        backDelay: 1800,
+        loop: true,
+        cursorChar: '_',
+    });
+
+    // Intersection observer for scroll reveals
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.project-card, .stat-row, .contact-item').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(12px)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(el);
+    });
+</script>
 </body>
 </html>
