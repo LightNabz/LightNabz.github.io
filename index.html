@@ -23,6 +23,7 @@
             --accent-dim2: rgba(200,255,87,0.15);
             --font-display: 'Syne', sans-serif;
             --font-mono: 'DM Mono', monospace;
+            --who-tilt: -15deg;
         }
 
         html { scroll-behavior: smooth; }
@@ -257,6 +258,34 @@
         /* ─── ABOUT ─── */
         #about {
             border-top: 1px solid var(--border);
+            position: relative;
+        }
+
+        #about::before {
+            content: "";
+            position: absolute;
+            
+            top: 50%;
+            left: -50px;
+            transform: translateY(-50%) rotate(var(--who-tilt));
+            width: 350px;
+            height: 350px;
+            background-image: url('whoisthis.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;            
+            z-index: 0;
+            pointer-events: none;
+
+            animation: fadeUpWHOImage 0.8s ease forwards;
+        }
+
+        /* Ensure the image stays on top of the image */
+        .about-grid, 
+        .section-label, 
+        .section-title {
+            position: relative;
+            z-index: 1;
         }
 
         .about-grid {
@@ -302,10 +331,26 @@
         .stat-value { color: var(--accent); font-size: 13px; font-weight: 500; }
 
         /* ─── PROJECTS ─── */
-        #projects { border-top: 1px solid var(--border); }
+        #projects { border-top: 1px solid var(--border); position: relative;}
+
+        .project-peeker {
+            position: absolute;
+            right: 75px;
+            top: 180px; 
+            
+            width: 80px;
+            height: auto;
+            z-index: 0;
+            pointer-events: none;
+            
+            /* Slight rotation for more "peeking" personality */
+            /* transform: rotate(5deg); */
+        }
 
         .projects-grid {
             display: grid;
+            position: relative;
+            z-index: 1;
             grid-template-columns: repeat(3, 1fr);
             gap: 1px;
             background: var(--border);
@@ -374,16 +419,31 @@
         }
 
         /* ─── CONTACT ─── */
-        #contact { border-top: 1px solid var(--border); }
+        #contact { border-top: 1px solid var(--border);}
+            
+        .contact-content {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem; }
 
         .contact-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 2.5rem;
+            flex: 1;
             max-width: 560px;
+            z-index: 1;
         }
 
+        .contact-image {
+            width: 300px;
+            height: auto;
+            object-fit: cover;
+            border-radius: 12px;
+        }
         .contact-desc {
             color: var(--text-secondary);
             font-size: 13px;
@@ -456,7 +516,13 @@
             section { padding: 4rem 1.25rem; }
             .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
             .projects-grid { grid-template-columns: 1fr; }
+            .project-peeker { top: 128px; }
             footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem 1.25rem; }
+            #about {overflow: hidden;}
+            #about::before {top: 50%; left: 85px; width: 400px; height: 400px; transform: translateY(-50%) rotate(var(--who-tilt)); opacity: 0.04;}
+            .contact-content { flex-direction: column; align-items: center; }
+            .contact-image { margin-top: 2rem; }       
+            :root { --who-tilt: 15deg; }
         }
 
         /* ─── ANIMATIONS ─── */
@@ -475,6 +541,130 @@
         .fade-up:nth-child(4) { animation-delay: 0.5s; }
 
         .typed-cursor { color: var(--accent); }
+
+        @keyframes fadeUpWHOImage {
+            from { 
+                opacity: 0; 
+                transform: translateY(-40%) rotate(var(--who-tilt));
+            } to { 
+                opacity: 0.08; 
+                transform: translateY(-50%) rotate(var(--who-tilt));
+            }
+        }
+
+        /* ─── OS ROW CLICKABLE ─── */
+        .stat-os {
+            cursor: pointer;
+            user-select: none;
+        }
+        .stat-os:hover .os-val { color: var(--accent); }
+        .stat-hint {
+            font-size: 10px;
+            opacity: 0.45;
+            margin-left: 4px;
+            transition: opacity 0.2s;
+        }
+        .stat-os:hover .stat-hint { opacity: 1; }
+
+        /* ─── NEOFETCH TERMINAL ─── */
+        .about-stats-wrap { position: relative; }
+
+        .neofetch-wrap {
+            position: absolute;
+            inset: 0;
+            background: #0d0f0d;
+            border: 1px solid rgba(200,255,87,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.97) translateY(6px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 0 40px rgba(200,255,87,0.05);
+        }
+        .neofetch-wrap.visible {
+            opacity: 1;
+            pointer-events: all;
+            transform: scale(1) translateY(0);
+        }
+
+        .neo-titlebar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: #151815;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .neo-dot { width: 11px; height: 11px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
+        .neo-red { background: #ff5f57; }
+        .neo-yellow { background: #febc2e; }
+        .neo-green { background: #28c840; }
+        .neo-title { flex: 1; text-align: center; color: #555; font-size: 11px; letter-spacing: 0.04em; }
+
+        .neo-body {
+            display: flex;
+            gap: 1.25rem;
+            padding: 1rem 1.25rem 0.5rem;
+            align-items: flex-start;
+        }
+
+        .neo-arch {
+            color: var(--accent);
+            font-size: 10px;
+            line-height: 1.25;
+            white-space: pre;
+            flex-shrink: 0;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.3s;
+        }
+        .neofetch-wrap.visible .neo-arch { opacity: 1; }
+
+        .neo-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 1px;
+            min-height: 120px;
+        }
+
+        .neo-line {
+            font-size: 12px;
+            line-height: 1.65;
+            opacity: 0;
+            transform: translateX(-5px);
+            transition: opacity 0.12s ease, transform 0.12s ease;
+            white-space: nowrap;
+        }
+        .neo-line.show { opacity: 1; transform: translateX(0); }
+        .neo-key { color: var(--accent); font-weight: 500; }
+        .neo-colon { color: #444; }
+        .neo-val { color: #c0bdb8; }
+        .neo-header { color: var(--accent); font-weight: 500; font-size: 13px; margin-bottom: 2px; }
+        .neo-uline { color: #333; letter-spacing: -1px; }
+        .neo-swatches { display: flex; gap: 3px; margin-top: 3px; }
+        .neo-sw { width: 13px; height: 13px; border-radius: 2px; display: inline-block; }
+
+        .neo-prompt {
+            padding: 4px 1.25rem 10px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .neofetch-wrap.visible .neo-prompt { opacity: 1; transition-delay: 1.8s; }
+        .neo-user { color: var(--accent); }
+        .neo-sep { color: #444; }
+        .neo-path { color: #74b8f7; }
+        .neo-dollar { color: #444; margin: 0 6px 0 2px; }
+        .neo-cursor { color: var(--accent); animation: blink 1s step-end infinite; font-size: 11px; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
     </style>
 </head>
 <body>
@@ -508,7 +698,7 @@
             <span class="typed-line"><span class="typed-hero"></span></span>
         </h1>
         <p class="fade-up hero-sub">
-            Frontend developer. Meme enthusiast. Occasionally writes code that works on the first try (rare).
+            All-rounder open-source developer. Meme enthusiast. Occasionally writes code that works on the first try (rare).
             Based somewhere with WiFi.
         </p>
         <div class="fade-up hero-actions">
@@ -523,30 +713,51 @@
         <h2 class="section-title">Who's this guy</h2>
         <div class="about-grid">
             <div class="about-text">
-                <p>Hey, I'm <strong>Nabz</strong> — a frontend developer who got into coding because of a dangerous mix of free time and curiosity. I build things for the web, sometimes they work great, sometimes they just work.</p>
+                <p>Hey, I'm <strong>Nabz</strong> — an open-source developer who got into coding because of a dangerous mix of free time and curiosity, and of course OSS enthusiast. I build things like websites, sometimes they work great, sometimes they just work.</p>
                 <p>I'm into clean interfaces, Linux tinkering, and memes that hit a little too close to home. When I'm not pushing commits, I'm probably tweaking my Arch setup or overthinking a CSS property.</p>
                 <p>Open to <strong>projects, collabs, or just talking tech</strong> if you've got something interesting.</p>
             </div>
-            <div class="about-stats">
+            <div class="about-stats-wrap">
+            <div class="about-stats" id="about-stats">
                 <div class="stat-row">
                     <span class="stat-label">Focus</span>
-                    <span class="stat-value">Frontend Dev</span>
+                    <span class="stat-value">All-rounder Dev (probably)</span>
                 </div>
-                <div class="stat-row">
+                <div class="stat-row stat-os" id="stat-os" onclick="triggerNeofetch()" title="click me... or don't">
                     <span class="stat-label">OS of choice</span>
-                    <span class="stat-value">Arch, btw</span>
+		    <span class="stat-value os-val">Arch, btw <!-- <span class="stat-hint">↗</span> --> </span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Vibe</span>
-                    <span class="stat-value">Sigma grindset (ironic)</span>
+                    <span class="stat-value">A Gooner</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Currently building</span>
-                    <span class="stat-value">NguliSim, SharkOS</span>
+                    <span class="stat-value">Absolutely Nothing</span>
                 </div>
                 <div class="stat-row">
                     <span class="stat-label">Status</span>
                     <span class="stat-value">Open to work</span>
+                </div>
+            </div>
+
+            <!-- NEOFETCH TERMINAL -->
+            <div class="neofetch-wrap" id="neofetch-wrap" aria-hidden="true">
+                <div class="neo-titlebar">
+                    <span class="neo-dot neo-red" onclick="closeNeofetch()"></span>
+                    <span class="neo-dot neo-yellow"></span>
+                    <span class="neo-dot neo-green"></span>
+                    <span class="neo-title">nabz@arch-chan — fastfetch</span>
+                </div>
+                <div class="neo-body">
+                    <div class="neo-left">
+                        <pre class="neo-arch" id="neo-arch"></pre>
+                    </div>
+                    <div class="neo-right" id="neo-right"></div>
+                </div>
+                <div class="neo-prompt">
+                    <span class="neo-user">nabz@arch-chan</span><span class="neo-sep">:</span><span class="neo-path">~</span><span class="neo-dollar">$</span>
+                    <span class="neo-cursor">█</span>
                 </div>
             </div>
         </div>
@@ -556,6 +767,7 @@
     <section id="projects">
         <p class="section-label">02 — Projects</p>
         <h2 class="section-title">Things I built</h2>
+        <img src="https://media.tenor.com/7W585rBd2PQAAAAi/sabakitty-saba-kitty.gif" alt="Hiii" class="project-peeker fade-up">
         <div class="projects-grid">
             <div class="project-card">
                 <div class="project-number">001</div>
@@ -585,6 +797,8 @@
     <section id="contact">
         <p class="section-label">03 — Contact</p>
         <h2 class="section-title">Say something</h2>
+
+        <div class="contact-content">
         <div class="contact-card">
             <p class="contact-desc">Got a project, a question, or just want to talk about Linux for 3 hours? Hit me up anywhere below.</p>
             <ul class="contact-list">
@@ -610,6 +824,9 @@
                     <a href="https://github.com/LightNabz" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none;">@LightNabz</a>
                 </li>
             </ul>
+        </div>
+
+        <img src="halo.jpg" alt="Halo" class="contact-image">
         </div>
     </section>
 </main>
@@ -643,7 +860,87 @@
         cursorChar: '_',
     });
 
-    // Intersection observer for scroll reveals
+    // ─── NEOFETCH EASTER EGG ───
+    const ARCH_ART = `
+
+
+          .
+         / \\
+        /   \\
+       /\\    \\
+      /       \\
+     /         \\
+    /    .-.    \\
+   /    |   |   _\\
+  /   _.'   '._   \\
+ /_.-'         '-._\\
+    `;
+
+    const NEO_LINES = [
+        { type: 'header', text: 'nabz@arch-chan' },
+        { type: 'uline',  text: '-------------' },
+        { type: 'row', key: 'OS',      val: 'Arch Linux x86_64' },
+        { type: 'row', key: 'Kernel',  val: '6.7.6-arch1-1' },
+        { type: 'row', key: 'Shell',   val: 'fih 🐟' },
+        { type: 'row', key: 'DE/WM',   val: 'Hyprland' },
+        { type: 'row', key: 'Editor',  val: 'nvim (of course)' },
+        { type: 'row', key: 'Memory',  val: 'RAM in this economy...' },
+        { type: 'row', key: 'CPU',     val: 'Intel i10-6767 (12) @ 6.7GHz' },
+        { type: 'row', key: 'Uptime',  val: '12 days, 4 hrs (no cap)' },
+        { type: 'blank' },
+        { type: 'colors' },
+    ];
+
+    function triggerNeofetch() {
+        const wrap = document.getElementById('neofetch-wrap');
+        const stats = document.getElementById('about-stats');
+        const archEl = document.getElementById('neo-arch');
+        const rightEl = document.getElementById('neo-right');
+
+        // set arch art
+        archEl.textContent = ARCH_ART;
+
+        // clear previous lines
+        rightEl.innerHTML = '';
+
+        wrap.classList.add('visible');
+        stats.style.visibility = 'hidden';
+
+        // build lines
+        NEO_LINES.forEach((item, i) => {
+            const div = document.createElement('div');
+            div.className = 'neo-line';
+
+            if (item.type === 'header') {
+                div.innerHTML = `<span class="neo-header">${item.text}</span>`;
+            } else if (item.type === 'uline') {
+                div.innerHTML = `<span class="neo-uline">${item.text}</span>`;
+            } else if (item.type === 'row') {
+                div.innerHTML = `<span class="neo-key">${item.key}</span><span class="neo-colon">: </span><span class="neo-val">${item.val}</span>`;
+            } else if (item.type === 'blank') {
+                div.innerHTML = '&nbsp;';
+            } else if (item.type === 'colors') {
+                const colors = ['#1e1e2e','#f38ba8','#a6e3a1','#f9e2af','#89b4fa','#cba6f7','#94e2d5','#cdd6f4'];
+                div.innerHTML = colors.map(c => `<span class="neo-sw" style="background:${c}"></span>`).join('');
+                div.style.display = 'flex';
+                div.style.gap = '3px';
+                div.style.marginTop = '3px';
+            }
+
+            rightEl.appendChild(div);
+
+            // staggered reveal
+            setTimeout(() => div.classList.add('show'), 100 + i * 80);
+        });
+    }
+
+    function closeNeofetch() {
+        const wrap = document.getElementById('neofetch-wrap');
+        const stats = document.getElementById('about-stats');
+        wrap.classList.remove('visible');
+        stats.style.visibility = 'visible';
+    }
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
