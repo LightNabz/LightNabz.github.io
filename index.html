@@ -12,6 +12,7 @@
         :root {
             --bg: #0a0a0a;
             --bg-card: #111111;
+            --bg-card-alt: #141414;
             --bg-card-hover: #161616;
             --border: rgba(255,255,255,0.07);
             --border-hover: rgba(255,255,255,0.14);
@@ -270,7 +271,7 @@
             transform: translateY(-50%) rotate(var(--who-tilt));
             width: 350px;
             height: 350px;
-            background-image: url('assets/images/whoisthis.jpg');
+            background-image: url('whoisthis.jpg');
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;            
@@ -352,7 +353,7 @@
             position: relative;
             z-index: 1;
             grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
+            gap: 2px;
             background: var(--border);
             border: 1px solid var(--border);
             border-radius: 12px;
@@ -365,8 +366,20 @@
             transition: background 0.2s;
             cursor: default;
             position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         .project-card:hover { background: var(--bg-card-hover); }
+
+        /* This targets the 2nd, 4th, 6th... cards */
+        .project-card:nth-child(even) {
+            background: var(--bg-card-alt);
+        }
+
+        .project-card:nth-child(even):hover {
+            background: var(--bg-card-hover) !important;
+        }
 
         .project-number {
             font-size: 11px;
@@ -400,11 +413,19 @@
             color: var(--text-secondary);
             font-size: 13px;
             line-height: 1.7;
+            flex-grow: 1;
+            display: -webkit-box;
+            -webkit-line-clamp: 6; /* Change this number to show more/less lines */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 1.25rem; /* Space between text and badge */
         }
 
         .project-badge {
+            align-self: flex-start;
             display: inline-block;
-            margin-top: 1rem;
+            /* margin-top: 1rem; */
             font-size: 11px;
             padding: 3px 10px;
             border-radius: 20px;
@@ -443,6 +464,7 @@
             height: auto;
             object-fit: cover;
             border-radius: 12px;
+            animation: fadeUp 0.8s ease forwards;
         }
         .contact-desc {
             color: var(--text-secondary);
@@ -807,7 +829,7 @@
                         <span class="contact-dot"></span>
                         Discord
                     </span>
-                    <span class="contact-handle">LightNabz</span>
+                    <span class="contact-handle">lightnabz</span>
                 </li>
                 <li class="contact-item">
                     <span class="contact-platform">
@@ -826,7 +848,7 @@
             </ul>
         </div>
 
-        <img src="assets/images/halo.jpg" alt="Halo" class="contact-image">
+        <img src="halo.jpg" alt="Halo" class="contact-image">
         </div>
     </section>
 </main>
