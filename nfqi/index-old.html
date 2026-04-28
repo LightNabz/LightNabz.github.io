@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[Friend's Name] — Official Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Noto+Serif+JP:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #05060f;
+    --deep: #0b0d1f;
+    --panel: #0f1128;
+    --gold: #c9a84c;
+    --gold2: #f0d080;
+    --sakura: #e87dac;
+    --sakura2: #f9b8d4;
+    --cyan: #5ef0e8;
+    --text: #dde0f0;
+    --muted: #7880aa;
+    --border: rgba(201,168,76,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'Noto Serif JP', serif;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    background-size: 150px;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--deep); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 3px; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+    padding: 60px 24px;
+    background: radial-gradient(ellipse 80% 60% at 50% 40%, #1a0d35 0%, var(--navy) 70%);
+    overflow: hidden;
+  }
+
+  /* floating sakura petals */
+  .petal {
+    position: absolute;
+    width: 8px; height: 10px;
+    background: var(--sakura);
+    border-radius: 50% 0 50% 0;
+    opacity: 0;
+    animation: fall linear infinite;
+  }
+  @keyframes fall {
+    0%   { transform: translateY(-60px) rotate(0deg) translateX(0); opacity: 0.7; }
+    100% { transform: translateY(110vh) rotate(360deg) translateX(60px); opacity: 0; }
+  }
+
+  /* grid lines bg */
+  .hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: var(--gold);
+    color: #000;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.25em;
+    padding: 4px 14px;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+    animation: fadeDown 0.6s ease both;
+  }
+
+  .hero-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.8rem, 8vw, 6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: 0.04em;
+    position: relative;
+    z-index: 1;
+    animation: fadeDown 0.8s 0.1s ease both;
+    background: linear-gradient(135deg, var(--gold2) 0%, var(--gold) 40%, var(--sakura2) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .glitch-line {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+    color: var(--cyan);
+    letter-spacing: 0.2em;
+    margin-top: 14px;
+    position: relative;
+    z-index: 1;
+    animation: fadeDown 0.8s 0.2s ease both, glitch 4s 2s infinite;
+  }
+
+  @keyframes glitch {
+    0%, 92%, 100% { text-shadow: none; transform: translateX(0); }
+    93% { text-shadow: 2px 0 var(--sakura); transform: translateX(-2px); }
+    95% { text-shadow: -2px 0 var(--cyan); transform: translateX(2px); }
+    97% { text-shadow: 2px 0 var(--sakura); transform: translateX(0); }
+  }
+
+  .hero-subtitle {
+    margin-top: 24px;
+    font-size: 0.95rem;
+    color: var(--muted);
+    font-weight: 300;
+    letter-spacing: 0.08em;
+    position: relative;
+    z-index: 1;
+    animation: fadeDown 0.8s 0.35s ease both;
+  }
+
+  .hero-scroll {
+    margin-top: 56px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.3em;
+    position: relative;
+    z-index: 1;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION SHELL ── */
+  section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 100px 32px;
+  }
+
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    background: linear-gradient(90deg, var(--gold2), var(--sakura2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 48px;
+    line-height: 1.2;
+  }
+
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .about-photo {
+    aspect-ratio: 3/4;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.05) 0%, rgba(232,125,172,0.05) 100%);
+  }
+
+  .photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: var(--muted);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    z-index: 1;
+  }
+
+  .photo-icon {
+    width: 64px; height: 64px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+  }
+
+  .about-photo .corner {
+    position: absolute;
+    width: 20px; height: 20px;
+    border-color: var(--gold);
+    border-style: solid;
+    opacity: 0.6;
+  }
+  .corner.tl { top: 10px; left: 10px; border-width: 1px 0 0 1px; }
+  .corner.tr { top: 10px; right: 10px; border-width: 1px 1px 0 0; }
+  .corner.bl { bottom: 10px; left: 10px; border-width: 0 0 1px 1px; }
+  .corner.br { bottom: 10px; right: 10px; border-width: 0 1px 1px 0; }
+
+  .about-content { display: flex; flex-direction: column; gap: 20px; }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .stat-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 16px 20px;
+    position: relative;
+  }
+
+  .stat-box::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .stat-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .stat-val {
+    font-size: 1.05rem;
+    color: var(--gold2);
+    font-weight: 700;
+  }
+
+  .about-bio {
+    color: var(--text);
+    font-size: 0.95rem;
+    line-height: 1.9;
+    font-weight: 300;
+    border-left: 2px solid var(--sakura);
+    padding-left: 20px;
+    font-style: italic;
+  }
+
+  .certifications {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .cert-tag {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--gold);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    padding: 4px 12px;
+    letter-spacing: 0.1em;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--sakura), transparent);
+    opacity: 0.35;
+    margin: 0 auto;
+  }
+
+  /* ── WAIFU SHRINE ── */
+  .shrine-intro {
+    max-width: 600px;
+    margin-bottom: 56px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .waifu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+  }
+
+  .waifu-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    animation: cardIn 0.5s ease both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .waifu-card:hover {
+    transform: translateY(-6px);
+    border-color: var(--sakura);
+    box-shadow: 0 16px 40px rgba(232,125,172,0.2), 0 0 0 1px rgba(232,125,172,0.15);
+  }
+
+  .waifu-card:hover .waifu-rank { color: var(--sakura2); }
+  .waifu-card:hover .waifu-overlay { opacity: 1; }
+
+  .waifu-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+    background: var(--deep);
+  }
+
+  .waifu-photo-placeholder {
+    width: 100%;
+    aspect-ratio: 3/4;
+    background: linear-gradient(160deg, var(--deep) 0%, #130f25 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 2.2rem;
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  .waifu-photo-placeholder small {
+    font-size: 0.55rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+  }
+
+  .waifu-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(0deg, rgba(5,6,15,0.95) 0%, rgba(5,6,15,0.2) 60%, transparent 100%);
+    opacity: 0.7;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .waifu-info {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    padding: 16px 14px 14px;
+  }
+
+  .waifu-rank {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--gold);
+    letter-spacing: 0.25em;
+    margin-bottom: 3px;
+    transition: color 0.3s;
+  }
+
+  .waifu-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.82rem;
+    color: #fff;
+    line-height: 1.3;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+  }
+
+  .waifu-series {
+    font-size: 0.65rem;
+    color: var(--muted);
+    margin-top: 4px;
+    font-weight: 300;
+    font-style: italic;
+  }
+
+  .waifu-hearts {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 0.7rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .waifu-card:hover .waifu-hearts { opacity: 1; }
+
+  /* special gold border for top 3 */
+  .waifu-card.top3 { border-color: rgba(201,168,76,0.5); }
+  .waifu-card.top3::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,168,76,0.04) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .skill-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skill-card::before {
+    content: attr(data-kanji);
+    position: absolute;
+    top: -10px; right: -5px;
+    font-size: 6rem;
+    color: rgba(201,168,76,0.04);
+    line-height: 1;
+    pointer-events: none;
+    font-family: 'Noto Serif JP', serif;
+  }
+
+  .skill-icon { font-size: 1.6rem; margin-bottom: 12px; }
+  .skill-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.95rem;
+    color: var(--gold2);
+    margin-bottom: 8px;
+  }
+  .skill-desc {
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .skill-bar-wrap {
+    margin-top: 14px;
+    height: 3px;
+    background: rgba(255,255,255,0.05);
+    position: relative;
+  }
+
+  .skill-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--sakura));
+    position: relative;
+    animation: barGrow 1.5s ease both;
+    transform-origin: left;
+  }
+
+  @keyframes barGrow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 60px 32px;
+    border-top: 1px solid var(--border);
+    background: var(--deep);
+  }
+
+  .footer-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.2rem;
+    background: linear-gradient(90deg, var(--gold), var(--sakura2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+
+  .footer-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 32px;
+  }
+
+  .footer-seal {
+    display: inline-block;
+    border: 1px solid var(--border);
+    padding: 12px 28px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 720px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .stat-row { grid-template-columns: 1fr 1fr; }
+    .waifu-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .waifu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    section { padding: 64px 20px; }
+  }
+
+  /* TORII DECO */
+  .torii {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 12px rgba(201,168,76,0.4));
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+</style>
+</head>
+<body>
+
+<!-- Sakura petals -->
+<script>
+  const colors = ['#e87dac','#f9b8d4','#c9a84c','#f0d080'];
+  for(let i=0;i<18;i++){
+    const p=document.createElement('div');
+    p.className='petal';
+    p.style.cssText=`
+      left:${Math.random()*100}vw;
+      width:${6+Math.random()*8}px;
+      height:${8+Math.random()*10}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      animation-duration:${8+Math.random()*12}s;
+      animation-delay:-${Math.random()*12}s;
+      opacity:${0.4+Math.random()*0.5};
+      border-radius:${Math.random()>0.5?'50% 0 50% 0':'0 50% 0 50%'};
+    `;
+    document.body.appendChild(p);
+  }
+</script>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-badge">✦ Official Portfolio ✦</div>
+  <div class="torii">⛩️</div>
+  <h1 class="hero-name">[Friend's Name]</h1>
+  <div class="glitch-line">CERTIFIED ANIME CONNOISSEUR // PROFESSIONAL WAIFU CURATOR</div>
+  <p class="hero-subtitle">
+    Devotee of the Sacred Arts · Protector of Fictional Characters · Man of Culture
+  </p>
+  <div class="hero-scroll">▼ &nbsp; SCROLL TO WITNESS &nbsp; ▼</div>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<section>
+  <div class="about-grid">
+    <div class="about-photo">
+      <div class="corner tl"></div>
+      <div class="corner tr"></div>
+      <div class="corner bl"></div>
+      <div class="corner br"></div>
+      <div class="photo-placeholder">
+        <div class="photo-icon">🖼️</div>
+        <span>[ INSERT PHOTO ]</span>
+        <span style="font-size:0.55rem;opacity:0.4">replace me pls</span>
+      </div>
+    </div>
+
+    <div class="about-content">
+      <div>
+        <div class="section-label">// 001 &nbsp; IDENTITY FILE</div>
+        <h2 class="section-title">About the<br>Protagonist</h2>
+      </div>
+
+      <p class="about-bio">
+        A man who has dedicated his life to the appreciation of fictional women drawn in 2D. 
+        His taste is widely regarded as "unhinged but oddly consistent." 
+        He cries at anime openings and owns too many body pillows to count. 
+        A true scholar of the craft.
+      </p>
+
+      <div class="stat-row">
+        <div class="stat-box">
+          <div class="stat-label">Waifus Catalogued</div>
+          <div class="stat-val">20 (official)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Series Watched</div>
+          <div class="stat-val">∞ (lost count)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Skill Level</div>
+          <div class="stat-val">SSS-Tier Weeb</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Social Life</div>
+          <div class="stat-val">Pending...</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="stat-label" style="margin-bottom:10px">CERTIFICATIONS & HONORS</div>
+        <div class="certifications">
+          <span class="cert-tag">✦ Man of Culture</span>
+          <span class="cert-tag">✦ Isekai Survivor</span>
+          <span class="cert-tag">✦ Certified Gamer</span>
+          <span class="cert-tag">✦ Emotionally Unavailable (IRL)</span>
+          <span class="cert-tag">✦ Toaster Safety Hazard</span>
+          <span class="cert-tag">✦ Tsundere Enthusiast</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ SKILLS ═══ -->
+<section>
+  <div class="section-label">// 002 &nbsp; COMPETENCIES</div>
+  <h2 class="section-title">Professional<br>Skillset</h2>
+
+  <div class="skills-grid">
+    <div class="skill-card" data-kanji="才">
+      <div class="skill-icon">🎌</div>
+      <div class="skill-name">Anime Analysis</div>
+      <div class="skill-desc">Can identify a character by hair strand alone. Expert in detecting plot armor, foreshadowing, and when a character is about to die tragically.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:97%"></div></div>
+    </div>
+    <div class="skill-card" data-kanji="愛">
+      <div class="skill-icon">💘</div>
+      <div class="skill-name">Waifu Selection</div>
+      <div class="skill-desc">Curates waifus across all major genres: isekai, mecha, idol, VTuber, and beyond. Each pick is defensible in a court of law.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:100%"></div></div>
+    </div>
+    <div class="skill-card" data-kanji="嘆">
+      <div class="skill-icon">😭</div>
+      <div class="skill-name">Emotional Regulation</div>
+      <div class="skill-desc">Cannot regulate emotions when a good anime ends. Has been seen weeping over an ending theme. Absolutely zero stability.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:12%"></div></div>
+    </div>
+    <div class="skill-card" data-kanji="守">
+      <div class="skill-icon">⚔️</div>
+      <div class="skill-name">Waifu Defense</div>
+      <div class="skill-desc">Will argue passionately for any character on his list. Will write a 3-page essay if needed. Has done it before. Will do it again.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:100%"></div></div>
+    </div>
+    <div class="skill-card" data-kanji="睡">
+      <div class="skill-icon">🌙</div>
+      <div class="skill-name">Sleep Management</div>
+      <div class="skill-desc">"Just one more episode" is his last known words every night. Sleeps when the sun rises. Functions normally regardless.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:8%"></div></div>
+    </div>
+    <div class="skill-card" data-kanji="夢">
+      <div class="skill-icon">🌀</div>
+      <div class="skill-name">Lore Retention</div>
+      <div class="skill-desc">Memorizes fictional world lore but forgets where he put his keys. The multiverse is mapped in his head. His room is not.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:94%"></div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══ WAIFU SHRINE ═══ -->
+<section>
+  <div class="section-label">// 003 &nbsp; THE SACRED SHRINE</div>
+  <h2 class="section-title">The Official<br>Waifu Registry</h2>
+
+  <p class="shrine-intro">
+    Curated over years of careful research, sleepless nights, and deeply questionable streaming decisions. 
+    Each entry is considered with the utmost seriousness. This list is legally binding.
+  </p>
+
+  <div class="waifu-grid" id="waifuGrid"></div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-title">[Friend's Name]</div>
+  <div class="footer-sub">PROFESSIONAL PORTFOLIO // EST. WHEN ANIME BECAME REAL TO HIM</div>
+  <div style="margin-bottom:32px; font-size:0.8rem; color:var(--muted); max-width:480px; margin-left:auto; margin-right:auto; line-height:1.8; font-weight:300; font-style:italic;">
+    "Real love is temporary. Waifu is eternal."<br>
+    <span style="font-size:0.65rem; opacity:0.5; font-style:normal;">— him, probably</span>
+  </div>
+  <div class="footer-seal">✦ Certified Man of Culture ✦ est. Anno Domini ✦</div>
+  <div style="margin-top:24px; font-family:'Share Tech Mono',monospace; font-size:0.55rem; letter-spacing:0.2em; color:rgba(120,128,170,0.35);">
+    THIS PORTFOLIO WAS NOT MADE WITH HIS CONSENT // MADE WITH LOVE & MALICE
+  </div>
+</footer>
+
+<script>
+  const waifus = [
+    { name: "Furina",           series: "Genshin Impact",              rank: "#01", hearts: "💙💙💙" },
+    { name: "Alice Zuberg",     series: "Sword Art Online: Alicization",rank: "#02", hearts: "💛💛💛" },
+    { name: "Misaka Mikoto",    series: "A Certain Scientific Railgun", rank: "#03", hearts: "⚡⚡⚡" },
+    { name: "Asahi Amagami",    series: "Overflow",                     rank: "#04", hearts: "💗💗" },
+    { name: "Arisa Ichigaya",   series: "BanG Dream!",                  rank: "#05", hearts: "🎸💗" },
+    { name: "Index",            series: "A Certain Magical Index",      rank: "#06", hearts: "✝️💙" },
+    { name: "Hitori Goto",      series: "Bocchi the Rock!",             rank: "#07", hearts: "🎸🎸🎸" },
+    { name: "Kobo Kanaeru",     series: "Hololive Indonesia",           rank: "#08", hearts: "🌧️💙" },
+    { name: "Ruby Hoshino",     series: "Oshi no Ko",                   rank: "#09", hearts: "⭐💛" },
+    { name: "Rem",              series: "Re:Zero",                      rank: "#10", hearts: "💙💙💙" },
+    { name: "Kubo Nagisa",      series: "Kubo Won't Let Me Be Invisible",rank:"#11", hearts: "👻💗" },
+    { name: "Kurumi Tokisaki",  series: "Date A Live",                  rank: "#12", hearts: "🕰️🖤" },
+    { name: "Mio Honda",        series: "The iDOLM@STER",               rank: "#13", hearts: "🎵🌸" },
+    { name: "Rimuru Tempest",   series: "That Time I Got Reincarnated", rank: "#14", hearts: "💎💜" },
+    { name: "Shizue Izawa",     series: "That Time I Got Reincarnated", rank: "#15", hearts: "🔥💛" },
+    { name: "Topaz",            series: "Honkai: Star Rail",            rank: "#16", hearts: "💎🧡" },
+    { name: "Yotsuha Miyamizu", series: "Suzume / Weathering With You", rank: "#17", hearts: "🌀💗" },
+    { name: "Ruri Gokou",       series: "Oreimo",                       rank: "#18", hearts: "🐱💙" },
+    { name: "Vladilena Milizé", series: "86—Eighty Six",               rank: "#19", hearts: "⚔️❤️" },
+    { name: "Siesta",           series: "The Detective Is Already Dead",rank: "#20", hearts: "🔍🤍" },
+  ];
+
+  const grid = document.getElementById('waifuGrid');
+  waifus.forEach((w, i) => {
+    const card = document.createElement('div');
+    card.className = 'waifu-card' + (i < 3 ? ' top3' : '');
+    card.style.animationDelay = `${i * 0.04}s`;
+    card.innerHTML = `
+      <div class="waifu-photo-placeholder">
+        <span>🖼️</span>
+        <small>[ add photo ]</small>
+      </div>
+      <div class="waifu-overlay"></div>
+      <div class="waifu-info">
+        <div class="waifu-rank">${w.rank} ${i < 3 ? '✦ LEGENDARY' : i < 10 ? '· ELITE' : '· HONORED'}</div>
+        <div class="waifu-name">${w.name}</div>
+        <div class="waifu-series">${w.series}</div>
+      </div>
+      <div class="waifu-hearts">${w.hearts}</div>
+    `;
+    grid.appendChild(card);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portofolio Napki</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Boogaloo&family=Nunito:ital,wght@0,400;0,700;0,900;1,400&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400..800&display=swap" rel="stylesheet">
+<style>
+
+/* ─── TOKENS ─── */
+:root {
+  --cream:   #fdf6e3;
+  --white:   #ffffff;
+  --ink:     #111111;
+  --pink:    #ff4d9e;
+  --pink-lt: #ffd6ec;
+  --mint:    #00d4a0;
+  --mint-lt: #c8fff3;
+  --sky:     #3da9fc;
+  --sky-lt:  #dbeeff;
+  --lemon:   #ffe94d;
+  --lemon-lt:#fffacc;
+  --lilac:   #c77dff;
+  --lilac-lt:#f0d9ff;
+  --orange:  #ff6b35;
+  --shadow:  4px 4px 0px var(--ink);
+  --shadow-lg: 6px 6px 0px var(--ink);
+  --shadow-xl: 8px 8px 0px var(--ink);
+  --border:  2.5px solid var(--ink);
+  --radius:  12px;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'Nunito', sans-serif;
+  overflow-x: hidden;
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='5' fill='%23ff4d9e' stroke='%23111' stroke-width='2'/%3E%3C/svg%3E") 12 12, crosshair;
+}
+
+/* dot grid bg */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: radial-gradient(circle, rgba(17,17,17,0.08) 1.2px, transparent 1.2px);
+  background-size: 24px 24px;
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width:8px; }
+::-webkit-scrollbar-track { background:var(--pink-lt); }
+::-webkit-scrollbar-thumb { background:var(--pink); border:2px solid var(--ink); border-radius:99px; }
+
+/* ─── NOISE STAMP ─── */
+.stamp {
+  display:inline-block;
+  background:var(--lemon);
+  border:var(--border);
+  padding:4px 14px;
+  font-family:'Silkscreen',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.15em;
+  text-transform:uppercase;
+  box-shadow:var(--shadow);
+  border-radius:4px;
+  white-space:nowrap;
+}
+.stamp.pink  { background:var(--pink);  color:#fff; }
+.stamp.mint  { background:var(--mint);  }
+.stamp.sky   { background:var(--sky);   color:#fff; }
+.stamp.lilac { background:var(--lilac); color:#fff; }
+
+/* ─── DECO BLOBS / SHAPES ─── */
+.blob {
+  position:absolute;
+  border-radius:50%;
+  border:var(--border);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ═══════════════════════════════
+   HERO
+═══════════════════════════════ */
+.hero {
+  min-height:100vh;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:var(--white);
+  border-bottom:var(--border);
+  z-index:1;
+}
+
+/* stripes diagonal bg */
+.hero::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    -45deg,
+    var(--pink-lt) 0px,
+    var(--pink-lt) 2px,
+    transparent 2px,
+    transparent 28px
+  );
+  opacity:0.5;
+}
+
+.hero-inner {
+  position:relative;
+  z-index:2;
+  text-align:center;
+  padding:60px 24px;
+  max-width:900px;
+  width:100%;
+}
+
+/* floating deco shapes */
+.hero-shape {
+  position:absolute;
+  pointer-events:none;
+}
+
+.hero-shape.star {
+  font-size:2.5rem;
+  animation:spin 8s linear infinite;
+  filter:drop-shadow(2px 2px 0 var(--ink));
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+
+.hero-shape.bounce {
+  animation:bob 3s ease-in-out infinite;
+}
+@keyframes bob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+
+.hero-eyecatch {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:24px;
+  flex-wrap:wrap;
+}
+
+/* big chunky name card */
+.hero-namecard {
+  background:var(--lemon);
+  border:var(--border);
+  box-shadow:var(--shadow-xl);
+  padding:20px 48px 22px;
+  display:inline-block;
+  border-radius:var(--radius);
+  margin:20px 0 16px;
+  position:relative;
+  transform:rotate(-1deg);
+  transition:transform 0.2s;
+}
+.hero-namecard:hover { transform:rotate(0deg) scale(1.02); }
+
+.hero-namecard::after {
+  content:'★';
+  position:absolute;
+  top:-14px; right:-10px;
+  font-size:1.4rem;
+  color:var(--pink);
+  text-shadow:2px 2px 0 var(--ink);
+}
+
+/* 1. Set up the Octocat container */
+.hero-namecard::before {
+  content: '';
+  position: absolute;
+  width: 80px; 
+  height: 80px;
+  background: url('https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png') no-repeat center/contain;
+  border-radius: 50%; 
+  
+  top: 0;
+  left: 20px;
+  z-index: -1; 
+
+  opacity: 0;
+  transform: translateY(20px) rotate(-15deg);
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s;
+}
+
+/* 2. The Pop-out Trigger */
+.hero-namecard:hover::before {
+  opacity: 1;
+  transform: translateY(-60px) rotate(10deg);
+}
+
+/* 3. Ensure the anchor doesn't clip the pop-out */
+a[href*="github.com"] {
+  display: inline-block;
+  overflow: visible; 
+  text-decoration: none;
+}
+
+.hero-name {
+  font-family:'Syne',sans-serif;
+  font-weight: 725;
+  font-size:clamp(3rem,9vw,7rem);
+  line-height:1;
+  letter-spacing:-0.01em;
+  color:var(--ink);
+  text-transform:uppercase;
+}
+
+.hero-tagline {
+  background:var(--pink);
+  color:#fff;
+  border:var(--border);
+  box-shadow:var(--shadow);
+  padding:10px 28px;
+  display:inline-block;
+  border-radius:99px;
+  font-family:'Silkscreen',monospace;
+  font-size:0.7rem;
+  letter-spacing:0.12em;
+  margin-top:8px;
+  transform:rotate(1deg);
+}
+
+.hero-pills {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  margin-top:28px;
+}
+
+.pill {
+  border:var(--border);
+  border-radius:99px;
+  padding:7px 18px;
+  font-family:'Nunito',sans-serif;
+  font-weight:900;
+  font-size:0.8rem;
+  box-shadow:3px 3px 0 var(--ink);
+  transition:transform 0.15s, box-shadow 0.15s;
+  cursor:default;
+}
+.pill:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 var(--ink); }
+.pill.p1 { background:var(--mint-lt); }
+.pill.p2 { background:var(--sky-lt); }
+.pill.p3 { background:var(--lilac-lt); }
+.pill.p4 { background:var(--lemon); }
+.pill.p5 { background:var(--pink-lt); }
+.pill.p6 { background:var(--mint-lt); }
+
+.hero-scroll-cue {
+  margin-top:48px;
+  font-family:'Silkscreen',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.3em;
+  color:var(--ink);
+  opacity:0.45;
+  animation:blink 2s step-end infinite;
+}
+@keyframes blink { 0%,100%{opacity:0.45} 50%{opacity:0.15} }
+
+/* ═══════════════════════════════
+   SECTION SHELL
+═══════════════════════════════ */
+.section-wrap {
+  position:relative;
+  z-index:1;
+  padding:80px 40px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.section-header {
+  display:flex;
+  align-items:flex-start;
+  gap:16px;
+  margin-bottom:48px;
+  flex-wrap:wrap;
+}
+
+.section-number {
+  font-family:'Silkscreen',monospace;
+  font-size:4rem;
+  line-height:1;
+  color:var(--pink);
+  text-shadow:3px 3px 0 var(--ink);
+  flex-shrink:0;
+}
+
+.section-titles { display:flex; flex-direction:column; gap:6px; }
+
+.section-label-tag {
+  font-family:'Silkscreen',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.2em;
+  color:var(--ink);
+  opacity:0.5;
+  text-transform:uppercase;
+}
+
+.section-title {
+  font-family:'Syne',sans-serif;
+  font-weight: 725;
+  font-size:clamp(2rem,5vw,3.5rem);
+  line-height:1;
+  color:var(--ink);
+  text-transform:uppercase;
+}
+
+/* ─── band separator ─── */
+.band {
+  border-top:var(--border);
+  border-bottom:var(--border);
+  background:var(--ink);
+  color:#fff;
+  overflow:hidden;
+  padding:10px 0;
+  white-space:nowrap;
+  font-family:'Silkscreen',monospace;
+  font-size:0.65rem;
+  letter-spacing:0.15em;
+}
+
+.band-inner {
+  display:inline-flex;
+  gap:32px;
+  animation:marquee 22s linear infinite;
+}
+@keyframes marquee { to{transform:translateX(-50%)} }
+
+.band-item { flex-shrink:0; }
+.band-item span { color:var(--lemon); }
+
+/* ═══════════════════════════════
+   ABOUT
+═══════════════════════════════ */
+.about-section {
+  background:var(--white);
+  border-top:var(--border);
+  border-bottom:var(--border);
+}
+
+.about-grid {
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:40px;
+  align-items:start;
+}
+
+.about-photo-wrap {
+  position:relative;
+}
+
+.about-photo-box {
+  background:var(--sky-lt);
+  border:var(--border);
+  box-shadow:var(--shadow-xl);
+  aspect-ratio:3/4;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  border-radius:var(--radius);
+  position:relative;
+  overflow:hidden;
+  font-family:'Silkscreen',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.12em;
+  color:var(--ink);
+}
+
+.about-photo-box::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    45deg,
+    var(--sky-lt) 0, var(--sky-lt) 4px,
+    var(--white) 4px, var(--white) 12px
+  );
+  opacity:0.5;
+}
+
+.photo-inner { position:relative; z-index:1; text-align:center;}
+.photo-inner .icon { font-size:3rem; display:block; margin-bottom:8px; }
+
+.about-photo-wrap .sticker {
+  position:absolute;
+  font-size:1.8rem;
+  filter:drop-shadow(2px 2px 0 var(--ink));
+}
+.sticker.s1 { top:-14px; right:-12px; transform:rotate(15deg); }
+.sticker.s2 { bottom:-10px; left:-12px; transform:rotate(-10deg); }
+
+.about-right { display:flex; flex-direction:column; gap:20px; }
+
+.bio-card {
+  background:var(--lemon-lt);
+  border:var(--border);
+  box-shadow:var(--shadow);
+  padding:20px 24px;
+  border-radius:var(--radius);
+  font-family:'Syne',sans-serif;
+  font-size:0.95rem;
+  line-height:1.85;
+  font-style:italic;
+  position:relative;
+}
+
+.bio-card::before {
+  content:'"';
+  position:absolute;
+  top:-12px; left:16px;
+  font-size:3.5rem;
+  font-family:'Silkscreen',sans-serif;
+  color:var(--pink);
+  line-height:1;
+  text-shadow:2px 2px 0 var(--ink);
+}
+
+.stats-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.stat-card {
+  border:var(--border);
+  box-shadow:var(--shadow);
+  padding:14px 16px;
+  border-radius:var(--radius);
+  transition:transform 0.15s, box-shadow 0.15s;
+}
+.stat-card:hover { transform:translate(-2px,-2px); box-shadow:var(--shadow-lg); }
+.stat-card:nth-child(1) { background:var(--mint-lt); }
+.stat-card:nth-child(2) { background:var(--pink-lt); }
+.stat-card:nth-child(3) { background:var(--sky-lt); }
+.stat-card:nth-child(4) { background:var(--lemon); }
+
+.stat-label {
+  font-family:'Silkscreen',monospace;
+  font-size:0.55rem;
+  letter-spacing:0.2em;
+  opacity:0.6;
+  margin-bottom:4px;
+  text-transform:uppercase;
+}
+
+.stat-val {
+  font-family:'Syne',sans-serif;
+  font-weight: 620;
+  font-size:1.3rem;
+  line-height:1.1;
+}
+
+.cert-wrap { display:flex; flex-wrap:wrap; gap:8px; }
+
+.cert {
+  background:var(--lilac-lt);
+  border:var(--border);
+  box-shadow:2px 2px 0 var(--ink);
+  padding:5px 14px;
+  border-radius:99px;
+  font-weight:900;
+  font-size:0.75rem;
+  transition:transform 0.15s;
+}
+.cert:hover { transform:translate(-1px,-1px); }
+.cert:nth-child(odd)  { background:var(--pink-lt); }
+.cert:nth-child(3n)   { background:var(--mint-lt); }
+.cert:nth-child(4n)   { background:var(--lemon); }
+
+/* ═══════════════════════════════
+   SKILLS
+═══════════════════════════════ */
+.skills-section { background:var(--cream); }
+
+.skills-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(260px,1fr));
+  gap:20px;
+}
+
+.skill-card {
+  border:var(--border);
+  box-shadow:var(--shadow-lg);
+  border-radius:var(--radius);
+  padding:24px 22px 20px;
+  position:relative;
+  overflow:hidden;
+  transition:transform 0.2s, box-shadow 0.2s;
+}
+.skill-card:hover { transform:translate(-3px,-3px); box-shadow:var(--shadow-xl); }
+
+.skill-card:nth-child(1) { background:var(--mint-lt); }
+.skill-card:nth-child(2) { background:var(--pink-lt); }
+.skill-card:nth-child(3) { background:var(--sky-lt); }
+.skill-card:nth-child(4) { background:var(--lemon); }
+.skill-card:nth-child(5) { background:var(--lilac-lt); }
+.skill-card:nth-child(6) { background:var(--pink-lt); }
+
+.skill-emoji {
+  font-size:2.2rem;
+  display:block;
+  margin-bottom:10px;
+  filter:drop-shadow(1px 1px 0 var(--ink));
+}
+
+.skill-name {
+  font-family:'Boogaloo',sans-serif;
+  font-size:1.3rem;
+  text-transform:uppercase;
+  margin-bottom:6px;
+}
+
+.skill-desc {
+  font-family:'Syne',sans-serif;
+  font-size:0.8rem;
+  line-height:1.7;
+  opacity:0.75;
+}
+
+.skill-meter {
+  margin-top:14px;
+  height:10px;
+  background:rgba(17,17,17,0.1);
+  border:2px solid var(--ink);
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.skill-fill {
+  height:100%;
+  background:var(--ink);
+  border-radius:99px;
+  animation:fillBar 1.5s ease both;
+  transform-origin:left;
+}
+@keyframes fillBar { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+/* corner deco tag */
+.skill-card .corner-tag {
+  position:absolute;
+  top:12px; right:12px;
+  font-family:'Silkscreen',monospace;
+  font-size:0.5rem;
+  background:var(--ink);
+  color:#fff;
+  padding:2px 8px;
+  border-radius:4px;
+  letter-spacing:0.1em;
+}
+
+/* ═══════════════════════════════
+   WAIFU SHRINE
+═══════════════════════════════ */
+.shrine-section {
+  background:var(--white);
+  border-top:var(--border);
+}
+
+.shrine-intro {
+  max-width:560px;
+  margin-bottom:40px;
+  font-size:0.9rem;
+  line-height:1.85;
+  opacity:0.7;
+}
+
+/* tier headers */
+.tier-label {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:36px 0 16px;
+}
+
+.tier-badge {
+  font-family:'Silkscreen',sans-serif;
+  font-size:1.1rem;
+  text-transform:uppercase;
+  background:var(--ink);
+  color:#fff;
+  border:var(--border);
+  box-shadow:var(--shadow);
+  padding:5px 18px;
+  border-radius:8px;
+  letter-spacing:0.05em;
+}
+
+.tier-line {
+  flex:1;
+  height:2px;
+  background:var(--ink);
+  opacity:0.15;
+}
+
+/* waifu grid */
+.waifu-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(180px,1fr));
+  gap:16px;
+}
+
+.waifu-card {
+  border:var(--border);
+  border-radius:var(--radius);
+  overflow:hidden;
+  box-shadow:var(--shadow);
+  background:var(--white);
+  transition:transform 0.2s, box-shadow 0.2s;
+  position:relative;
+  cursor:pointer;
+  animation:popIn 0.4s ease both;
+}
+@keyframes popIn { from{opacity:0;transform:scale(0.9)} to{opacity:1;transform:scale(1)} }
+
+.waifu-card:hover {
+  transform:translate(-3px,-4px) rotate(-0.5deg);
+  box-shadow:var(--shadow-xl);
+}
+
+/* coloured top strip per card */
+.waifu-card::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:4px;
+  background:var(--strip, var(--pink));
+}
+
+.waifu-card:nth-child(5n+1) { --strip: var(--pink); }
+.waifu-card:nth-child(5n+2) { --strip: var(--mint); }
+.waifu-card:nth-child(5n+3) { --strip: var(--sky); }
+.waifu-card:nth-child(5n+4) { --strip: var(--lemon); border-top-color:var(--ink); }
+.waifu-card:nth-child(5n+5) { --strip: var(--lilac); }
+
+.waifu-photo {
+  width:100%;
+  aspect-ratio:3/4;
+  background:var(--cream);    max-width: 400px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  border-bottom:var(--border);
+  font-family:'Silkscreen',monospace;
+  font-size:0.5rem;
+  letter-spacing:0.12em;
+  color:var(--ink);
+  opacity:0.6;
+  position:relative;
+  overflow:hidden;
+}
+
+/* checkered placeholder bg */
+.waifu-photo::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    repeating-conic-gradient(rgba(17,17,17,0.04) 0% 25%, transparent 0% 50%);
+  background-size:20px 20px;
+}
+
+.waifu-photo-icon { font-size:2.4rem; position:relative; }
+
+.waifu-rank-badge {
+  position:absolute;
+  top:8px; left:8px;
+  background:var(--ink);
+  color:#fff;
+  font-family:'Silkscreen',monospace;
+  font-size:0.5rem;
+  padding:3px 8px;
+  border-radius:6px;
+  z-index:2;
+  letter-spacing:0.1em;
+}
+
+.waifu-info {
+  padding:12px 12px 10px;
+}
+
+.waifu-name {
+  font-family:'Boogaloo',sans-serif;
+  font-size:1.05rem;
+  text-transform:uppercase;
+  line-height:1.1;
+  margin-bottom:4px;
+}
+
+.waifu-series {
+  font-size:0.65rem;
+  opacity:0.55;
+  line-height:1.4;
+}
+
+.waifu-heart {
+  position:absolute;
+  bottom:10px; right:10px;
+  font-size:0.9rem;
+  opacity:0;
+  transition:opacity 0.2s;
+}
+.waifu-card:hover .waifu-heart { opacity:1; }
+
+/* top3 gold treatment */
+.waifu-card.legendary {
+  background:var(--lemon-lt);
+  border-color:var(--ink);
+}
+
+/* ═══════════════════════════════
+   FOOTER
+═══════════════════════════════ */
+footer {
+  background:var(--ink);
+  color:#fff;
+  text-align:center;
+  padding:60px 32px 40px; 
+  position:relative;
+  overflow:hidden;
+  border-top:4px solid var(--ink);
+}
+
+footer::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.02) 0, rgba(255,255,255,0.02) 1px,
+    transparent 1px, transparent 20px
+  );
+}
+
+.footer-logo {
+  font-family:'Silkscreen',sans-serif;
+  font-size:clamp(2rem,6vw,4.5rem);
+  text-transform:uppercase;
+  color:var(--lemon);
+  text-shadow:4px 4px 0 var(--pink);
+  margin-bottom:8px;
+  position:relative;
+}
+
+.footer-sub {
+  font-family:'Silkscreen',monospace;
+  font-size:0.6rem;
+  letter-spacing:0.25em;
+  opacity:0.4;
+  margin-bottom:28px;
+  position:relative;
+}
+
+.footer-quote {
+  max-width:440px;
+  margin:0 auto 36px;
+  font-size:1rem;
+  font-style:italic;
+  opacity:0.6;
+  line-height:1.7;
+  position:relative;
+}
+
+.footer-pills {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  justify-content:center;
+  position:relative;
+  margin-bottom:36px;
+}
+
+.footer-pill {
+  background:transparent;
+  border:1.5px solid rgba(255,255,255,0.2);
+  color:rgba(255,255,255,0.6);
+  border-radius:99px;
+  padding:5px 16px;
+  font-size:0.75rem;
+  font-family:'Silkscreen',monospace;
+  font-size:0.55rem;
+  letter-spacing:0.1em;
+}
+
+.footer-credit {
+  font-family:'Silkscreen',monospace;
+  font-size:0.5rem;
+  letter-spacing:0.2em;
+  opacity:0.2;
+  position:relative;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width:720px) {
+  .about-grid { grid-template-columns:1fr; }
+  .section-wrap { padding:60px 20px; }
+  .waifu-grid { grid-template-columns:repeat(2,1fr); }
+}
+
+@media (max-width:480px) {
+  .waifu-grid { grid-template-columns:repeat(2,1fr); gap:10px; }
+  .stats-grid { grid-template-columns:1fr 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════
+     HERO
+══════════════════════════════ -->
+<div class="hero">
+  <!-- bg shapes -->
+  <div class="hero-shape star" style="top:12%;left:8%;font-size:2rem;">✦</div>
+  <div class="hero-shape star" style="top:20%;right:10%;font-size:1.4rem;animation-duration:5s;color:var(--mint);">★</div>
+  <div class="hero-shape bounce" style="bottom:18%;left:6%;font-size:2.5rem;">♡</div>
+  <div class="hero-shape bounce" style="bottom:24%;right:7%;font-size:2rem;animation-delay:1s;">◆</div>
+  <div class="hero-shape" style="top:8%;left:40%;font-size:1.2rem;animation:spin 12s linear infinite;color:var(--sky);">✿</div>
+
+  <div class="hero-inner">
+    <div class="hero-eyecatch">
+      <span class="stamp">✦ Official</span>
+      <span class="stamp pink">Man of Culture</span>
+      <span class="stamp mint">Est. Whenever</span>
+    </div>
+
+    <a href="https://github.com/Noakiki" style="text-decoration: none; color: inherit;">
+       <div class="hero-namecard">
+       <div class="hero-name">Noakiki</div>
+     </div>
+    </a>
+
+    <div>
+      <div class="hero-tagline">CERTIFIED KARBIT // PROFESSIONAL MALAS NGODING</div>
+    </div>
+
+    <div class="hero-pills">
+      <span class="pill p1">🌿 Isekai Tabrak Truk</span>
+      <span class="pill p2">💙 VTuber Glazer</span>
+      <span class="pill p3">💜 Idol Larping</span>
+      <span class="pill p4">🌸 Emotionally Absent IRL</span>
+      <span class="pill p5">🖥️ Malas Ngoding</span>
+    </div>
+
+    <div class="hero-scroll-cue">▼ ▼ ▼ &nbsp; SCROLL DOWN &nbsp; ▼ ▼ ▼</div>
+  </div>
+</div>
+
+<!-- MARQUEE BAND -->
+<div class="band">
+  <div class="band-inner">
+    <div class="band-inner">
+      <span class="band-item">WAIFU REGISTRY 2024 <span>✦</span></span>
+      <span class="band-item">CERTIFIED MAN OF CULTURE <span>★</span></span>
+      <span class="band-item">20 OFFICIAL WAIFUS <span>♡</span></span>
+      <span class="band-item">ZERO SOCIAL LIFE <span>✿</span></span>
+      <span class="band-item">MAXIMUM ANIME HOURS <span>◆</span></span>
+      <span class="band-item">BUILT DIFFERENT <span>✦</span></span>
+      <span class="band-item">WAIFU REGISTRY 2024 <span>✦</span></span>
+      <span class="band-item">CERTIFIED MAN OF CULTURE <span>★</span></span>
+      <span class="band-item">20 OFFICIAL WAIFUS <span>♡</span></span>
+      <span class="band-item">ZERO SOCIAL LIFE <span>✿</span></span>
+      <span class="band-item">MAXIMUM ANIME HOURS <span>◆</span></span>
+      <span class="band-item">BUILT DIFFERENT <span>✦</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     ABOUT
+══════════════════════════════ -->
+<div class="about-section">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <div class="section-titles">
+        <div class="section-label-tag">// Surat Keterangan Karbit</div>
+        <div class="section-title">About the<br>Raja Karbit</div>
+      </div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-photo-wrap">
+        <div class="about-photo-box">
+		<!-- <div class="photo-inner"> -->
+	   <img src="assets/images/nafqi_0.jpg" 
+     style="width:100%; height:100%; object-fit:cover; object-position:top center; position:absolute; inset:0; border-radius:inherit;">
+           <!-- <span class="icon">🖼️</span>
+            <span style="font-size:0.55rem;letter-spacing:0.12em;">[ INSERT PHOTO ]</span>
+	    <span style="font-size:0.45rem;opacity:0.45;display:block;margin-top:4px;">replace me please</span> -->
+	    <!-- </div> -->
+        </div>
+        <div class="sticker s1">⭐</div>
+        <div class="sticker s2">🌸</div>
+      </div>
+
+      <div class="about-right">
+        <div class="bio-card">
+          A man who has devoted his existence to the appreciation of 2D women. His taste spans 
+          ngodinh, idol units, VTubers, and gathering wives as much as possible.
+          Widely regarded as "deeply unwell but in a charming way." Claims other's waifus. 
+          Functioning adult (debatable).
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Waifus Logged</div>
+            <div class="stat-val">20 (official)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Series Completed</div>
+            <div class="stat-val">∞ lost count</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Skill Tier</div>
+            <div class="stat-val">Karbit Elit</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">IRL Social Life</div>
+            <div class="stat-val">UTBK anjinh</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="stat-label" style="margin-bottom:10px;font-family:'Silkscreen',monospace;font-size:0.6rem;letter-spacing:0.2em;opacity:0.5;">CERTIFICATIONS</div>
+          <div class="cert-wrap">
+            <span class="cert">✦ Man of Culture</span>
+            <span class="cert">✦ Isekai Survivor</span>
+            <span class="cert">✦ Tsundere</span>
+            <span class="cert">✦ Gooner</span>
+            <span class="cert">✦ VTuber Glazer</span>
+            <span class="cert">✦ Raja Karbit</span>
+            <span class="cert">✦ Idol Glazer</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     SKILLS
+══════════════════════════════ -->
+<div class="skills-section">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-number" style="color:var(--sky)">02</div>
+      <div class="section-titles">
+        <div class="section-label-tag">// Competency Report</div>
+        <div class="section-title">Professional<br>Skillset</div>
+      </div>
+    </div>
+
+    <div class="skills-grid">
+      <div class="skill-card">
+        <span class="corner-tag">ELITE</span>
+        <span class="skill-emoji">🎌</span>
+        <div class="skill-name">Anime Analysis</div>
+        <div class="skill-desc">Identifies characters by hair strand alone. Expert in plot armor, emotional foreshadowing, and knowing exactly who will die next episode.</div>
+        <div class="skill-meter"><div class="skill-fill" style="width:97%"></div></div>
+      </div>
+      <div class="skill-card">
+        <span class="corner-tag">MAX LVL</span>
+        <span class="skill-emoji">💘</span>
+        <div class="skill-name">Waifu Selection</div>
+        <div class="skill-desc">Curates a roster spanning isekai royalty, idol units, VTubers, and railgun users. Each pick is legally defensible.</div>
+        <div class="skill-meter"><div class="skill-fill" style="width:100%"></div></div>
+      </div>
+      <div class="skill-card">
+        <span class="corner-tag">LOW HP</span>
+        <span class="skill-emoji">😭</span>
+        <div class="skill-name">Emotional Stability</div>
+        <div class="skill-desc">Cannot get through a good ending theme. Zero emotional regulation when a waifu gets a sad arc. Cries freely.</div>
+        <div class="skill-meter"><div class="skill-fill" style="width:8%"></div></div>
+      </div>
+      <div class="skill-card">
+        <span class="corner-tag">ELITE</span>
+        <span class="skill-emoji">⚔️</span>
+        <div class="skill-name">Waifu Defense</div>
+        <div class="skill-desc">Will write a 3-page essay defending any entry on his list. Has done it. Will do it again. No hesitation.</div>
+        <div class="skill-meter"><div class="skill-fill" style="width:100%"></div></div>
+      </div>
+      <div class="skill-card">
+        <span class="corner-tag">CRITICAL</span>
+        <span class="skill-emoji">🌙</span>
+        <div class="skill-name">Sleep Management</div>
+        <div class="skill-desc">"Just one more episode" is his final known words each night. Sleeps when the sun rises. Still shows up.</div>
+        <div class="skill-meter"><div class="skill-fill" style="width:6%"></div></div>
+      </div>
+      <div class="skill-card">
+        <span class="corner-tag">ELITE</span>
+        <span class="skill-emoji">🌀</span>
+        <div class="skill-name">Lore Retention</div>
+        <div class="skill-desc">Entire fictional multiverse mapped in his head. Cannot find his keys. The trade-off was worth it apparently.</div>
+	<div class="skill-meter"><div class="skill-fill" style="width:94%"></div></div>
+      </div>
+      <div class="skill-card">
+        <span class="corner-tag">ELITE</span>
+        <span class="skill-emoji">🖥️</span>
+        <div class="skill-name">Malas Ngoding</div>
+        <div class="skill-desc">Ngapain ngodinh sekarang ada ei ai.</div>
+	<div class="skill-meter"><div class="skill-fill" style="width:94%"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MARQUEE BAND 2 -->
+<div class="band" style="background:var(--pink);color:#fff;border-color:var(--ink);">
+  <div class="band-inner">
+    <div class="band-inner">
+      <span class="band-item" style="color:#fff">THE SACRED WAIFU SHRINE <span style="color:var(--lemon)">★</span></span>
+      <span class="band-item" style="color:#fff">OFFICIALLY CERTIFIED LIST <span style="color:var(--lemon)">♡</span></span>
+      <span class="band-item" style="color:#fff">DO NOT DEBATE THE RANKING <span style="color:var(--lemon)">✦</span></span>
+      <span class="band-item" style="color:#fff">20 ENTRIES NO REGRETS <span style="color:var(--lemon)">✿</span></span>
+      <span class="band-item" style="color:#fff">THE SACRED WAIFU SHRINE <span style="color:var(--lemon)">★</span></span>
+      <span class="band-item" style="color:#fff">OFFICIALLY CERTIFIED LIST <span style="color:var(--lemon)">♡</span></span>
+      <span class="band-item" style="color:#fff">DO NOT DEBATE THE RANKING <span style="color:var(--lemon)">✦</span></span>
+      <span class="band-item" style="color:#fff">20 ENTRIES NO REGRETS <span style="color:var(--lemon)">✿</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     WAIFU SHRINE
+══════════════════════════════ -->
+<div class="shrine-section">
+  <div class="section-wrap">
+    <div class="section-header">
+      <div class="section-number" style="color:var(--pink)">03</div>
+      <div class="section-titles">
+        <div class="section-label-tag">// The Karbit Registry</div>
+        <div class="section-title">Official Waifu<br>Archive</div>
+      </div>
+    </div>
+
+    <p class="shrine-intro">
+      Compiled over years of careful research, sleepless nights, and deeply questionable 
+      streaming decisions. Each entry is considered with the utmost seriousness and ultimate Karbitness. 
+      This list is legally binding and non-negotiable.
+    </p>
+
+    <div class="tier-label">
+      <div class="tier-badge" style="background:var(--lemon);color:var(--ink);">★ Legendary Tier — #01 to #03</div>
+      <div class="tier-line"></div>
+    </div>
+    <div class="waifu-grid" id="grid-legendary"></div>
+
+    <div class="tier-label">
+      <div class="tier-badge" style="background:var(--pink);color:#fff;">◆ Elite Tier — #04 to #10</div>
+      <div class="tier-line"></div>
+    </div>
+    <div class="waifu-grid" id="grid-elite"></div>
+
+    <div class="tier-label">
+      <div class="tier-badge" style="background:var(--sky);color:#fff;">✦ Honored Tier — #11 to #20</div>
+      <div class="tier-line"></div>
+    </div>
+    <div class="waifu-grid" id="grid-honored"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     FOOTER
+══════════════════════════════ -->
+<footer>
+  <div class="footer-logo">Noakiki</div>
+  <div class="footer-sub">OFFICIAL PORTFOLIO</div>
+  <p class="footer-quote">
+    "Real love is temporary. Ngarbit is eternal."<br>
+    <span style="font-size:0.8rem;font-style:normal;opacity:0.4;">— Noakiki, raja karbit</span>
+  </p>
+  <div class="footer-pills">
+    <span class="footer-pill">✦ KARBITEST PERSON EVER</span>
+    <span class="footer-pill">★ 20 OFFICIAL WAIFUS</span>
+    <span class="footer-pill">♡ EMOTIONALLY KARBIT IRL</span>
+    <span class="footer-pill">✿ RAJA KARBIT</span>
+  </div>
+  <div class="footer-credit">THIS PORTFOLIO WAS NOT MADE WITH HIS CONSENT // MADE BY CLAUDE</div>
+</footer>
+
+<script>
+const waifus = [
+  { name:"Furina",           series:"Genshin Impact",                 rank:"#01", hearts:"💙", tier:"legendary", img:"furina.jpg" },
+  { name:"Alice Zuberg",     series:"Sword Art Online",		      rank:"#02", hearts:"💛", tier:"legendary", img:"alice.jpg" },
+  { name:"Misaka Mikoto",    series:"A Certain Scientific Railgun",   rank:"#03", hearts:"⚡", tier:"legendary", img:"mikoto.jpg" },
+  { name:"Asahi Amagami",    series:"Amagami-san Chi no Enmusubi",    rank:"#04", hearts:"💗", tier:"elite",     img:"asahi.jpg" },
+  { name:"Arisa Ichigaya",   series:"BanG Dream!",                    rank:"#05", hearts:"🎸", tier:"elite",     img:"arisa.jpg" },
+  { name:"Index",            series:"A Certain Magical Index",        rank:"#06", hearts:"✝️", tier:"elite",     img:"index.jpg" },
+  { name:"Hitori Goto",      series:"Bocchi the Rock!",               rank:"#07", hearts:"🎸", tier:"elite",     img:"bocchi.jpg" },
+  { name:"Kobo Kanaeru",     series:"Hololive ID",                    rank:"#08", hearts:"🌧️", tier:"elite",     img:"kobo.jpg" },
+  { name:"Ruby Hoshino",     series:"Oshi no Ko",                     rank:"#09", hearts:"⭐", tier:"elite",     img:"ruby.jpg" },
+  { name:"Rem",              series:"Re:Zero",                        rank:"#10", hearts:"💙", tier:"elite",     img:"rem.jpg" },
+  { name:"Kubo Nagisa",      series:"Kubo Won't Let Me Be Invisible", rank:"#11", hearts:"👻", tier:"honored",   img:"kubo.jpg" },
+  { name:"Kurumi Tokisaki",  series:"Date A Live",                    rank:"#12", hearts:"🕰️", tier:"honored",   img:"kurumi.jpg" },
+  { name:"Mio Honda",        series:"The iDOLM@STER",                 rank:"#13", hearts:"🎵", tier:"honored",   img:"mio.jpg" },
+  { name:"Rimuru Tempest",   series:"That Time I Got Reincarnated",   rank:"#14", hearts:"💎", tier:"honored",   img:"rimuru.jpg" },
+  { name:"Shizue Izawa",     series:"That Time I Got Reincarnated",   rank:"#15", hearts:"🔥", tier:"honored",   img:"shizue.jpg" },
+  { name:"Topaz",            series:"Honkai: Star Rail",              rank:"#16", hearts:"🧡", tier:"honored",   img:"topaz.jpg" },
+  { name:"Yotsuha Miyamizu", series:"Your Name",                      rank:"#17", hearts:"🌀", tier:"honored",   img:"yotsuha.jpg" },
+  { name:"Ruri Gokou",       series:"Oreimo",                         rank:"#18", hearts:"🐱", tier:"honored",   img:"ruri.jpg" },
+  { name:"Vladilena Milizé", series:"86—Eighty Six",                  rank:"#19", hearts:"⚔️", tier:"honored",   img:"vladilena.jpg" },
+  { name:"Siesta",           series:"The Detective Is Already Dead",  rank:"#20", hearts:"🔍", tier:"honored",   img:"siesta.jpg" },
+];
+
+const grids = {
+  legendary: document.getElementById('grid-legendary'),
+  elite:     document.getElementById('grid-elite'),
+  honored:   document.getElementById('grid-honored'),
+};
+
+waifus.forEach((w, i) => {
+  const card = document.createElement('div');
+  card.className = 'waifu-card' + (w.tier === 'legendary' ? ' legendary' : '');
+  card.style.animationDelay = `${i * 0.04}s`;
+  card.innerHTML = `
+   <div class="waifu-photo">
+     <div class="waifu-rank-badge">${w.rank}</div>
+  	${w.img
+    	? `<img src="assets/images/${w.img}" style="width:100%;height:100%;object-fit:cover;object-position:top;position:absolute;inset:0;" alt="${w.name}">`
+    	: `<span class="waifu-photo-icon">🖼️</span><span style="position:relative;font-size:0.5rem;">add photo</span>`
+	}
+</div>
+    <div class="waifu-info">
+      <div class="waifu-name">${w.name}</div>
+      <div class="waifu-series">${w.series}</div>
+    </div>
+    <div class="waifu-heart">${w.hearts}</div>
+  `;
+  grids[w.tier].appendChild(card);
+});
+</script>
+</body>
+</html>
