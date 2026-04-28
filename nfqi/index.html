@@ -157,6 +157,9 @@ body::before {
   background:var(--lemon);
   border:var(--border);
   box-shadow:var(--shadow-xl);
+  box-sizing: border-box;
+  overflow: visible;
+  word-wrap: break-word;
   padding:20px 48px 22px;
   display:inline-block;
   border-radius:var(--radius);
@@ -164,6 +167,10 @@ body::before {
   position:relative;
   transform:rotate(-1deg);
   transition:transform 0.2s;
+} @media (max-width: 480px) {
+  .hero-namecard {
+    padding: 16px 24px 18px; 
+    margin: 40px 0 16px;  }
 }
 .hero-namecard:hover { transform:rotate(0deg) scale(1.02); }
 
