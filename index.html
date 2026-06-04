@@ -4,134 +4,94 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nabz — Developer</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/typed.js@2.1.0/dist/typed.umd.js"></script>
     <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         :root {
-            --bg: #0a0a0a;
-            --bg-card: #111111;
-            --bg-card-alt: #141414;
-            --bg-card-hover: #161616;
-            --border: rgba(255,255,255,0.07);
-            --border-hover: rgba(255,255,255,0.14);
-            --text-primary: #f0ede8;
-            --text-secondary: #888;
-            --text-muted: #444;
+            --bg: #f5f0e8;
+            --bg-2: #ede8df;
+            --black: #0a0a0a;
+            --white: #f5f0e8;
             --accent: #c8ff57;
-            --accent-dim: rgba(200,255,87,0.08);
-            --accent-dim2: rgba(200,255,87,0.15);
-            --font-display: 'Syne', sans-serif;
-            --font-mono: 'DM Mono', monospace;
-            --who-tilt: -15deg;
+            --accent-2: #ff5757;
+            --accent-3: #57c8ff;
+            --border: 3px solid #0a0a0a;
+            --shadow: 4px 4px 0px #0a0a0a;
+            --shadow-lg: 6px 6px 0px #0a0a0a;
+            --shadow-xl: 8px 8px 0px #0a0a0a;
+            --font-display: 'Unbounded', sans-serif;
+            --font-mono: 'Space Mono', monospace;
         }
 
-        /* Light mode override */
-        [data-theme="light"] {
-            --bg: #faf9f7;
-            --bg-card: #ffffff;
-            --bg-card-alt: #f8f7f4;
-            --bg-card-hover: #f0efec;
-            --border: rgba(0,0,0,0.07);
-            --border-hover: rgba(0,0,0,0.14);
-            --text-primary: #0f0f0f;
-            --text-secondary: #666;
-            --text-muted: #999;
-            --accent: #5856e6; /* Slightly adjusted for light bg */
-            --accent-dim: rgba(88,86,230,0.08);
-            --accent-dim2: rgba(88,86,230,0.15);
-            --who-tilt: -15deg;
-        }  
-
-        /* Theme toggle button styles */
-        .theme-toggle {
-            position: relative;
-            width: 44px; height: 24px;
-            background: var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex; align-items: center; justify-content: flex-end; padding: 4px;
+        [data-theme="dark"] {
+            --bg: #0f0f0f;
+            --bg-2: #1a1a1a;
+            --black: #f5f0e8;
+            --white: #0f0f0f;
+            --accent: #08999b;
+            --accent-dark-text: #0f0f0f;
+            --accent-2: #ff6b6b;
+            --accent-3: #57c8ff;
+            --border: 3px solid #f5f0e8;
+            --shadow: 4px 4px 0px #f5f0e8;
+            --shadow-lg: 6px 6px 0px #f5f0e8;
+            --shadow-xl: 8px 8px 0px #f5f0e8;
         }
-        .theme-toggle:hover { background: var(--border-hover); }
-        [data-theme="light"] .theme-toggle { justify-content: flex-start; }
-        .theme-toggle::before,
-        .theme-toggle::after {
-            content: ''; position: absolute;
-            border-radius: 50%; transition: all 0.3s ease;
-        }
-        .theme-toggle::before { /* Moon for dark */ width: 16px; height: 16px; right: 4px; background: var(--text-secondary); }
-        .theme-toggle::after { /* Sun for light */ width: 12px; height: 12px; left: 4px; background: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-
-        /* Additional light mode tweaks | "I'm tired boss" ~ BlackBox  */
-        [data-theme="light"] .hero-glow {
-            background: radial-gradient(ellipse, var(--accent-dim) 0%, transparent 80%) !important;
-        }
-        [data-theme="light"] nav {
-            background: color-mix(in srgb, var(--bg) 90%, transparent) !important;
-        }
-        [data-theme="light"] #main-nav {
-            background: rgba(250,249,247,0.98);
-            border-bottom-color: var(--border) !important;
-        }
-
-        [data-theme="light"] .hamburger div {
-            background: #0f0f0f !important; /* Or var(--text-primary) */
-        }
-
-        [data-theme="light"] .nav-links.active {
-            background: rgba(250,249,247,0.97);
-            border-bottom-color: var(--border);
-        }
-        /* Neofetch light mode */
-        [data-theme="light"] .neofetch-wrap {
-            background: var(--bg-card) !important;
-            border-color: var(--accent-dim2) !important;
-            box-shadow: 0 0 40px rgba(0,0,0,0.08);
-        }
-        [data-theme="light"] .neo-titlebar {
-            background: color-mix(in srgb, var(--bg-card) 80%, transparent) !important;
-            border-bottom-color: var(--border) !important;
-        }
-        [data-theme="light"] .neo-body {
-            background: var(--bg-card-alt) !important;
-        }
-        [data-theme="light"] .neo-arch,
-        [data-theme="light"] .neo-key,
-        [data-theme="light"] .neo-header {
-            color: var(--accent) !important;
-        }
-        [data-theme="light"] .neo-val,
-        [data-theme="light"] .neo-path,
-        [data-theme="light"] .neo-user {
-            color: var(--text-primary) !important;
-        }
-        [data-theme="light"] .neo-colon,
-        [data-theme="light"] .neo-sep,
-        [data-theme="light"] .neo-dollar {
-            color: var(--text-secondary) !important;
-        }
-        [data-theme="light"] .neo-uline { color: var(--text-muted) !important; }
-        [data-theme="light"] .neo-sw { filter: brightness(0.9); }
-
-        /* Body transition */
-        body { transition: background 0.3s ease, color 0.3s ease; }
-
-        html { color-scheme: light dark; }
-
-        /* Light mode experiment ended here */
 
         html { scroll-behavior: smooth; }
 
         body {
             background: var(--bg);
-            color: var(--text-primary);
+            color: var(--black);
             font-family: var(--font-mono);
             font-size: 14px;
             line-height: 1.7;
             overflow-x: hidden;
+            cursor: crosshair;
+            transition: background 0.3s, color 0.3s;
         }
+
+        /* ─── CURSOR DOT ─── */
+        .cursor-dot {
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            border: 2px solid var(--black);
+            border-radius: 0;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s;
+        }
+
+        /* ─── TOAST ─── */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--black);
+            color: var(--white);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            padding: 12px 18px;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            z-index: 9998;
+            opacity: 0;
+            transform: translateY(calc(100% + 3rem));
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease;
+            max-width: 280px;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+        .toast-label { color: var(--accent); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 3px; }
 
         /* ─── NAV ─── */
         nav {
@@ -141,217 +101,361 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1.25rem 2.5rem;
-            background: rgba(10,10,10,0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid transparent;
-            transition: border-color 0.3s;
+            padding: 0 2.5rem;
+            height: 60px;
+            background: var(--bg);
+            border-bottom: var(--border);
+            transition: background 0.3s;
         }
-        nav.scrolled { border-bottom-color: var(--border); }
 
         .logo {
             font-family: var(--font-display);
-            font-weight: 800;
-            font-size: 18px;
+            font-weight: 900;
+            font-size: 16px;
             letter-spacing: -0.5px;
-            color: var(--text-primary);
+            color: var(--black);
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
         }
-        .logo span { color: var(--accent); }
+        .logo:hover { background: var(--accent); padding: 2px 6px; }
+        .logo span { color: var(--accent-2); }
+        .logo:hover span { color: var(--black); }
 
         .nav-links {
             display: flex;
             align-items: center;
-            gap: 2rem;
+            gap: 0;
             list-style: none;
+            border: var(--border);
+        }
+        .nav-links li {
+            display: flex;
         }
         .nav-links a {
-            color: var(--text-secondary);
+            color: var(--black);
             text-decoration: none;
-            font-size: 13px;
-            letter-spacing: 0.02em;
-            transition: color 0.2s;
+            font-size: 12px;
+            letter-spacing: 0.04em;
+            padding: 8px 18px;
+            border-right: var(--border);
+            display: block;
+            transition: all 0.15s;
+            font-weight: 700;
+            line-height: 1;
+            height: 38px;
+            display: flex;
+            align-items: center;
         }
-        .nav-links a:hover { color: var(--text-primary); }
+        .nav-links li:last-child a {
+            border-right: none;
+        }
+        .nav-links a:hover {
+            background: var(--black);
+            color: var(--bg);
+        }
 
         .nav-right {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0;
+            border: var(--border);
+            margin-left: 12px;
         }
 
         .github-link {
             display: flex;
             align-items: center;
             gap: 6px;
-            color: var(--text-secondary);
+            color: var(--black);
             text-decoration: none;
-            font-size: 13px;
-            padding: 6px 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            transition: all 0.2s;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 8px 14px;
+            border-right: var(--border);
+            transition: all 0.15s;
+            height: 38px;
         }
         .github-link:hover {
-            color: var(--text-primary);
-            border-color: var(--border-hover);
-            background: rgba(255,255,255,0.04);
+            background: var(--black);
+            color: var(--accent);
         }
         .github-link svg { width: 14px; height: 14px; fill: currentColor; }
+
+        .theme-btn {
+            border: none;
+            background: var(--bg);
+            color: var(--black);
+            font-family: var(--font-mono);
+            font-size: 14px;
+            width: 38px;
+            height: 38px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .theme-btn:hover {
+            background: var(--black);
+            color: var(--accent);
+        }
 
         .hamburger {
             display: none;
             flex-direction: column;
             gap: 5px;
             cursor: pointer;
-            padding: 4px;
+            padding: 8px;
+            border: var(--border);
+            background: var(--bg);
         }
         .hamburger div {
-            width: 22px;
-            height: 1.5px;
-            background: var(--text-secondary);
+            width: 20px;
+            height: 2px;
+            background: var(--black);
             transition: all 0.3s;
         }
 
         /* ─── HERO ─── */
         .hero {
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 8rem 2.5rem 4rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-top: 60px solid transparent;
             position: relative;
             overflow: hidden;
         }
 
-        .hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            
-            /* Using your --border variable for the lines */
-            background-image: 
-                linear-gradient(to right, var(--border) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-            background-size: 45px 45px; /* Adjust size to match your screenshot */
-
-            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 75%);
-            mask-image: radial-gradient(circle at center, black 40%, transparent 75%);
-        }          
-
-        /* Make sure your content stays on top */
-        .hero > * {
+        .hero-left {
+            padding: 5rem 2.5rem 4rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-right: var(--border);
             position: relative;
-            z-index: 1;
         }
 
-        .hero-noise {
+        .hero-right {
+            padding: 4rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: var(--bg-2);
+        }
+
+        /* grid bg on hero-right */
+        .hero-right::before {
+            content: '';
             position: absolute;
             inset: 0;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-            pointer-events: none;
-            opacity: 0.4;
+            background-image:
+                linear-gradient(to right, rgba(10,10,10,0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(10,10,10,0.07) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
-
-        .hero-glow {
-            position: absolute;
-            top: -20%;
-            left: -10%;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(ellipse, rgba(200,255,87,0.04) 0%, transparent 70%);
-            pointer-events: none;
+        [data-theme="dark"] .hero-right::before {
+            background-image:
+                linear-gradient(to right, rgba(245,240,232,0.07) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(245,240,232,0.07) 1px, transparent 1px);
         }
 
         .hero-tag {
-            font-size: 12px;
-            color: var(--accent);
+            font-size: 11px;
+            font-weight: 700;
             letter-spacing: 0.15em;
             text-transform: uppercase;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .hero-tag::before {
-            content: '';
-            display: block;
-            width: 24px;
-            height: 1px;
+            color: var(--black);
             background: var(--accent);
+            padding: 4px 10px;
+            border: var(--border);
+            box-shadow: var(--shadow);
+            display: inline-block;
+            margin-bottom: 2rem;
+            width: fit-content;
         }
 
         .hero h1 {
             font-family: var(--font-display);
-            font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 800;
-            line-height: 0.95;
+            font-size: clamp(2.5rem, 5vw, 5.5rem);
+            font-weight: 900;
+            line-height: 1;
             letter-spacing: -2px;
-            color: var(--text-primary);
-            margin-bottom: 0.5rem;
+            color: var(--black);
+            margin-bottom: 0.25rem;
         }
 
         .hero h1 .typed-line {
             display: block;
-            color: var(--accent);
+            color: var(--accent-2);
             font-style: italic;
             min-height: 1.1em;
+            background: var(--black);
+            padding: 0 8px;
+            color: var(--accent);
+            margin-top: 6px;
         }
 
         .hero-sub {
             margin-top: 2rem;
-            max-width: 480px;
-            color: var(--text-secondary);
+            max-width: 420px;
+            color: var(--black);
             font-size: 13px;
             line-height: 1.8;
+            opacity: 0.7;
         }
 
         .hero-actions {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 0;
             margin-top: 2.5rem;
         }
 
         .btn-primary {
-            background: var(--accent);
+            background: var(--black);
             color: var(--bg);
-            border: none;
-            padding: 10px 24px;
-            border-radius: 6px;
+            border: var(--border);
+            padding: 12px 28px;
             font-family: var(--font-mono);
-            font-size: 13px;
-            font-weight: 500;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.15s;
             display: inline-block;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
         }
         .btn-primary:hover {
-            background: color-mix(in srgb, var(--accent) 80%, white);
-            transform: translateY(-1px);
+            background: var(--accent);
+            color: var(--black);
+            box-shadow: var(--shadow);
+            transform: translate(-2px, -2px);
         }
 
         .btn-ghost {
-            color: var(--text-secondary);
-            border: 1px solid var(--border);
-            padding: 10px 24px;
-            border-radius: 6px;
+            color: var(--black);
+            border: var(--border);
+            margin-left: -3px;
+            padding: 12px 28px;
             font-family: var(--font-mono);
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: 700;
             cursor: pointer;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.15s;
             display: inline-block;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
         }
         .btn-ghost:hover {
-            color: var(--text-primary);
-            border-color: var(--border-hover);
+            background: var(--black);
+            color: var(--bg);
+            box-shadow: var(--shadow);
+            transform: translate(-2px, -2px);
+        }
+
+        /* ─── HERO TERMINAL / RIGHT PANEL ─── */
+        .hero-terminal {
+            background: #0a0a0a;
+            color: var(--accent);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            width: 100%;
+            max-width: 400px;
+            border: var(--border);
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            z-index: 1;
+        }
+        .hero-terminal .t-bar {
+            background: var(--bg-2);
+            border-bottom: var(--border);
+            padding: 8px 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .t-dot { width: 11px; height: 11px; border: 2px solid var(--black); display: inline-block; }
+        .t-dot-r { background: #ff5f57; }
+        .t-dot-y { background: #febc2e; }
+        .t-dot-g { background: #28c840; }
+        .t-title { flex: 1; text-align: center; font-size: 10px; color: #555; letter-spacing: 0.06em; }
+        [data-theme="dark"] .t-title { color: #888; }
+        .hero-terminal .t-body {
+            padding: 1rem 1.25rem;
+            min-height: 180px;
+            line-height: 1.8;
+        }
+        .t-prompt { color: var(--accent); }
+        .t-cmd { color: #f5f0e8; }
+        .t-out { color: #888; }
+        [data-theme="dark"] .t-out { color: #aaa; }
+        .t-cursor-inline { display: inline-block; width: 8px; height: 14px; background: var(--accent); vertical-align: middle; animation: blink 1s step-end infinite; margin-left: 2px; }
+
+        /* ─── KONAMI OVERLAY ─── */
+        .konami-overlay {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 9997;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-family: var(--font-mono);
+        }
+        .konami-overlay.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+        .konami-text {
+            color: var(--accent);
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 6vw, 5rem);
+            font-weight: 900;
+            text-align: center;
+            animation: glitch 0.5s infinite;
+        }
+        .konami-sub {
+            color: #555;
+            font-size: 13px;
+            margin-top: 1rem;
+            letter-spacing: 0.1em;
+        }
+        .konami-close {
+            margin-top: 2rem;
+            background: var(--accent);
+            color: var(--black);
+            border: 3px solid var(--accent);
+            padding: 10px 24px;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .konami-close:hover { background: transparent; color: var(--accent); }
+
+        @keyframes glitch {
+            0% { text-shadow: 3px 0 var(--accent-2), -3px 0 var(--accent-3); }
+            20% { text-shadow: -3px 0 var(--accent-2), 3px 0 var(--accent-3); }
+            40% { text-shadow: 3px 3px var(--accent-2), -3px -3px var(--accent-3); }
+            60% { text-shadow: none; }
+            80% { text-shadow: -3px 0 var(--accent-3), 3px 0 var(--accent-2); }
+            100% { text-shadow: 3px 0 var(--accent-2), -3px 0 var(--accent-3); }
         }
 
         /* ─── SECTIONS ─── */
         section {
-            padding: 6rem 2.5rem;
+            padding: 5rem 2.5rem;
             max-width: 1100px;
             margin: 0 auto;
         }
@@ -360,375 +464,225 @@
             font-size: 11px;
             letter-spacing: 0.18em;
             text-transform: uppercase;
-            color: var(--text-muted);
+            color: var(--black);
+            opacity: 0.4;
             margin-bottom: 0.5rem;
+            font-weight: 700;
         }
 
         .section-title {
             font-family: var(--font-display);
-            font-size: clamp(1.75rem, 3vw, 2.5rem);
-            font-weight: 700;
-            letter-spacing: -0.5px;
+            font-size: clamp(1.75rem, 3vw, 2.8rem);
+            font-weight: 900;
+            letter-spacing: -1px;
             margin-bottom: 3rem;
-            color: var(--text-primary);
+            color: var(--black);
+            display: inline-block;
+            background: var(--black);
+            color: var(--bg);
+            padding: 4px 14px;
         }
 
         /* ─── ABOUT ─── */
-        #about {
-            border-top: 1px solid var(--border);
+        .about-toggle-wrapper {
             position: relative;
-        }
-
-        #about::before {
-            content: "";
-            position: absolute;
+            cursor: pointer;
+            background: var(--bg);
+            border-right: var(--border);
+            width: 100.9%;
             
-            top: 50%;
-            left: -50px;
-            transform: translateY(-50%) rotate(var(--who-tilt));
-            width: 350px;
-            height: 350px;
-            background-image: url('assets/images/whoisthis.jpg');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;            
-            z-index: 0;
-            pointer-events: none;
-
-            animation: fadeUpWHOImage 0.8s ease forwards;
+            /* STACKING MAGIC: Forces both children into the exact same grid cell space */
+            display: grid;
+            grid-template-areas: "stack";
+            overflow: hidden;
         }
 
-        /* Ensure the image stays on top of the image */
-        .about-grid, 
-        .section-label, 
-        .section-title {
+        /* Assign both containers to the exact same grid spot */
+        .about-view-image,
+        .about-view-text {
+            grid-area: stack;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            
+            /* Smooth fading transition */
+            transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                        transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ─── Image Specifics ─── */
+        .about-view-image {
             position: relative;
+            opacity: 1;
+            z-index: 2;
+            pointer-events: auto; /* Clickable */
+            transform: scale(1);
+        }
+
+        .about-image-src {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .click-hint {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: var(--black);
+            color: var(--bg);
+            padding: 4px 8px;
+            font-size: 11px;
+            font-family: monospace;
+            text-transform: uppercase;
+            z-index: 3;
+        }
+
+        /* ─── Text Specifics ─── */
+        .about-view-text {
+            padding: 2rem;
+            opacity: 0;
             z-index: 1;
+            pointer-events: none; /* Can't click/select text while hidden */
+            transform: scale(0.98); /* Subtle scale up animation when revealed */
+            
+            /* Center text vertically if the container is taller than the paragraphs */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* ─── ACTIVE/TOGGLED STATES ─── */
+
+        /* When text is showing: Fade out image cleanly */
+        .about-toggle-wrapper.show-text .about-view-image {
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.02); /* Slight drift out effect */
+        }
+
+        /* When text is showing: Fade in text cleanly */
+        .about-toggle-wrapper.show-text .about-view-text {
+            opacity: 1;
+            z-index: 3;
+            pointer-events: auto; /* Allows links/text selection now */
+            transform: scale(1);
+        }
+
+        /* ─── Core Typography Styles (Unchanged) ─── */
+        .about-view-text p {
+            color: var(--black);
+            line-height: 1.9;
+            margin-bottom: 1rem;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+
+        .about-view-text p strong {
+            color: var(--black);
+            font-weight: 700;
+            opacity: 1;
+            background: var(--accent);
+            padding: 0 3px;
+        }
+        #about {
+            border-top: var(--border);
         }
 
         .about-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: start;
+            gap: 0;
+            border: var(--border);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .about-text {
+            padding: 2rem;
+            border-right: var(--border);
         }
 
         .about-text p {
-            color: var(--text-secondary);
+            color: var(--black);
             line-height: 1.9;
             margin-bottom: 1rem;
+            font-size: 13px;
+            opacity: 0.8;
+        }
+        .about-text p strong {
+            color: var(--black);
+            font-weight: 700;
+            opacity: 1;
+            background: var(--accent);
+            padding: 0 3px;
         }
 
-        .about-text p strong {
-            color: var(--text-primary);
-            font-weight: 500;
-        }
+        .about-stats-wrap { position: relative; }
 
         .about-stats {
             display: flex;
             flex-direction: column;
-            gap: 1px;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            overflow: hidden;
+            gap: 0;
         }
 
         .stat-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 1.25rem;
-            background: var(--bg-card);
-            transition: background 0.2s;
+            padding: 1rem 1.5rem;
+            border-bottom: var(--border);
+            transition: all 0.15s;
         }
-        .stat-row:not(:last-child) {
-            border-bottom: 1px solid var(--border);
+        .stat-row:last-child { border-bottom: none; }
+        .stat-row:hover {
+            background: var(--black);
         }
-        .stat-row:hover { background: var(--bg-card-hover); }
-        .stat-label { color: var(--text-secondary); font-size: 13px; }
-        .stat-value { color: var(--accent); font-size: 13px; font-weight: 500; }
+        .stat-row:hover .stat-label,
+        .stat-row:hover .stat-value { color: var(--bg); }
+        .stat-label { color: var(--black); font-size: 12px; opacity: 0.5; font-weight: 700; }
+        .stat-value { color: var(--black); font-size: 12px; font-weight: 700; }
 
-        /* ─── PROJECTS ─── */
-        #projects { border-top: 1px solid var(--border); position: relative;}
-
-        .project-peeker {
-            position: absolute;
-            right: 75px;
-            top: 180px; 
-            
-            width: 80px;
-            height: auto;
-            z-index: 0;
-            pointer-events: none;
-            
-            /* Slight rotation for more "peeking" personality */
-            /* transform: rotate(5deg); */
-        }
-
-        .projects-grid {
-            display: grid;
-            position: relative;
-            z-index: 1;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            background: var(--border);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .project-card {
-            background: var(--bg-card);
-            padding: 1.75rem;
-            transition: background 0.2s;
-            cursor: default;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        .project-card:hover { background: var(--bg-card-hover); }
-
-        /* This targets the 2nd, 4th, 6th... cards */
-        .project-card:nth-child(even) {
-            background: var(--bg-card-alt);
-        }
-
-        .project-card:nth-child(even):hover {
-            background: var(--bg-card-hover) !important;
-        }
-
-        .project-number {
-            font-size: 11px;
-            color: var(--text-muted);
-            letter-spacing: 0.1em;
-            margin-bottom: 1.5rem;
-        }
-
-        .project-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 8px;
-            background: var(--accent-dim);
-            border: 1px solid var(--accent-dim2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.25rem;
-            font-size: 16px;
-        }
-
-        .project-name {
-            font-family: var(--font-display);
-            font-size: 17px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 0.6rem;
-        }
-
-        .project-desc {
-            color: var(--text-secondary);
-            font-size: 13px;
-            line-height: 1.7;
-            flex-grow: 1;
-            display: -webkit-box;
-            -webkit-line-clamp: 6; /* Change this number to show more/less lines */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 1.25rem; /* Space between text and badge */
-        }
-
-        .project-badge {
-            align-self: flex-start;
-            display: inline-block;
-            /* margin-top: 1rem; */
-            font-size: 11px;
-            padding: 3px 10px;
-            border-radius: 20px;
-            border: 1px solid var(--border);
-            color: var(--text-muted);
-            letter-spacing: 0.06em;
-        }
-        .project-badge.live {
-            border-color: var(--accent-dim2);
-            color: var(--accent);
-            background: var(--accent-dim);
-        }
-
-        /* ─── CONTACT ─── */
-        #contact { border-top: 1px solid var(--border);}
-            
-        .contact-content {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            gap: 2rem; }
-
-        .contact-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 2.5rem;
-            flex: 1;
-            max-width: 560px;
-            z-index: 1;
-        }
-
-        .contact-image {
-            width: 300px;
-            height: auto;
-            object-fit: cover;
-            border-radius: 12px;
-            transform: rotate(var(--who-tilt));
-            animation: fadeUp 0.8s ease forwards;
-        }
-        .contact-desc {
-            color: var(--text-secondary);
-            font-size: 13px;
-            margin-bottom: 2rem;
-        }
-
-        .contact-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1rem 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .contact-item:last-child { border-bottom: none; }
-
-        .contact-platform {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-
-        .contact-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            flex-shrink: 0;
-        }
-
-        .contact-handle {
-            color: var(--text-primary);
-            font-size: 13px;
-        }
-
-        /* ─── FOOTER ─── */
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 2rem 2.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            max-width: 1100px;
-            margin: 0 auto;
-            color: var(--text-muted);
-            font-size: 12px;
-        }
-        footer a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-        footer a:hover { color: var(--text-primary); }
-
-        /* ─── MOBILE ─── */
-        @media (max-width: 768px) {
-            nav { padding: 1rem 1.25rem; }
-            .nav-links { display: none; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: rgba(10,10,10,0.97); padding: 1.5rem; gap: 1.25rem; border-bottom: 1px solid var(--border); }
-            .nav-links.active { display: flex; }
-            .hamburger { display: flex; }
-            .hero { padding: 7rem 1.25rem 3rem; }
-            section { padding: 4rem 1.25rem; }
-            .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-            .projects-grid { grid-template-columns: 1fr; }
-            .project-peeker { top: 128px; }
-            footer { flex-direction: column; gap: 0.5rem; text-align: center; padding: 1.5rem 1.25rem; }
-            #about {overflow: hidden;}
-            #about::before {top: 50%; left: 85px; width: 400px; height: 400px; transform: translateY(-50%) rotate(var(--who-tilt)); opacity: 0.04;}
-            .contact-content { flex-direction: column; align-items: center; }
-            .contact-image { margin-top: 2rem; }       
-            :root { --who-tilt: 15deg; }
-        }
-
-        /* ─── ANIMATIONS ─── */
-        @keyframes fadeUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .fade-up {
-            opacity: 0;
-            animation: fadeUp 0.6s ease forwards;
-        }
-        .fade-up:nth-child(1) { animation-delay: 0.1s; }
-        .fade-up:nth-child(2) { animation-delay: 0.2s; }
-        .fade-up:nth-child(3) { animation-delay: 0.35s; }
-        .fade-up:nth-child(4) { animation-delay: 0.5s; }
-
-        .typed-cursor { color: var(--accent); }
-
-        @keyframes fadeUpWHOImage {
-            from { 
-                opacity: 0; 
-                transform: translateY(-40%) rotate(var(--who-tilt));
-            } to { 
-                opacity: 0.08; 
-                transform: translateY(-50%) rotate(var(--who-tilt));
-            }
-        }
-
-        /* ─── OS ROW CLICKABLE ─── */
         .stat-os {
             cursor: pointer;
             user-select: none;
+            position: relative;
         }
-        .stat-os:hover .os-val { color: var(--accent); }
+        .stat-os:hover .stat-value { color: var(--accent) !important; }
         .stat-hint {
             font-size: 10px;
-            opacity: 0.45;
+            opacity: 0.5;
             margin-left: 4px;
-            transition: opacity 0.2s;
         }
-        .stat-os:hover .stat-hint { opacity: 1; }
+        .stat-os::after {
+            content: '↗';
+            position: absolute;
+            right: 1.5rem;
+            font-size: 10px;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .stat-os:hover::after { opacity: 0.5; }
 
-        /* ─── NEOFETCH TERMINAL ─── */
-        .about-stats-wrap { position: relative; }
-
+        /* ─── NEOFETCH ─── */
         .neofetch-wrap {
             position: absolute;
             inset: 0;
             background: #0d0f0d;
-            border: 1px solid rgba(200,255,87,0.2);
-            border-radius: 10px;
+            border-left: var(--border);
             overflow: hidden;
             font-family: var(--font-mono);
             font-size: 12px;
             opacity: 0;
             pointer-events: none;
-            transform: scale(0.97) translateY(6px);
             transition: opacity 0.3s ease, transform 0.3s ease;
             z-index: 10;
-            box-shadow: 0 0 40px rgba(200,255,87,0.05);
+            transform: translateX(10px);
         }
         .neofetch-wrap.visible {
             opacity: 1;
             pointer-events: all;
-            transform: scale(1) translateY(0);
+            transform: translateX(0);
         }
 
         .neo-titlebar {
@@ -737,9 +691,9 @@
             gap: 6px;
             padding: 8px 12px;
             background: #151815;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 2px solid #222;
         }
-        .neo-dot { width: 11px; height: 11px; border-radius: 50%; cursor: pointer; flex-shrink: 0; }
+        .neo-dot { width: 11px; height: 11px; border-radius: 0; cursor: pointer; flex-shrink: 0; border: 1px solid rgba(255,255,255,0.1); }
         .neo-red { background: #ff5f57; }
         .neo-yellow { background: #febc2e; }
         .neo-green { background: #28c840; }
@@ -783,10 +737,9 @@
         .neo-key { color: var(--accent); font-weight: 500; }
         .neo-colon { color: #444; }
         .neo-val { color: #c0bdb8; }
-        .neo-header { color: var(--accent); font-weight: 500; font-size: 13px; margin-bottom: 2px; }
-        .neo-uline { color: #333; letter-spacing: -1px; }
-        .neo-swatches { display: flex; gap: 3px; margin-top: 3px; }
-        .neo-sw { width: 13px; height: 13px; border-radius: 2px; display: inline-block; }
+        .neo-header { color: var(--accent); font-weight: 700; font-size: 13px; }
+        .neo-uline { color: #333; }
+        .neo-sw { width: 13px; height: 13px; border-radius: 0; display: inline-block; }
 
         .neo-prompt {
             padding: 4px 1.25rem 10px;
@@ -803,14 +756,468 @@
         .neo-path { color: #74b8f7; }
         .neo-dollar { color: #444; margin: 0 6px 0 2px; }
         .neo-cursor { color: var(--accent); animation: blink 1s step-end infinite; font-size: 11px; }
+
+        /* ─── PROJECTS ─── */
+        #projects { border-top: var(--border); }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0;
+            border: var(--border);
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            z-index: 1;
+        }
+
+        .project-card {
+            background: var(--bg);
+            padding: 2rem;
+            border-right: var(--border);
+            transition: all 0.15s;
+            cursor: default;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .project-card:last-child { border-right: none; }
+        .project-card:hover {
+            background: var(--black);
+            transform: translate(-3px, -3px);
+            box-shadow: 3px 3px 0 var(--black);
+            z-index: 2;
+        }
+        .project-card:hover .project-name,
+        .project-card:hover .project-desc { color: var(--bg); }
+        .project-card:hover .project-number { color: var(--accent); }
+        .project-card:hover .project-badge { border-color: var(--bg-2); color: var(--bg-2); }
+        .project-card:hover .project-badge.live { background: var(--accent); color: var(--black); border-color: var(--accent); }
+
+        .project-number {
+            font-size: 11px;
+            color: var(--black);
+            opacity: 0.3;
+            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .project-icon {
+            font-size: 24px;
+            margin-bottom: 1rem;
+        }
+
+        .project-name {
+            font-family: var(--font-display);
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--black);
+            margin-bottom: 0.6rem;
+            letter-spacing: -0.5px;
+        }
+
+        .project-desc {
+            color: var(--black);
+            font-size: 12px;
+            line-height: 1.7;
+            opacity: 0.6;
+            flex-grow: 1;
+            margin-bottom: 1.25rem;
+        }
+
+        .project-badge {
+            align-self: flex-start;
+            display: inline-block;
+            font-size: 10px;
+            padding: 3px 10px;
+            border: 2px solid var(--black);
+            color: var(--black);
+            letter-spacing: 0.08em;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .project-badge.live {
+            background: var(--accent);
+            border-color: var(--black);
+            color: var(--black);
+        }
+
+        /* ─── CONTACT ─── */
+        #contact { border-top: var(--border); }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            border: var(--border);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .contact-card {
+            padding: 2.5rem;
+            border-right: var(--border);
+        }
+
+        .contact-desc {
+            color: var(--black);
+            font-size: 13px;
+            margin-bottom: 2rem;
+            opacity: 0.7;
+            line-height: 1.8;
+        }
+
+        .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: var(--border);
+            transition: all 0.15s;
+            cursor: default;
+        }
+        .contact-item:last-child { border-bottom: none; }
+        .contact-item:hover { background: var(--black); margin: 0 -2.5rem; padding: 1rem 2.5rem; }
+        .contact-item:hover .contact-platform,
+        .contact-item:hover .contact-handle { color: var(--bg) !important; }
+        .contact-item:hover .contact-dot { background: var(--accent); }
+
+        .contact-image {
+            width: 100%;
+            max-width: 380px;
+            display: block;
+            margin: 2rem auto 0;
+            border: var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        .contact-platform {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--black);
+            font-size: 12px;
+            font-weight: 700;
+            opacity: 0.5;
+            transition: color 0.15s, opacity 0.15s;
+        }
+        .contact-item:hover .contact-platform { opacity: 1; }
+
+        .contact-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--black);
+            flex-shrink: 0;
+            transition: background 0.15s;
+        }
+
+        .contact-handle {
+            color: var(--black);
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+
+        /* ─── CONTACT RIGHT PANEL ─── */
+        .contact-right {
+            padding: 2.5rem;
+            background: var(--bg-2);
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .contact-right-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0.4;
+            margin-bottom: 0.5rem;
+        }
+
+        /* ─── SECRET PANEL ─── */
+        .secret-box {
+            border: var(--border);
+            padding: 1.5rem;
+            background: var(--black);
+            color: var(--accent);
+            font-size: 12px;
+            line-height: 1.8;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .secret-box:hover {
+            background: var(--accent);
+            color: var(--black);
+            box-shadow: var(--shadow-lg);
+            transform: translate(-2px, -2px);
+        }
+        .secret-box-title {
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            opacity: 0.6;
+        }
+
+        .skill-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+        }
+        .skill-tag {
+            border: var(--border);
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            margin: -1px 0 0 -1px;
+            color: var(--black);
+            background: var(--bg);
+            transition: all 0.15s;
+            cursor: default;
+            letter-spacing: 0.04em;
+        }
+        .skill-tag:hover {
+            background: var(--black);
+            color: var(--accent);
+        }
+
+        /* ─── MARQUEE ─── */
+        .marquee-wrap {
+            border-top: var(--border);
+            border-bottom: var(--border);
+            overflow: hidden;
+            background: var(--accent);
+            padding: 10px 0;
+        }
+        .marquee-inner {
+            display: flex;
+            gap: 0;
+            white-space: nowrap;
+            animation: marquee 18s linear infinite;
+        }
+        .marquee-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 1.5rem;
+            font-family: var(--font-display);
+            font-weight: 900;
+            font-size: 13px;
+            color: var(--black);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .marquee-sep {
+            color: var(--black);
+            opacity: 0.3;
+        }
+        @keyframes marquee {
+            from { transform: translateX(0); }
+            to { transform: translateX(-50%); }
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: var(--border);
+            padding: 1.5rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 100%;
+            color: var(--black);
+            font-size: 11px;
+            font-weight: 700;
+            opacity: 0.5;
+        }
+        footer a {
+            color: var(--black);
+            text-decoration: none;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+        footer a:hover { opacity: 1; }
+
+        /* ─── MOBILE ─── */
+        @media (max-width: 768px) {
+            nav { padding: 0 1rem; }
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: fixed;
+                top: 60px; left: 0; right: 0;
+                background: var(--bg);
+                border-bottom: var(--border);
+                border-top: none;
+                border-left: none;
+                border-right: none;
+                padding: 0;
+                gap: 0;
+                z-index: 99;
+            }
+            .nav-links.active { display: flex; }
+            .nav-links li { width: 100%; }
+            .nav-links a { width: 100%; border-right: none; border-bottom: var(--border); height: auto; padding: 12px 16px; }
+            .nav-links li:last-child a { border-bottom: none; }
+            .hamburger { display: flex; }
+            .github-link span { display: none; }
+            .hero { grid-template-columns: 1fr; min-height: auto; }
+            .hero-right { display: none; }
+            .hero-left { padding: 5rem 1.25rem 3rem; }
+            section { padding: 4rem 1.25rem; }
+            .about-grid { grid-template-columns: 1fr; }
+            .about-text { border-right: none; border-bottom: var(--border); }
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-card { border-right: none; border-bottom: var(--border); }
+            .project-card:last-child { border-bottom: none; }
+            .contact-grid { grid-template-columns: 1fr; }
+            .contact-card { border-right: none; border-bottom: var(--border); }
+            footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+        }
+
+        /* ─── ANIMATIONS ─── */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-up {
+            opacity: 0;
+            animation: fadeUp 0.5s ease forwards;
+        }
+        .fade-up:nth-child(1) { animation-delay: 0.1s; }
+        .fade-up:nth-child(2) { animation-delay: 0.2s; }
+        .fade-up:nth-child(3) { animation-delay: 0.35s; }
+        .fade-up:nth-child(4) { animation-delay: 0.5s; }
+
+        .typed-cursor { color: var(--accent); }
+
         @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
+        /* ─── SCROLL REVEAL ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(16px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .reveal.shown {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ─── CURSOR TRAIL ─── */
+        .cursor-trail {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--black);
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transform: translate(-50%, -50%);
+            transition: left 0.1s ease, top 0.1s ease;
+            opacity: 0.35;
+        }
+
+        /* ─── CLICK BURST ─── */
+        @keyframes burst {
+            0%   { transform: translate(-50%,-50%) scale(0); opacity: 1; }
+            100% { transform: translate(-50%,-50%) scale(3); opacity: 0; }
+        }
+
+        /* ─── SKILL BARS ─── */
+        .skill-bars-wrap { margin-top: 2.5rem; }
+        .skill-bar-item { display: flex; flex-direction: column; gap: 5px; margin-bottom: 0.75rem; }
+        .skill-bar-label {
+            display: flex; justify-content: space-between;
+            font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+        }
+        .skill-bar-track {
+            width: 100%; height: 10px;
+            background: var(--bg-2);
+            border: 2px solid var(--black);
+        }
+        .skill-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+        .skill-bar-fill::after {
+            content: '';
+            position: absolute; right: 0; top: 0; bottom: 0;
+            width: 3px; background: var(--black);
+        }
+        .skill-bar-fill.go { width: var(--tw); }
+
+        /* ─── LOGO RAGE ─── */
+        .logo { transition: opacity 0.25s ease, all 0.15s; }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20%      { transform: translateX(-4px) rotate(-1deg); }
+            40%      { transform: translateX(4px) rotate(1deg); }
+            60%      { transform: translateX(-3px); }
+            80%      { transform: translateX(3px); }
+        }
+        .logo.shaking { animation: shake 0.4s ease; }
+
+        /* ─── KONAMI HINT ROW ─── */
+        #konami-hint-row { display: none; }
+
+        /* ─── DRAG EASTER EGG ─── */
+        .draggable-sticker {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            cursor: grab;
+            user-select: none;
+            z-index: 500;
+            font-size: 40px;
+            line-height: 1;
+            transition: transform 0.1s;
+            filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.3));
+        }
+        .draggable-sticker:active { cursor: grabbing; transform: scale(1.2) rotate(10deg); }
     </style>
 </head>
 <body>
 
+<!-- cursor dot -->
+<!-- <div class="cursor-dot" id="cursor-dot"></div> -->
+<!-- <div class="cursor-trail" id="cursor-trail"></div> -->
+
+<!-- toast -->
+<div class="toast" id="toast">
+    <div class="toast-label">psst</div>
+    <div id="toast-msg">you found something</div>
+</div>
+
+<!-- konami overlay -->
+<!-- <div class="konami-overlay" id="konami-overlay">
+    <div class="konami-text">YOU FOUND IT</div>
+    <div style="color:#c8ff57;font-size:4rem;margin:1rem 0">🎮</div>
+    <div class="konami-sub">↑ ↑ ↓ ↓ ← → ← → B A</div>
+    <div class="konami-sub" style="margin-top:0.5rem;font-size:11px;opacity:0.4">bro knows the code fr fr</div>
+    <button class="konami-close" onclick="closeKonami()">ok ok i see u</button>
+</div> -->
+
+<!-- draggable sticker -->
+<div class="draggable-sticker" id="drag-sticker" style="bottom: 120px; right: 30px;" title="drag me lol">🐟</div>
+
 <nav id="main-nav">
-    <div class="logo">Nabz<span>.</span></div>
+    <div class="logo" onclick="logoClick()">Nabz<span>.</span></div>
     <div class="hamburger" onclick="toggleMenu()" aria-label="Toggle menu">
         <div></div><div></div><div></div>
     </div>
@@ -818,34 +1225,54 @@
         <li><a href="#about" onclick="closeMenu()">About</a></li>
         <li><a href="#projects" onclick="closeMenu()">Projects</a></li>
         <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
-        <li><a href="gate-utility.html" onclick="closeMenu()">Utilities</a></li>
-        <a href="https://github.com/LightNabz" class="github-link" target="_blank" rel="noopener">
-            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.11.793-.26.793-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.495.998.108-.775.419-1.305.762-1.605-2.665-.306-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.304-.535-1.524.117-3.176 0 0 1.007-.322 3.301 1.23a11.52 11.52 0 013.004-.404c1.02.004 2.047.137 3.003.403 2.292-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.12 3.177.77.84 1.232 1.91 1.232 3.22 0 4.609-2.805 5.619-5.475 5.92.429.37.823 1.103.823 2.222 0 1.605-.014 2.896-.014 3.287 0 .32.19.694.8.576 4.765-1.592 8.2-6.09 8.2-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            GitHub
-        </a>
     </ul>
     <div class="nav-right">
-        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme"></button>
+        <a href="https://github.com/LightNabz" class="github-link" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.11.793-.26.793-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.61-4.042-1.61-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.807 1.305 3.495.998.108-.775.419-1.305.762-1.605-2.665-.306-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.304-.535-1.524.117-3.176 0 0 1.007-.322 3.301 1.23a11.52 11.52 0 013.004-.404c1.02.004 2.047.137 3.003.403 2.292-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.873.12 3.177.77.84 1.232 1.91 1.232 3.22 0 4.609-2.805 5.619-5.475 5.92.429.37.823 1.103.823 2.222 0 1.605-.014 2.896-.014 3.287 0 .32.19.694.8.576 4.765-1.592 8.2-6.09 8.2-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            <span>GitHub</span>
+        </a>
+        <button class="theme-btn" id="theme-btn" title="toggle theme">☀</button>
     </div>
 </nav>
 
 <main>
     <!-- HERO -->
     <div class="hero">
-        <div class="hero-noise"></div>
-        <div class="hero-glow"></div>
-        <div class="fade-up hero-tag">Available for collabs</div>
-        <h1 class="fade-up">
-            Nabz<br>
-            <span class="typed-line"><span class="typed-hero"></span></span>
-        </h1>
-        <p class="fade-up hero-sub">
-            All-rounder open-source developer. Meme enthusiast. Occasionally writes code that works on the first try (rare).
-            Based somewhere with WiFi.
-        </p>
-        <div class="fade-up hero-actions">
-            <a href="#projects" class="btn-primary">See my work</a>
-            <a href="#contact" class="btn-ghost">Get in touch</a>
+        <div class="hero-left">
+            <div class="fade-up hero-tag">✦ Available for collabs</div>
+            <h1 class="fade-up">
+                Nabz<br>
+                <span class="typed-line"><span class="typed-hero"></span></span>
+            </h1>
+            <p class="fade-up hero-sub">
+                All-rounder open-source developer. Laugh at triple T memes everytime. Occasionally writes code that works on the first try (rare). Based somewhere with WiFi.
+            </p>
+            <div class="fade-up hero-actions">
+                <a href="#projects" class="btn-primary">See my work</a>
+                <a href="#contact" class="btn-ghost">Get in touch</a>
+            </div>
+        </div>
+        <div class="hero-right">
+            <!-- interactive terminal -->
+            <div class="hero-terminal" id="hero-terminal">
+                <div class="t-bar">
+                    <span class="t-dot t-dot-r"></span>
+                    <span class="t-dot t-dot-y"></span>
+                    <span class="t-dot t-dot-g"></span>
+                    <span class="t-title">nabz@arch-chan — bash</span>
+                </div>
+                <div class="t-body" id="t-body">
+                    <div><span class="t-prompt">nabz@arch-chan:~$ </span><span class="t-cmd" id="t-cmd"></span><span class="t-cursor-inline" id="t-cursor"></span></div>
+                    <div id="t-output" style="margin-top:6px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MARQUEE -->
+    <div class="marquee-wrap">
+        <div class="marquee-inner" id="marquee-inner">
+            <!-- duplicated for loop -->
         </div>
     </div>
 
@@ -853,55 +1280,82 @@
     <section id="about">
         <p class="section-label">01 — About</p>
         <h2 class="section-title">Who's this guy</h2>
-        <div class="about-grid">
-            <div class="about-text">
-                <p>Hey, I'm <strong>Nabz</strong> — an open-source developer who got into coding because of a dangerous mix of free time and curiosity, and of course OSS enthusiast. I build things like websites, sometimes they work great, sometimes they just work.</p>
-                <p>I'm into clean interfaces, Linux tinkering, and memes that hit a little too close to home. When I'm not pushing commits, I'm probably tweaking my Arch setup or overthinking a CSS property.</p>
+        <div class="about-grid reveal">
+        <div class="about-toggle-wrapper" onclick="this.classList.toggle('show-text')" title="Click to view info!">
+            
+            <div class="about-view-image">
+                <img src="assets/images/whoisthis.jpg" alt="Who's this guy" class="about-image-src" />
+                <div class="click-hint">Click to reveal details</div>
+            </div>
+            
+            <div class="about-view-text">
+                <p>Hey, I'm <strong>Nabz</strong> — an open-source developer who got into coding because of a dangerous mix of free time and curiosity. I build things like websites or even some other random projects, sometimes they work great, sometimes they just work.</p>
+                <p>I'm into low-level programming such as <strong>Kernel tinkering and all</strong>, <strong>Linux tinkering</strong>, and doomscrolling brainrots. When I'm not pushing commits, I'm probably tweaking my Arch setup or overthinking a kernel configuration.</p>
                 <p>Open to <strong>projects, collabs, or just talking tech</strong> if you've got something interesting.</p>
             </div>
+        </div>
             <div class="about-stats-wrap">
-            <div class="about-stats" id="about-stats">
-                <div class="stat-row">
-                    <span class="stat-label">Focus</span>
-                    <span class="stat-value">All-rounder Dev (probably)</span>
-                </div>
-                <div class="stat-row stat-os" id="stat-os" onclick="triggerNeofetch()" title="click me... or don't">
-                    <span class="stat-label">OS of choice</span>
-		    <span class="stat-value os-val">Arch, btw <!-- <span class="stat-hint">↗</span> --> </span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Vibe</span>
-                    <span class="stat-value">A Gooner</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Currently building</span>
-                    <span class="stat-value">Selachii</span>
-                </div>
-                <div class="stat-row">
-                    <span class="stat-label">Status</span>
-                    <span class="stat-value">Open to work</span>
-                </div>
-            </div>
-
-            <!-- NEOFETCH TERMINAL -->
-            <div class="neofetch-wrap" id="neofetch-wrap" aria-hidden="true">
-                <div class="neo-titlebar">
-                    <span class="neo-dot neo-red" onclick="closeNeofetch()"></span>
-                    <span class="neo-dot neo-yellow"></span>
-                    <span class="neo-dot neo-green"></span>
-                    <span class="neo-title">nabz@arch-chan — fastfetch</span>
-                </div>
-                <div class="neo-body">
-                    <div class="neo-left">
-                        <pre class="neo-arch" id="neo-arch"></pre>
+                <div class="about-stats" id="about-stats">
+                    <div class="stat-row reveal">
+                        <span class="stat-label">Focus</span>
+                        <span class="stat-value">All-rounder Dev (probably)</span>
                     </div>
-                    <div class="neo-right" id="neo-right"></div>
+                    <div class="stat-row stat-os reveal" id="stat-os" onclick="triggerNeofetch()" title="click me... or don't">
+                        <span class="stat-label">OS of choice</span>
+                        <span class="stat-value os-val">Arch, btw</span>
+                    </div>
+                    <div class="stat-row reveal">
+                        <span class="stat-label">Vibe</span>
+                        <span class="stat-value">A Gooner</span>
+                    </div>
+                    <div class="stat-row reveal">
+                        <span class="stat-label">Currently building</span>
+                        <span class="stat-value">Selachii 🦈</span>
+                    </div>
+                    <div class="stat-row reveal" id="stat-status" style="cursor:pointer;" onclick="cycleStatus()" title="click to see...">
+                        <span class="stat-label">Status</span>
+                        <span class="stat-value" id="status-val">Open to work</span>
+                    </div>
+                    <div class="stat-row" id="konami-hint-row">
+                        <span class="stat-label" style="font-size:10px;opacity:0.4;">psst...</span>
+                        <span class="stat-value" style="font-size:10px;opacity:0.4;">open dev tools~</span>
+                    </div>
                 </div>
-                <div class="neo-prompt">
-                    <span class="neo-user">nabz@arch-chan</span><span class="neo-sep">:</span><span class="neo-path">~</span><span class="neo-dollar">$</span>
-                    <span class="neo-cursor">█</span>
+
+                <!-- NEOFETCH -->
+                <div class="neofetch-wrap" id="neofetch-wrap" aria-hidden="true">
+                    <div class="neo-titlebar">
+                        <span class="neo-dot neo-red" onclick="closeNeofetch()" title="close"></span>
+                        <span class="neo-dot neo-yellow"></span>
+                        <span class="neo-dot neo-green"></span>
+                        <span class="neo-title">nabz@arch-chan — fastfetch</span>
+                    </div>
+                    <div class="neo-body">
+                        <div class="neo-left">
+                            <pre class="neo-arch" id="neo-arch"></pre>
+                        </div>
+                        <div class="neo-right" id="neo-right"></div>
+                    </div>
+                    <div class="neo-prompt">
+                        <span class="neo-user">nabz@arch-chan</span><span class="neo-sep">:</span><span class="neo-path">~</span><span class="neo-dollar">$</span>
+                        <span class="neo-cursor">█</span>
+                    </div>
                 </div>
             </div>
+        </div>
+
+        <!-- skills -->
+        <div style="margin-top: 3rem;">
+            <p class="section-label" style="margin-bottom:1rem;">Stack / things I touch</p>
+            <div class="skill-grid" id="skill-grid">
+                <!-- filled by JS -->
+            </div>
+        </div>
+
+        <!-- skill bars -->
+        <div class="skill-bars-wrap" id="skill-bars-wrap">
+            <p class="section-label" style="margin-bottom:1.25rem;margin-top:0;">Actual proficiency (honest edition)</p>
+            <div id="skill-bars-container"></div>
         </div>
     </section>
 
@@ -909,27 +1363,26 @@
     <section id="projects">
         <p class="section-label">02 — Projects</p>
         <h2 class="section-title">Things I built</h2>
-        <img src="https://media.tenor.com/7W585rBd2PQAAAAi/sabakitty-saba-kitty.gif" alt="Hiii" class="project-peeker fade-up">
-        <div class="projects-grid">
+        <div class="projects-grid reveal">
             <div class="project-card">
                 <div class="project-number">001</div>
                 <div class="project-icon">📋</div>
                 <div class="project-name">Public Board</div>
-                <p class="project-desc">A public bulletin board inspired by the one in SpongeBob and the developer's chronic free time. Post stuff, read stuff, vibe.</p>
+                <p class="project-desc">A public bulletin board inspired by the one in SpongeBob and chronic free time. Post stuff, read stuff, vibe.</p>
                 <span class="project-badge live">Live</span>
             </div>
             <div class="project-card">
                 <div class="project-number">002</div>
                 <div class="project-icon">💻</div>
                 <div class="project-name">NguliSim</div>
-                <p class="project-desc">Frontend dev simulator — like Duolingo but instead of learning Spanish you learn how to suffer through CSS layouts and client feedback.</p>
+                <p class="project-desc">Frontend dev simulator — like Duolingo but instead of Spanish you learn to suffer through CSS and client feedback.</p>
                 <span class="project-badge">Coming soon</span>
             </div>
             <div class="project-card">
                 <div class="project-number">003</div>
                 <div class="project-icon">🦈</div>
                 <div class="project-name">Selachii</div>
-                <p class="project-desc">Linux distro that is based on LFS, applied my concept, and there you are.</p>
+                <p class="project-desc">Linux distro based on LFS. My concept, my suffering, my rules.</p>
                 <span class="project-badge">Coming soon</span>
             </div>
         </div>
@@ -939,60 +1392,129 @@
     <section id="contact">
         <p class="section-label">03 — Contact</p>
         <h2 class="section-title">Say something</h2>
-
-        <div class="contact-content">
-        <div class="contact-card">
-            <p class="contact-desc">Got a project, a question, or just want to talk about Linux for 3 hours? Hit me up anywhere below~</p>
-            <ul class="contact-list">
-                <li class="contact-item">
-                    <span class="contact-platform">
-                        <span class="contact-dot"></span>
-                        Discord
-                    </span>
-                    <span class="contact-handle">lightnabz</span>
-                </li>
-                <li class="contact-item">
-                    <span class="contact-platform">
-                        <span class="contact-dot"></span>
-                        GitHub
-                    </span>
-                    <a href="https://github.com/LightNabz" target="_blank" rel="noopener" style="color: var(--accent); text-decoration: none;">@LightNabz</a>
-                </li>
-                <li class="contact-item">
-                    <span class="contact-platform">
-                        <span class="contact-dot"></span>
-                        Email
-                    </span>
-                    <span class="contact-handle">nabzvonluitpold@gmail.com</span>
-                </li>
-            </ul>
+        <div class="contact-grid reveal">
+            <div class="contact-card">
+                <p class="contact-desc">Got a project, a question, or just want to talk about Linux for 3 hours? Hit me up anywhere below~</p>
+                <ul class="contact-list">
+                    <li class="contact-item" onclick="copyToClipboard('lightnabz', 'Discord handle')" style="cursor:pointer;" title="click to copy">
+                        <span class="contact-platform">
+                            <span class="contact-dot"></span>
+                            Discord
+                        </span>
+                        <span class="contact-handle">lightnabz</span>
+                    </li>
+                    <li class="contact-item">
+                        <span class="contact-platform">
+                            <span class="contact-dot"></span>
+                            GitHub
+                        </span>
+                        <a href="https://github.com/LightNabz" target="_blank" rel="noopener" class="contact-handle" style="color:var(--black);">@LightNabz</a>
+                    </li>
+                    <li class="contact-item" onclick="copyToClipboard('nabzvonluitpold@gmail.com', 'Email')" style="cursor:pointer;" title="click to copy">
+                        <span class="contact-platform">
+                            <span class="contact-dot"></span>
+                            Email
+                        </span>
+                        <span class="contact-handle">nabzvonluitpold@gmail.com</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="contact-right">
+                <p class="contact-right-label">Secret panel (u found it)</p>
+                <div class="secret-box" onclick="triggerSecretMsg()" id="secret-box">
+                    <div class="secret-box-title">🔒 classified</div>
+                    <div id="secret-text">click me if ur brave enough</div>
+                </div>
+                <div style="margin-top:auto;">
+                    <p class="contact-right-label" style="margin-bottom:0.75rem;">current status</p>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <div style="width:8px;height:8px;background:var(--accent);animation:pulse 2s infinite;border:2px solid var(--black);"></div>
+                        <span style="font-size:12px;font-weight:700;color:var(--black);">Online — probably yapping somewhere</span>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <img src="assets/images/halo.jpg" alt="Halo" class="contact-image">
-        </div>
     </section>
 </main>
 
 <footer>
-    <span>&copy; 2025 Nabz</span>
+    <span>© 2025 Nabz — built with suffering & caffeine</span>
     <a href="https://github.com/LightNabz" target="_blank" rel="noopener">github.com/LightNabz</a>
 </footer>
 
+<style>
+@keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+</style>
+
 <script>
-    // Nav scroll
+    /* ─── CURSOR + TRAIL ───
+    const dot = document.getElementById('cursor-dot');
+    const trail = document.getElementById('cursor-trail');
+    document.addEventListener('mousemove', e => {
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+        trail.style.left = e.clientX + 'px';
+        trail.style.top = e.clientY + 'px';
+    }); 
+
+    ─── CLICK BURST ───
+    document.addEventListener('click', e => {
+        if (e.target.closest('#konami-overlay') || e.target.closest('nav')) return;
+        const b = document.createElement('div');
+        b.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;width:18px;height:18px;border:2.5px solid var(--black);background:var(--accent);pointer-events:none;z-index:9997;animation:burst 0.4s ease forwards;`;
+        document.body.appendChild(b);
+        setTimeout(() => b.remove(), 400);
+    }); */
+
+    // ─── NAV ───
     window.addEventListener('scroll', () => {
         document.getElementById('main-nav').classList.toggle('scrolled', window.scrollY > 50);
     });
+    function toggleMenu() { document.getElementById('nav-links').classList.toggle('active'); }
+    function closeMenu() { document.getElementById('nav-links').classList.remove('active'); }
 
-    // Hamburger
-    function toggleMenu() {
-        document.getElementById('nav-links').classList.toggle('active');
+    // ─── THEME ───
+    const html = document.documentElement;
+    const themeBtn = document.getElementById('theme-btn');
+    function setTheme(t) {
+        html.setAttribute('data-theme', t);
+        localStorage.setItem('theme', t);
+        themeBtn.textContent = t === 'dark' ? '☀' : '☾';
     }
-    function closeMenu() {
-        document.getElementById('nav-links').classList.remove('active');
+    function initTheme() {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(saved || (prefersDark ? 'dark' : 'light'));
+    }
+    themeBtn.addEventListener('click', () => {
+        const cur = html.getAttribute('data-theme') || 'dark';
+        setTheme(cur === 'dark' ? 'light' : 'dark');
+    });
+    initTheme();
+
+    // ─── TOAST ───
+    let toastTimeout;
+    function showToast(msg, label = 'psst') {
+        document.getElementById('toast-msg').textContent = msg;
+        document.querySelector('.toast-label').textContent = label;
+        const t = document.getElementById('toast');
+        t.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => t.classList.remove('show'), 3000);
     }
 
-    // Typed.js
+    // ─── COPY TO CLIPBOARD ───
+    function copyToClipboard(text, label) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast(text + ' copied!', label + ' copied');
+        }).catch(() => showToast(text));
+    }
+
+    // ─── TYPED.JS ───
     new Typed('.typed-hero', {
         strings: ['builds things.', 'writes code.', 'loves memes.', 'uses Arch btw.', 'touches grass rarely.', 'sleeps all day.', 'is a lazy ass.'],
         typeSpeed: 70,
@@ -1002,40 +1524,147 @@
         cursorChar: '_',
     });
 
-    // Theme toggle
-    const themeToggle = document.getElementById('theme-toggle');
-    const html = document.documentElement;
+    // ─── HERO TERMINAL ANIMATION ───
+    const terminalLines = [
+        { cmd: 'whoami', out: ['nabz — dev & meme lord'] },
+        { cmd: 'cat skills.txt', out: ['html css js python linux bash', 'nvim supremacy 🐛', 'git blame: usually me'] },
+        { cmd: 'uptime', out: ['up 12 days, 4:20, 1 user'] },
+        { cmd: 'echo $MOOD', out: ['gooner_mode=enabled'] },
+        { cmd: 'ls projects/', out: ['public-board/  ngulisim/  selachii/'] },
+    ];
+    let termIdx = 0;
+    const tCmd = document.getElementById('t-cmd');
+    const tOutput = document.getElementById('t-output');
+    const tCursor = document.getElementById('t-cursor');
 
-    function setTheme(theme) {
-        html.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
+    function typeTermLine(line, cb) {
+        tCmd.textContent = '';
+        tOutput.innerHTML = '';
+        tCursor.style.display = 'inline-block';
+        let i = 0;
+        const iv = setInterval(() => {
+            tCmd.textContent += line.cmd[i++];
+            if (i >= line.cmd.length) {
+                clearInterval(iv);
+                tCursor.style.display = 'none';
+                setTimeout(() => {
+                    tOutput.innerHTML = line.out.map(o => `<div class="t-out">${o}</div>`).join('');
+                    setTimeout(cb, 2200);
+                }, 300);
+            }
+        }, 65);
     }
 
-    function initTheme() {
-        const saved = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const theme = saved || (prefersDark ? 'dark' : 'light');
-        setTheme(theme);
+    function runTerminal() {
+        typeTermLine(terminalLines[termIdx % terminalLines.length], () => {
+            termIdx++;
+            runTerminal();
+        });
+    }
+    setTimeout(runTerminal, 800);
+
+    // ─── MARQUEE ───
+    const marqueeItems = [
+        'Arch Linux', 'Linux', 'HTML', 'CSS', 'JavaScript', 'Python', 'C/C++', 'Rust', 'Bash', 
+        'Wayland (wlroots)', 'nvim', 'git', 'OSS', 'Docker', 'SQL', 'WebAssembly'
+    ];
+    const inner = document.getElementById('marquee-inner');
+    const doubled = [...marqueeItems, ...marqueeItems];
+    inner.innerHTML = doubled.map(s => `<span class="marquee-item">${s}<span class="marquee-sep"> // </span></span>`).join('');
+
+    // ─── SKILLS ───
+    const skills = ['HTML', 'CSS', 'JavaScript', 'Python', 'Bash', 'Linux', 'nvim', 'C/C++', "Rust", 'git', 'All OSS'];
+    const sg = document.getElementById('skill-grid');
+    sg.innerHTML = skills.map(s => `<span class="skill-tag">${s}</span>`).join('');
+
+    // ─── LOGO CLICK — MAX RAGE ───
+    let logoClicks = 0;
+    let logoMaxed = false;
+    const MAX_RAGE = 9;
+    const logoMsgs = [
+        'H-hey! What do you think you\'re clicking?!',
+        'Are you still here? Don\'t you have anything better to do?',
+        'Stop it. It\'s not like I want you clicking me or anything...',
+        'B-baka! Just look somewhere else already!',
+        'Seriously, you\'re so annoying... Why won\'t you stop?',
+        '...',
+        'F-fine! If you promise to leave me alone, I\'ll tell you a secret...',
+        'I... I actually have no idea what I\'m doing, okay?!',
+        'N-not like the other components know what they\'re doing either! Hmph.'
+    ];
+
+    function triggerMaxRage() {
+        if (logoMaxed) return;
+        logoMaxed = true;
+        const logo = document.querySelector('.logo');
+        logo.style.opacity = '0';
+        setTimeout(() => {
+            logo.innerHTML = `<img src="https://media1.tenor.com/m/OdhNek3N5B0AAAAC/karane-inda-karane-inda-blush.gif"
+                style="height:36px;width:auto;display:block;border:2px solid var(--black);" alt="MAX RAGE">`;
+            logo.style.lineHeight = '0';
+            logo.style.opacity = '1';
+        }, 260);
+        showToast('THAT\'S IT. I\'M DONE. HMPH! BAKA!', 'max rage');
+        const nav = document.getElementById('main-nav');
+        nav.style.animation = 'none'; void nav.offsetWidth;
+        nav.style.animation = 'shake 0.5s ease';
+        setTimeout(() => {
+            const logo2 = document.querySelector('.logo');
+            logo2.style.opacity = '0';
+            setTimeout(() => {
+                logo2.innerHTML = 'Nabz<span>.</span>';
+                logo2.style.lineHeight = '';
+                logo2.style.opacity = '1';
+                logoMaxed = false;
+                logoClicks = 0;
+                showToast('fine. i\'m back. don\'t do that again, b-baka.', 'ok ok');
+            }, 260);
+        }, 6000);
     }
 
-    function toggleTheme() {
-        const current = html.getAttribute('data-theme') || 'dark';
-        setTheme(current === 'dark' ? 'light' : 'dark');
+    function logoClick() {
+        if (logoMaxed) return;
+        const logo = document.querySelector('.logo');
+        logo.classList.remove('shaking');
+        void logo.offsetWidth;
+        logo.classList.add('shaking');
+        showToast(logoMsgs[Math.min(logoClicks, logoMsgs.length - 1)], 'logo click #' + (logoClicks + 1));
+        logoClicks++;
+        if (logoClicks === 5) document.getElementById('konami-hint-row').style.display = 'flex';
+        if (logoClicks >= MAX_RAGE) triggerMaxRage();
     }
 
-    // Init + events
-    initTheme();
-    themeToggle.addEventListener('click', toggleTheme);
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-        if (!localStorage.getItem('theme')) setTheme(e.matches ? 'dark' : 'light');
-    });
+    // ─── STATUS CYCLE ───
+    const statuses = [
+        'Open to work', 'Procrastinating', 'In the void', 'Debugging since 3am', 'Touching grass (unlikely)', 'Building Selachii 🦈', 'fr send help'
+    ];
+    let statusIdx = 0;
+    function cycleStatus() {
+        statusIdx = (statusIdx + 1) % statuses.length;
+        document.getElementById('status-val').textContent = statuses[statusIdx];
+        showToast(statuses[statusIdx], 'current vibe');
+    }
 
-    // Theme toggle experiment ended here
+    // ─── SECRET BOX ───
+    const secrets = [
+        'i write html with two spaces not four. fight me.',
+        'i once spent 6 hrs debugging a missing semicolon.',
+        'the fish shell is called "fih 🐟" yes that is on purpose.',
+        'selachii means shark in latin. i googled it.',
+        'i named my arch install "arch-chan" no regrets.',
+        'this whole site was built during a single hyperfocus session.',
+        'css is my villain origin story.',
+    ];
+    let secretIdx = 0;
+    function triggerSecretMsg() {
+        const el = document.getElementById('secret-text');
+        el.textContent = secrets[secretIdx % secrets.length];
+        secretIdx++;
+        showToast('another one 💀', 'secret #' + secretIdx);
+    }
 
-    // ─── NEOFETCH EASTER EGG ───
+    // ─── NEOFETCH ───
     const ARCH_ART = `
-
-
           .
          / \\
         /   \\
@@ -1045,20 +1674,19 @@
     /    .-.    \\
    /    |   |   _\\
   /   _.'   '._   \\
- /_.-'         '-._\\
-    `;
+ /_.-'         '-._\\`;
 
     const NEO_LINES = [
         { type: 'header', text: 'nabz@arch-chan' },
-        { type: 'uline',  text: '-------------' },
+        { type: 'uline',  text: '--------------' },
         { type: 'row', key: 'OS',      val: 'Arch Linux x86_64' },
         { type: 'row', key: 'Kernel',  val: '6.7.6-arch1-1' },
         { type: 'row', key: 'Shell',   val: 'fih 🐟' },
         { type: 'row', key: 'DE/WM',   val: 'Hyprland' },
         { type: 'row', key: 'Editor',  val: 'nvim (of course)' },
         { type: 'row', key: 'Memory',  val: 'RAM in this economy...' },
-        { type: 'row', key: 'CPU',     val: 'Intel i10-6767 (12) @ 6.7GHz' },
-        { type: 'row', key: 'Uptime',  val: '12 days, 4 hrs (no cap)' },
+        { type: 'row', key: 'CPU',     val: 'Intel i10-6767 @ 6.7GHz' },
+        { type: 'row', key: 'Uptime',  val: '12 days, 4:20 (no cap)' },
         { type: 'blank' },
         { type: 'colors' },
     ];
@@ -1066,23 +1694,15 @@
     function triggerNeofetch() {
         const wrap = document.getElementById('neofetch-wrap');
         const stats = document.getElementById('about-stats');
-        const archEl = document.getElementById('neo-arch');
-        const rightEl = document.getElementById('neo-right');
-
-        // set arch art
-        archEl.textContent = ARCH_ART;
-
-        // clear previous lines
-        rightEl.innerHTML = '';
-
+        document.getElementById('neo-arch').textContent = ARCH_ART;
+        document.getElementById('neo-right').innerHTML = '';
         wrap.classList.add('visible');
         stats.style.visibility = 'hidden';
+        showToast('arch btw 🐧', 'os reveal');
 
-        // build lines
         NEO_LINES.forEach((item, i) => {
             const div = document.createElement('div');
             div.className = 'neo-line';
-
             if (item.type === 'header') {
                 div.innerHTML = `<span class="neo-header">${item.text}</span>`;
             } else if (item.type === 'uline') {
@@ -1094,40 +1714,121 @@
             } else if (item.type === 'colors') {
                 const colors = ['#1e1e2e','#f38ba8','#a6e3a1','#f9e2af','#89b4fa','#cba6f7','#94e2d5','#cdd6f4'];
                 div.innerHTML = colors.map(c => `<span class="neo-sw" style="background:${c}"></span>`).join('');
-                div.style.display = 'flex';
-                div.style.gap = '3px';
-                div.style.marginTop = '3px';
+                div.style.cssText += 'display:flex;gap:3px;margin-top:3px;';
             }
-
-            rightEl.appendChild(div);
-
-            // staggered reveal
+            document.getElementById('neo-right').appendChild(div);
             setTimeout(() => div.classList.add('show'), 100 + i * 80);
         });
     }
 
     function closeNeofetch() {
-        const wrap = document.getElementById('neofetch-wrap');
-        const stats = document.getElementById('about-stats');
-        wrap.classList.remove('visible');
-        stats.style.visibility = 'visible';
+        document.getElementById('neofetch-wrap').classList.remove('visible');
+        document.getElementById('about-stats').style.visibility = 'visible';
     }
 
+    // ─── KONAMI CODE ───
+    const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let konamiIdx = 0;
+    document.addEventListener('keydown', e => {
+        if (e.key === KONAMI[konamiIdx]) {
+            konamiIdx++;
+            if (konamiIdx === KONAMI.length) {
+                showToast('unlocking something special... 👾', 'secret found');
+                setTimeout(() => { window.location.href = 'index-retro.html'; }, 900);
+                konamiIdx = 0;
+            }
+        } else { konamiIdx = 0; }
+    });
+    function closeKonami() {
+        document.getElementById('konami-overlay').classList.remove('show');
+    }
+
+    // ─── DRAGGABLE STICKER ───
+    const sticker = document.getElementById('drag-sticker');
+    let isDragging = false, dragOffX = 0, dragOffY = 0;
+    sticker.addEventListener('mousedown', e => {
+        isDragging = true;
+        dragOffX = e.clientX - sticker.getBoundingClientRect().left;
+        dragOffY = e.clientY - sticker.getBoundingClientRect().top;
+        sticker.style.transition = 'none';
+    });
+    document.addEventListener('mousemove', e => {
+        if (!isDragging) return;
+        sticker.style.left = (e.clientX - dragOffX) + 'px';
+        sticker.style.top = (e.clientY - dragOffY) + 'px';
+        sticker.style.bottom = 'auto';
+        sticker.style.right = 'auto';
+    });
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            sticker.style.transition = 'transform 0.1s';
+            showToast('u found the fish 🐟', 'drag egg');
+        }
+    });
+    // touch support
+    sticker.addEventListener('touchstart', e => {
+        const t = e.touches[0];
+        isDragging = true;
+        dragOffX = t.clientX - sticker.getBoundingClientRect().left;
+        dragOffY = t.clientY - sticker.getBoundingClientRect().top;
+        e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchmove', e => {
+        if (!isDragging) return;
+        const t = e.touches[0];
+        sticker.style.left = (t.clientX - dragOffX) + 'px';
+        sticker.style.top = (t.clientY - dragOffY) + 'px';
+        sticker.style.bottom = 'auto';
+        sticker.style.right = 'auto';
+    }, { passive: false });
+    document.addEventListener('touchend', () => { isDragging = false; });
+
+    // ─── SKILL BARS ───
+    const skillBarsData = [
+        { label: 'Frontend',         pct: 30 },
+        { label: 'Linux',            pct: 95 },
+        { label: 'Backend',          pct: 72 },
+        { label: 'Overthinking',     pct: 99 },
+        { label: 'Touching grass',   pct: 12 },
+    ];
+    const sbContainer = document.getElementById('skill-bars-container');
+    if (sbContainer) {
+        sbContainer.innerHTML = skillBarsData.map(s => `
+            <div class="skill-bar-item">
+                <span class="skill-bar-label"><span>${s.label}</span><span>${s.pct}%</span></span>
+                <div class="skill-bar-track"><div class="skill-bar-fill" style="--tw:${s.pct}%"></div></div>
+            </div>`).join('');
+        const sbObserver = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    document.querySelectorAll('.skill-bar-fill').forEach((f, i) => {
+                        setTimeout(() => f.classList.add('go'), i * 120);
+                    });
+                    sbObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.3 });
+        sbObserver.observe(sbContainer);
+    }
+
+    // ─── SCROLL REVEAL ───
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('shown');
             }
         });
     }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    document.querySelectorAll('.project-card, .stat-row, .contact-item').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(12px)';
-        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(el);
-    });
+    // ─── DEV CONSOLE EGG ───
+    setTimeout(() => {
+        console.log('%c🐟 fih', 'color:#c8ff57;font-size:2rem;font-weight:900;');
+        console.log('%cnabz@arch-chan:~ — hi stalker 👋', 'color:#c8ff57;font-family:monospace;font-size:14px;');
+        console.log('%cif u found this u are automatically a 10/10 person', 'color:#888;font-family:monospace;font-size:12px;');
+        console.log('%ctry the konami code btw: ↑↑↓↓←→←→BA', 'color:#57c8ff;font-family:monospace;font-size:12px;');
+    }, 2000);
 </script>
 </body>
 </html>

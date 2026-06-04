@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nabz — Developer [RETRO MODE]</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --win-bg: #008080;
+            --win-face: #c0c0c0;
+            --win-dark: #808080;
+            --win-darker: #404040;
+            --win-black: #000000;
+            --win-white: #ffffff;
+            --win-blue: #000080;
+            --win-title-active: #000080;
+            --win-title-text: #ffffff;
+            --win-accent: #c8ff57;
+            --win-btn-face: #c0c0c0;
+            --border-raised: 2px solid;
+            --font-vt: 'VT323', monospace;
+            --font-mono: 'Share Tech Mono', monospace;
+        }
+
+        body {
+            background: var(--win-bg);
+            font-family: var(--font-mono);
+            font-size: 13px;
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: default;
+            background-image:
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0,0,0,0.03) 2px,
+                    rgba(0,0,0,0.03) 4px
+                );
+        }
+
+        /* ── SCANLINES overlay ── */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,0,0,0) 0px,
+                rgba(0,0,0,0) 1px,
+                rgba(0,0,0,0.04) 1px,
+                rgba(0,0,0,0.04) 2px
+            );
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ── WIN95 BUTTON ── */
+        .btn95 {
+            background: var(--win-face);
+            border: none;
+            border-top: 2px solid var(--win-white);
+            border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-darker);
+            border-bottom: 2px solid var(--win-darker);
+            outline: 1px solid var(--win-black);
+            outline-offset: -2px;
+            padding: 4px 14px;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--win-black);
+            min-width: 75px;
+            white-space: nowrap;
+            text-align: center;
+        }
+        .btn95:active, .btn95.active {
+            border-top: 2px solid var(--win-darker);
+            border-left: 2px solid var(--win-darker);
+            border-right: 2px solid var(--win-white);
+            border-bottom: 2px solid var(--win-white);
+        }
+        .btn95:hover { background: #d4d0c8; }
+
+        /* ── WIN95 WINDOW ── */
+        .window {
+            background: var(--win-face);
+            border-top: 2px solid var(--win-white);
+            border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-darker);
+            border-bottom: 2px solid var(--win-darker);
+            outline: 1px solid var(--win-black);
+            position: relative;
+        }
+
+        .titlebar {
+            background: linear-gradient(to right, var(--win-title-active), #1084d0);
+            color: var(--win-title-text);
+            padding: 3px 6px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            font-weight: bold;
+            min-height: 22px;
+        }
+        .titlebar-title {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .titlebar-icon { font-size: 14px; line-height: 1; }
+        .titlebar-btns {
+            display: flex;
+            gap: 2px;
+        }
+        .title-btn {
+            width: 16px;
+            height: 14px;
+            background: var(--win-face);
+            border-top: 1px solid var(--win-white);
+            border-left: 1px solid var(--win-white);
+            border-right: 1px solid var(--win-darker);
+            border-bottom: 1px solid var(--win-darker);
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--win-black);
+            font-family: var(--font-mono);
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .title-btn:active {
+            border-top: 1px solid var(--win-darker);
+            border-left: 1px solid var(--win-darker);
+            border-right: 1px solid var(--win-white);
+            border-bottom: 1px solid var(--win-white);
+        }
+
+        /* ── MENU BAR ── */
+        .menubar {
+            background: var(--win-face);
+            border-bottom: 1px solid var(--win-dark);
+            padding: 2px 4px;
+            display: flex;
+            gap: 2px;
+        }
+        .menu-item {
+            padding: 2px 8px;
+            font-size: 12px;
+            cursor: pointer;
+            color: var(--win-black);
+        }
+        .menu-item:hover {
+            background: var(--win-title-active);
+            color: var(--win-white);
+        }
+
+        /* ── WINDOW CONTENT ── */
+        .win-content {
+            padding: 12px;
+        }
+
+        /* ── TASKBAR ── */
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 32px;
+            background: var(--win-face);
+            border-top: 2px solid var(--win-white);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 4px;
+            z-index: 8000;
+        }
+
+        #start-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px 2px 4px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: bold;
+            background: var(--win-face);
+            border-top: 2px solid var(--win-white);
+            border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-darker);
+            border-bottom: 2px solid var(--win-darker);
+            cursor: pointer;
+            min-width: 54px;
+        }
+        #start-btn:active, #start-btn.active {
+            border-top: 2px solid var(--win-darker);
+            border-left: 2px solid var(--win-darker);
+            border-right: 2px solid var(--win-white);
+            border-bottom: 2px solid var(--win-white);
+        }
+        #start-btn img { width: 16px; height: 16px; }
+
+        .taskbar-divider {
+            width: 2px;
+            height: 24px;
+            border-left: 1px solid var(--win-dark);
+            border-right: 1px solid var(--win-white);
+            margin: 0 4px;
+        }
+
+        .taskbar-task {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-family: var(--font-mono);
+            background: var(--win-face);
+            border-top: 1px solid var(--win-darker);
+            border-left: 1px solid var(--win-darker);
+            border-right: 1px solid var(--win-white);
+            border-bottom: 1px solid var(--win-white);
+            cursor: pointer;
+            min-width: 120px;
+            max-width: 160px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .taskbar-clock {
+            margin-left: auto;
+            padding: 2px 8px;
+            font-size: 12px;
+            border-top: 1px solid var(--win-dark);
+            border-left: 1px solid var(--win-dark);
+            border-right: 1px solid var(--win-white);
+            border-bottom: 1px solid var(--win-white);
+            font-family: var(--font-mono);
+            min-width: 60px;
+            text-align: center;
+        }
+
+        /* ── START MENU ── */
+        #start-menu {
+            position: fixed;
+            bottom: 32px;
+            left: 0;
+            width: 200px;
+            background: var(--win-face);
+            border-top: 2px solid var(--win-white);
+            border-left: 2px solid var(--win-white);
+            border-right: 2px solid var(--win-darker);
+            border-bottom: 2px solid var(--win-darker);
+            outline: 1px solid var(--win-black);
+            z-index: 9000;
+            display: none;
+        }
+        #start-menu.show { display: flex; }
+
+        .start-sidebar {
+            width: 26px;
+            background: linear-gradient(to top, #000080, #1084d0);
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            padding-bottom: 4px;
+        }
+        .start-sidebar-text {
+            writing-mode: vertical-rl;
+            transform: rotate(180deg);
+            color: var(--win-white);
+            font-family: var(--font-vt);
+            font-size: 18px;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            white-space: nowrap;
+        }
+
+        .start-items {
+            flex: 1;
+            padding: 4px 0;
+        }
+        .start-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            color: var(--win-black);
+        }
+        .start-item:hover {
+            background: var(--win-title-active);
+            color: var(--win-white);
+        }
+        .start-item-icon { font-size: 18px; width: 20px; flex-shrink: 0; }
+        .start-sep { border: none; border-top: 1px solid var(--win-dark); border-bottom: 1px solid var(--win-white); margin: 4px 4px; }
+
+        /* ── DESKTOP ICONS ── */
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 72px;
+            cursor: pointer;
+            padding: 6px 4px;
+            user-select: none;
+            text-align: center;
+        }
+        .desktop-icon:hover .icon-img { outline: 1px dotted white; }
+        .desktop-icon.selected .icon-img { outline: 2px solid rgba(255,255,255,0.5); background: rgba(0,0,128,0.4); }
+        .icon-img { font-size: 36px; line-height: 1; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; }
+        .icon-label { font-size: 11px; color: white; text-shadow: 1px 1px 2px black; line-height: 1.3; word-break: break-word; }
+
+        /* ── DRAGGABLE WINDOWS ── */
+        .win95-window {
+            position: absolute;
+            min-width: 280px;
+            z-index: 100;
+        }
+        .win95-window.focused { z-index: 200; }
+
+        /* ── INSET BOX ── */
+        .inset {
+            border-top: 1px solid var(--win-dark);
+            border-left: 1px solid var(--win-dark);
+            border-right: 1px solid var(--win-white);
+            border-bottom: 1px solid var(--win-white);
+            background: var(--win-white);
+            padding: 8px;
+        }
+
+        /* ── PROGRESS BAR ── */
+        .progress-wrap {
+            background: var(--win-white);
+            border-top: 1px solid var(--win-dark);
+            border-left: 1px solid var(--win-dark);
+            border-right: 1px solid var(--win-white);
+            border-bottom: 1px solid var(--win-white);
+            height: 16px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            display: flex;
+            gap: 1px;
+        }
+        .progress-block {
+            width: 10px;
+            background: var(--win-title-active);
+            flex-shrink: 0;
+            animation: progload 0.5s ease forwards;
+            opacity: 0;
+        }
+        @keyframes progload { to { opacity: 1; } }
+
+        /* ── TERMINAL (MSDOS BOX) ── */
+        .dos-terminal {
+            background: #000;
+            color: #c0c0c0;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            padding: 10px 12px;
+            min-height: 140px;
+            line-height: 1.7;
+        }
+        .dos-prompt { color: #c0c0c0; }
+        .dos-cmd { color: #ffffff; }
+        .dos-out { color: #a0a0a0; }
+        .dos-cursor { display: inline-block; width: 8px; height: 14px; background: #c0c0c0; vertical-align: middle; animation: blink 1s step-end infinite; }
+
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+        /* ── PROJECT CARD ── */
+        .proj-card {
+            border-top: 1px solid var(--win-white);
+            border-left: 1px solid var(--win-white);
+            border-right: 1px solid var(--win-dark);
+            border-bottom: 1px solid var(--win-dark);
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            background: var(--win-face);
+        }
+        .proj-card:last-child { margin-bottom: 0; }
+        .proj-name { font-weight: bold; font-size: 13px; color: var(--win-black); }
+        .proj-desc { font-size: 12px; color: #444; margin-top: 3px; line-height: 1.5; }
+        .proj-status {
+            display: inline-block;
+            background: var(--win-blue);
+            color: white;
+            font-size: 10px;
+            padding: 1px 6px;
+            margin-top: 5px;
+        }
+        .proj-status.live { background: #008000; }
+
+        /* ── CONTACT LIST ── */
+        .contact-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 2px;
+            border-bottom: 1px solid var(--win-dark);
+            font-size: 12px;
+        }
+        .contact-row:last-child { border-bottom: none; }
+        .contact-row .label { color: #555; font-weight: bold; }
+        .contact-row .val { color: var(--win-black); }
+
+        /* ── STATUS BAR ── */
+        .statusbar {
+            display: flex;
+            background: var(--win-face);
+            border-top: 1px solid var(--win-dark);
+            padding: 2px 4px;
+            gap: 4px;
+        }
+        .status-panel {
+            border-top: 1px solid var(--win-dark);
+            border-left: 1px solid var(--win-dark);
+            border-right: 1px solid var(--win-white);
+            border-bottom: 1px solid var(--win-white);
+            padding: 1px 8px;
+            font-size: 11px;
+            color: var(--win-black);
+        }
+
+        /* ── MARQUEE BANNER ── */
+        .retro-marquee {
+            background: var(--win-blue);
+            color: #ffff00;
+            font-family: var(--font-vt);
+            font-size: 18px;
+            padding: 2px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            letter-spacing: 2px;
+        }
+
+        /* ── VT323 TITLE ── */
+        .vt-title {
+            font-family: var(--font-vt);
+            font-size: 32px;
+            color: var(--win-black);
+            letter-spacing: 1px;
+        }
+
+        /* ── ABOUT TEXT ── */
+        .about-body {
+            font-size: 12px;
+            line-height: 1.7;
+            color: var(--win-black);
+        }
+        .about-body strong { color: var(--win-blue); }
+
+        /* ── BSOD ── */
+        #bsod {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: #0000aa;
+            color: #aaaaaa;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            z-index: 99999;
+            padding: 4rem;
+            line-height: 1.8;
+        }
+        #bsod .bsod-title {
+            background: #aaaaaa;
+            color: #0000aa;
+            display: inline-block;
+            padding: 0 4px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+        #bsod p { max-width: 540px; }
+
+        /* ── DIALOG ── */
+        .win95-dialog {
+            position: fixed;
+            z-index: 5000;
+            display: none;
+        }
+        .win95-dialog.show { display: block; }
+        .dialog-body {
+            padding: 16px;
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .dialog-icon { font-size: 32px; flex-shrink: 0; }
+        .dialog-text { font-size: 12px; line-height: 1.7; }
+        .dialog-btns { padding: 8px 12px 12px; display: flex; justify-content: center; gap: 8px; }
+
+        /* ── BACK BUTTON ── */
+        #back-to-modern {
+            position: fixed;
+            top: 8px;
+            right: 8px;
+            z-index: 9001;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+
+        /* ── SCROLL ── */
+        ::-webkit-scrollbar { width: 16px; }
+        ::-webkit-scrollbar-track { background: var(--win-face); border: 1px solid var(--win-dark); }
+        ::-webkit-scrollbar-thumb {
+            background: var(--win-face);
+            border-top: 1px solid var(--win-white);
+            border-left: 1px solid var(--win-white);
+            border-right: 1px solid var(--win-darker);
+            border-bottom: 1px solid var(--win-darker);
+        }
+
+        /* ── DESKTOP LAYOUT ── */
+        #desktop {
+            min-height: calc(100vh - 32px);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+        }
+
+        .desktop-icons-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: absolute;
+            top: 16px;
+            left: 16px;
+        }
+
+        .windows-area {
+            margin-left: 96px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 48px;
+        }
+
+        /* Boot loading effect */
+        #boot-screen {
+            position: fixed;
+            inset: 0;
+            background: #000;
+            z-index: 99998;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            transition: opacity 0.5s;
+        }
+        #boot-screen.fade { opacity: 0; pointer-events: none; }
+        .boot-logo {
+            font-family: var(--font-vt);
+            font-size: 48px;
+            color: #00aaaa;
+            text-shadow: 0 0 20px #00aaaa;
+            letter-spacing: 4px;
+        }
+        .boot-sub {
+            font-family: var(--font-mono);
+            font-size: 13px;
+            color: #888;
+        }
+        .boot-bar-wrap {
+            width: 300px;
+            height: 20px;
+            border: 2px solid #555;
+            padding: 2px;
+        }
+        .boot-bar-fill {
+            height: 100%;
+            background: #00aaaa;
+            width: 0%;
+            transition: width 1.5s ease;
+        }
+        .boot-msg { font-family: var(--font-mono); font-size: 11px; color: #555; height: 14px; }
+
+        /* Retro blinking */
+        .blink { animation: blink 1s step-end infinite; }
+
+        @media (max-width: 600px) {
+            .windows-area { margin-left: 0; }
+            .desktop-icons-row { flex-direction: row; position: relative; top: auto; left: auto; flex-wrap: wrap; margin-bottom: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- BOOT SCREEN -->
+<div id="boot-screen">
+    <div class="boot-logo">NabzOS</div>
+    <div class="boot-sub">NabzOS 95 v4.00.950</div>
+    <div class="boot-bar-wrap">
+        <div class="boot-bar-fill" id="boot-bar"></div>
+    </div>
+    <div class="boot-msg" id="boot-msg">Starting Windows...</div>
+</div>
+
+<!-- BSOD -->
+<div id="bsod">
+    <div class="bsod-title">Windows</div><br>
+    <p>A fatal exception 0E has occurred at 0028:C0094F17 in VxD VMM(01) + 00010F17.<br>
+    The current application will be terminated.</p><br>
+    <p>* Press any key to terminate the current application.<br>
+    * Press CTRL+ALT+DEL to restart your computer. You will<br>
+    &nbsp;&nbsp;lose any unsaved information in all applications.</p><br>
+    <p>Press any key to continue<span class="blink"> _</span></p>
+</div>
+
+<!-- START MENU -->
+<div id="start-menu">
+    <div class="start-sidebar">
+        <span class="start-sidebar-text">NabzOS 95</span>
+    </div>
+    <div class="start-items">
+        <div class="start-item" onclick="openWindow('about-win')">
+            <span class="start-item-icon">👤</span> About Nabz
+        </div>
+        <div class="start-item" onclick="openWindow('projects-win')">
+            <span class="start-item-icon">📁</span> My Projects
+        </div>
+        <div class="start-item" onclick="openWindow('terminal-win')">
+            <span class="start-item-icon">💻</span> MS-DOS Prompt
+        </div>
+        <div class="start-item" onclick="openWindow('contact-win')">
+            <span class="start-item-icon">📧</span> Contact
+        </div>
+        <hr class="start-sep">
+        <div class="start-item" onclick="goModern()">
+            <span class="start-item-icon">🚀</span> Modern Mode
+        </div>
+        <div class="start-item" onclick="triggerBSOD()">
+            <span class="start-item-icon">💥</span> Crash (don't)
+        </div>
+    </div>
+</div>
+
+<!-- TASKBAR -->
+<div id="taskbar">
+    <button id="start-btn" onclick="toggleStartMenu()">
+        <span style="font-size:16px;">🪟</span> Start
+    </button>
+    <div class="taskbar-divider"></div>
+    <div id="taskbar-tasks"></div>
+    <div class="taskbar-clock" id="taskbar-clock">12:00</div>
+</div>
+
+<!-- RETRO MARQUEE -->
+<div class="retro-marquee">
+    <marquee behavior="scroll" direction="left" scrollamount="4">
+        ★ WELCOME TO NABZOS 95 ★ YOU FOUND THE EASTER EGG ★ ARCH LINUX SUPREMACY ★ CSS IS A VILLAIN ORIGIN STORY ★ TOUCHING GRASS: 12% ★ git blame: usually me ★ fih 🐟 ★ NABZ@ARCH-CHAN ★
+    </marquee>
+</div>
+
+<!-- DESKTOP -->
+<div id="desktop">
+
+    <!-- Desktop icons -->
+    <div class="desktop-icons-row" id="desktop-icons">
+        <div class="desktop-icon" ondblclick="openWindow('about-win')" onclick="selectIcon(this)">
+            <div class="icon-img">👤</div>
+            <div class="icon-label">About Nabz</div>
+        </div>
+        <div class="desktop-icon" ondblclick="openWindow('projects-win')" onclick="selectIcon(this)">
+            <div class="icon-img">📁</div>
+            <div class="icon-label">My Projects</div>
+        </div>
+        <div class="desktop-icon" ondblclick="openWindow('terminal-win')" onclick="selectIcon(this)">
+            <div class="icon-img">💻</div>
+            <div class="icon-label">MS-DOS Prompt</div>
+        </div>
+        <div class="desktop-icon" ondblclick="openWindow('contact-win')" onclick="selectIcon(this)">
+            <div class="icon-img">📧</div>
+            <div class="icon-label">Contact</div>
+        </div>
+        <div class="desktop-icon" ondblclick="goModern()" onclick="selectIcon(this)">
+            <div class="icon-img">🚀</div>
+            <div class="icon-label">Modern Site</div>
+        </div>
+    </div>
+
+    <!-- Windows area -->
+    <div class="windows-area" id="windows-area">
+
+        <!-- WELCOME DIALOG (auto-open) -->
+        <div class="window win95-window" id="welcome-win" style="max-width:400px;">
+            <div class="titlebar" onmousedown="startDrag(event,'welcome-win')">
+                <div class="titlebar-title">
+                    <span class="titlebar-icon">🎮</span>
+                    <span>Easter Egg Found!</span>
+                </div>
+                <div class="titlebar-btns">
+                    <span class="title-btn" onclick="closeWindow('welcome-win')">✕</span>
+                </div>
+            </div>
+            <div class="win-content">
+                <div class="dialog-body" style="padding:0 0 12px;">
+                    <div class="dialog-icon">🐟</div>
+                    <div class="dialog-text">
+                        <strong>Konami Code Detected!</strong><br><br>
+                        You typed ↑↑↓↓←→←→BA and unlocked <strong>NabzOS 95</strong>.<br><br>
+                        You are now browsing Nabz's portfolio in Windows 95 mode. Double-click the desktop icons to explore.
+                    </div>
+                </div>
+                <div class="dialog-btns" style="padding:0;">
+                    <button class="btn95" onclick="closeWindow('welcome-win')">OK</button>
+                    <button class="btn95" onclick="goModern()">Exit Retro Mode</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABOUT WINDOW -->
+        <div class="window win95-window" id="about-win" style="max-width:480px; display:none;">
+            <div class="titlebar" onmousedown="startDrag(event,'about-win')">
+                <div class="titlebar-title">
+                    <span class="titlebar-icon">👤</span>
+                    <span>About Nabz — Properties</span>
+                </div>
+                <div class="titlebar-btns">
+                    <span class="title-btn">─</span>
+                    <span class="title-btn">□</span>
+                    <span class="title-btn" onclick="closeWindow('about-win')">✕</span>
+                </div>
+            </div>
+            <div class="menubar">
+                <span class="menu-item">File</span>
+                <span class="menu-item">Edit</span>
+                <span class="menu-item">View</span>
+                <span class="menu-item">Help</span>
+            </div>
+            <div class="win-content">
+                <div class="vt-title" style="margin-bottom:10px;">Nabz</div>
+                <div class="inset" style="margin-bottom:12px;">
+                    <p class="about-body">
+                        Hey, I'm <strong>Nabz</strong> — an open-source developer who got into coding because of a dangerous mix of free time and curiosity.<br><br>
+                        I build things like websites. Sometimes they work great. Sometimes they just work.<br><br>
+                        Into clean interfaces, <strong>Linux tinkering</strong>, and memes that hit a little too close to home.
+                    </p>
+                </div>
+                <div style="font-size:11px;font-weight:bold;margin-bottom:6px;color:#555;">SYSTEM PROPERTIES</div>
+                <div class="contact-row"><span class="label">Focus:</span><span class="val">All-rounder Dev (probably)</span></div>
+                <div class="contact-row"><span class="label">OS:</span><span class="val">Arch, btw 🐧</span></div>
+                <div class="contact-row"><span class="label">Editor:</span><span class="val">nvim (of course)</span></div>
+                <div class="contact-row"><span class="label">Status:</span><span class="val">Open to work</span></div>
+                <div class="contact-row"><span class="label">Grass touched:</span><span class="val">12%</span></div>
+
+                <div style="margin-top:12px;font-size:11px;font-weight:bold;margin-bottom:6px;color:#555;">PROFICIENCY (%)</div>
+                <div style="font-size:12px;margin-bottom:4px;">Frontend</div>
+                <div class="progress-wrap" style="margin-bottom:6px;" id="pb1"></div>
+                <div style="font-size:12px;margin-bottom:4px;">Linux / Ricing</div>
+                <div class="progress-wrap" style="margin-bottom:6px;" id="pb2"></div>
+                <div style="font-size:12px;margin-bottom:4px;">Overthinking CSS</div>
+                <div class="progress-wrap" style="margin-bottom:6px;" id="pb3"></div>
+                <div style="font-size:12px;margin-bottom:4px;">Touching grass</div>
+                <div class="progress-wrap" style="margin-bottom:6px;" id="pb4"></div>
+            </div>
+            <div class="statusbar">
+                <div class="status-panel">nabz@arch-chan</div>
+                <div class="status-panel">4 object(s)</div>
+            </div>
+        </div>
+
+        <!-- PROJECTS WINDOW -->
+        <div class="window win95-window" id="projects-win" style="max-width:500px; display:none;">
+            <div class="titlebar" onmousedown="startDrag(event,'projects-win')">
+                <div class="titlebar-title">
+                    <span class="titlebar-icon">📁</span>
+                    <span>My Projects (C:\nabz\projects)</span>
+                </div>
+                <div class="titlebar-btns">
+                    <span class="title-btn">─</span>
+                    <span class="title-btn">□</span>
+                    <span class="title-btn" onclick="closeWindow('projects-win')">✕</span>
+                </div>
+            </div>
+            <div class="menubar">
+                <span class="menu-item">File</span>
+                <span class="menu-item">Edit</span>
+                <span class="menu-item">View</span>
+                <span class="menu-item">Go</span>
+                <span class="menu-item">Help</span>
+            </div>
+            <div class="win-content">
+                <div class="proj-card">
+                    <div class="proj-name">📋 Public Board</div>
+                    <div class="proj-desc">A public bulletin board inspired by the one in SpongeBob and chronic free time. Post stuff, read stuff, vibe.</div>
+                    <span class="proj-status live">● LIVE</span>
+                </div>
+                <div class="proj-card">
+                    <div class="proj-name">💻 NguliSim</div>
+                    <div class="proj-desc">Frontend dev simulator — like Duolingo but instead of Spanish you learn to suffer through CSS and client feedback.</div>
+                    <span class="proj-status">○ COMING SOON</span>
+                </div>
+                <div class="proj-card">
+                    <div class="proj-name">🦈 Selachii</div>
+                    <div class="proj-desc">Linux distro based on LFS. My concept, my suffering, my rules.</div>
+                    <span class="proj-status">○ COMING SOON</span>
+                </div>
+            </div>
+            <div class="statusbar">
+                <div class="status-panel">3 object(s)</div>
+                <div class="status-panel">C:\nabz\projects</div>
+            </div>
+        </div>
+
+        <!-- TERMINAL WINDOW -->
+        <div class="window win95-window" id="terminal-win" style="max-width:520px; display:none;">
+            <div class="titlebar" onmousedown="startDrag(event,'terminal-win')">
+                <div class="titlebar-title">
+                    <span class="titlebar-icon">💻</span>
+                    <span>MS-DOS Prompt — nabz@arch-chan</span>
+                </div>
+                <div class="titlebar-btns">
+                    <span class="title-btn">─</span>
+                    <span class="title-btn">□</span>
+                    <span class="title-btn" onclick="closeWindow('terminal-win')">✕</span>
+                </div>
+            </div>
+            <div class="dos-terminal" id="dos-body">
+                <div>NabzOS 95 [Version 4.00.950]</div>
+                <div>(C) Copyright Nabz 1995. All rights reserved.</div>
+                <div>&nbsp;</div>
+                <div id="dos-lines"></div>
+                <div style="margin-top:4px;"><span class="dos-prompt">C:\nabz\&gt; </span><span class="dos-cmd" id="dos-cmd"></span><span class="dos-cursor" id="dos-cursor"></span></div>
+            </div>
+            <div class="statusbar">
+                <div class="status-panel">C:\nabz</div>
+            </div>
+        </div>
+
+        <!-- CONTACT WINDOW -->
+        <div class="window win95-window" id="contact-win" style="max-width:380px; display:none;">
+            <div class="titlebar" onmousedown="startDrag(event,'contact-win')">
+                <div class="titlebar-title">
+                    <span class="titlebar-icon">📧</span>
+                    <span>Contact — Address Book</span>
+                </div>
+                <div class="titlebar-btns">
+                    <span class="title-btn">─</span>
+                    <span class="title-btn">□</span>
+                    <span class="title-btn" onclick="closeWindow('contact-win')">✕</span>
+                </div>
+            </div>
+            <div class="win-content">
+                <div style="font-family:var(--font-vt);font-size:24px;margin-bottom:12px;">📇 Address Book</div>
+                <div class="inset" style="margin-bottom:12px;">
+                    <div class="contact-row">
+                        <span class="label">Discord</span>
+                        <span class="val" style="cursor:pointer;" onclick="copyText('lightnabz')">lightnabz [copy]</span>
+                    </div>
+                    <div class="contact-row">
+                        <span class="label">GitHub</span>
+                        <span class="val"><a href="https://github.com/LightNabz" target="_blank" style="color:var(--win-blue);">@LightNabz</a></span>
+                    </div>
+                    <div class="contact-row">
+                        <span class="label">Email</span>
+                        <span class="val" style="cursor:pointer;font-size:11px;" onclick="copyText('nabzvonluitpold@gmail.com')">nabzvonluitpold@gmail.com [copy]</span>
+                    </div>
+                </div>
+                <div class="dialog-btns" style="padding:0;justify-content:flex-start;gap:8px;">
+                    <button class="btn95" onclick="copyText('lightnabz')">Copy Discord</button>
+                    <button class="btn95" onclick="window.open('https://github.com/LightNabz','_blank')">GitHub ↗</button>
+                </div>
+            </div>
+            <div class="statusbar">
+                <div class="status-panel">1 contact</div>
+                <div class="status-panel">● Online</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- BACK TO MODERN -->
+<button class="btn95" id="back-to-modern" onclick="goModern()" title="Exit retro mode">← Modern Site</button>
+
+<!-- COPY TOAST -->
+<div id="retro-toast" style="display:none;position:fixed;bottom:42px;right:8px;z-index:8999;">
+    <div class="window" style="padding:8px 12px;font-size:12px;font-family:var(--font-mono);">
+        <span id="retro-toast-msg">Copied!</span>
+    </div>
+</div>
+
+<script>
+    // ── BOOT SEQUENCE ──
+    const bootMsgs = [
+        'Loading NabzOS 95...',
+        'Checking RAM (there is none)...',
+        'Starting Windows...',
+        'Loading desktop...',
+        'Detecting fish 🐟...',
+        'Ready.'
+    ];
+    let bootStep = 0;
+    const bootBar = document.getElementById('boot-bar');
+    const bootMsg = document.getElementById('boot-msg');
+    const bootScreen = document.getElementById('boot-screen');
+
+    function bootStep_() {
+        if (bootStep >= bootMsgs.length) {
+            bootScreen.classList.add('fade');
+            setTimeout(() => { bootScreen.style.display = 'none'; }, 600);
+            initProgressBars();
+            startDosTerminal();
+            return;
+        }
+        bootMsg.textContent = bootMsgs[bootStep];
+        bootBar.style.width = ((bootStep + 1) / bootMsgs.length * 100) + '%';
+        bootStep++;
+        setTimeout(bootStep_, bootStep === 1 ? 400 : 350);
+    }
+    setTimeout(() => { bootBar.style.transition = 'width 0.3s'; bootStep_(); }, 500);
+
+    // ── CLOCK ──
+    function updateClock() {
+        const now = new Date();
+        document.getElementById('taskbar-clock').textContent =
+            now.getHours().toString().padStart(2,'0') + ':' + now.getMinutes().toString().padStart(2,'0');
+    }
+    updateClock();
+    setInterval(updateClock, 10000);
+
+    // ── START MENU ──
+    let startOpen = false;
+    function toggleStartMenu() {
+        startOpen = !startOpen;
+        document.getElementById('start-menu').classList.toggle('show', startOpen);
+        document.getElementById('start-btn').classList.toggle('active', startOpen);
+    }
+    document.addEventListener('click', e => {
+        if (!e.target.closest('#start-menu') && !e.target.closest('#start-btn')) {
+            startOpen = false;
+            document.getElementById('start-menu').classList.remove('show');
+            document.getElementById('start-btn').classList.remove('active');
+        }
+    });
+
+    // ── WINDOW MANAGEMENT ──
+    let topZ = 200;
+    function openWindow(id) {
+        const w = document.getElementById(id);
+        if (!w) return;
+        w.style.display = 'block';
+        focusWindow(id);
+        // Close start menu
+        startOpen = false;
+        document.getElementById('start-menu').classList.remove('show');
+        document.getElementById('start-btn').classList.remove('active');
+        updateTaskbar();
+    }
+    function closeWindow(id) {
+        const w = document.getElementById(id);
+        if (w) w.style.display = 'none';
+        updateTaskbar();
+    }
+    function focusWindow(id) {
+        document.querySelectorAll('.win95-window').forEach(w => w.classList.remove('focused'));
+        const w = document.getElementById(id);
+        if (w) {
+            topZ++;
+            w.style.zIndex = topZ;
+            w.classList.add('focused');
+        }
+    }
+
+    // ── TASKBAR ──
+    const winLabels = {
+        'welcome-win': '🎮 Easter Egg Found!',
+        'about-win': '👤 About Nabz',
+        'projects-win': '📁 My Projects',
+        'terminal-win': '💻 MS-DOS Prompt',
+        'contact-win': '📧 Contact',
+    };
+    function updateTaskbar() {
+        const tasks = document.getElementById('taskbar-tasks');
+        tasks.innerHTML = '';
+        document.querySelectorAll('.win95-window').forEach(w => {
+            if (w.style.display !== 'none' && w.style.display !== '') {
+                const task = document.createElement('div');
+                task.className = 'taskbar-task';
+                task.textContent = winLabels[w.id] || w.id;
+                task.onclick = () => focusWindow(w.id);
+                tasks.appendChild(task);
+            }
+        });
+    }
+
+    // ── SELECT ICON ──
+    function selectIcon(el) {
+        document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    // ── DRAG ──
+    let dragging = null, dragOX = 0, dragOY = 0;
+    function startDrag(e, id) {
+        dragging = id;
+        const w = document.getElementById(id);
+        focusWindow(id);
+        const rect = w.getBoundingClientRect();
+        dragOX = e.clientX - rect.left;
+        dragOY = e.clientY - rect.top;
+        e.preventDefault();
+    }
+    document.addEventListener('mousemove', e => {
+        if (!dragging) return;
+        const w = document.getElementById(dragging);
+        const parent = w.parentElement;
+        const pr = parent.getBoundingClientRect();
+        w.style.position = 'relative';
+        w.style.left = (e.clientX - dragOX - pr.left) + 'px';
+        w.style.top = (e.clientY - dragOY - pr.top) + 'px';
+    });
+    document.addEventListener('mouseup', () => { dragging = null; });
+
+    // ── DOS TERMINAL ──
+    const dosLines = [
+        { cmd: 'dir', out: ['Directory of C:\\nabz', '', '03/14/1995  02:05 AM    <DIR>  projects', '03/14/1995  03:14 AM    <DIR>  configs', '03/14/1995  04:20 AM       342  readme.txt', '               3 File(s)     342 bytes'] },
+        { cmd: 'type readme.txt', out: ['Nabz is an open-source dev.', 'Meme enthusiast. Arch user.', 'Email: nabzvonluitpold@gmail.com', 'Status: Probably procrastinating.'] },
+        { cmd: 'ls projects/', out: ['public-board/   ngulisim/   selachii/'] },
+        { cmd: 'echo $MOOD', out: ['gooner_mode=enabled'] },
+        { cmd: 'neofetch', out: ['nabz@arch-chan', '--------------', 'OS: Arch Linux x86_64', 'Shell: fih 🐟', 'WM: Hyprland', 'Memory: RAM in this economy...'] },
+    ];
+    let dosIdx = 0;
+    const dosCmd = document.getElementById('dos-cmd');
+    const dosCursor = document.getElementById('dos-cursor');
+    const dosLinesEl = document.getElementById('dos-lines');
+
+    function typeDosLine(line, cb) {
+        dosCmd.textContent = '';
+        dosCursor.style.display = 'inline-block';
+        let i = 0;
+        const iv = setInterval(() => {
+            dosCmd.textContent += line.cmd[i++];
+            if (i >= line.cmd.length) {
+                clearInterval(iv);
+                dosCursor.style.display = 'none';
+                setTimeout(() => {
+                    line.out.forEach(o => {
+                        const d = document.createElement('div');
+                        d.className = 'dos-out';
+                        d.textContent = o;
+                        dosLinesEl.insertBefore(d, dosLinesEl.firstChild.nextSibling || null);
+                        dosLinesEl.appendChild(d);
+                    });
+                    const prompt = document.createElement('div');
+                    prompt.innerHTML = `<span class="dos-prompt">C:\\nabz\\&gt; </span><span class="dos-cmd">${line.cmd}</span>`;
+                    dosLinesEl.appendChild(prompt);
+                    setTimeout(cb, 2000);
+                }, 400);
+            }
+        }, 70);
+    }
+
+    function startDosTerminal() {
+        function run() {
+            typeDosLine(dosLines[dosIdx % dosLines.length], () => {
+                dosIdx++;
+                run();
+            });
+        }
+        setTimeout(run, 600);
+    }
+
+    // ── PROGRESS BARS ──
+    function initProgressBars() {
+        const bars = [
+            { id: 'pb1', pct: 88 },
+            { id: 'pb2', pct: 95 },
+            { id: 'pb3', pct: 99 },
+            { id: 'pb4', pct: 12 },
+        ];
+        bars.forEach(b => {
+            const el = document.getElementById(b.id);
+            if (!el) return;
+            el.innerHTML = '';
+            const count = Math.round(b.pct / 5);
+            for (let i = 0; i < count; i++) {
+                const blk = document.createElement('div');
+                blk.className = 'progress-block';
+                blk.style.animationDelay = (i * 30) + 'ms';
+                el.querySelector('.progress-bar')?.appendChild(blk) || (() => {
+                    const bar = document.createElement('div');
+                    bar.className = 'progress-bar';
+                    bar.appendChild(blk);
+                    el.appendChild(bar);
+                })();
+            }
+        });
+    }
+
+    // ── BSOD ──
+    function triggerBSOD() {
+        document.getElementById('bsod').style.display = 'block';
+        document.addEventListener('keydown', () => {
+            document.getElementById('bsod').style.display = 'none';
+        }, { once: true });
+        document.getElementById('bsod').addEventListener('click', () => {
+            document.getElementById('bsod').style.display = 'none';
+        }, { once: true });
+    }
+
+    // ── COPY ──
+    function copyText(text) {
+        navigator.clipboard?.writeText(text).catch(() => {});
+        const t = document.getElementById('retro-toast');
+        document.getElementById('retro-toast-msg').textContent = '"' + text + '" copied!';
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2000);
+    }
+
+    // ── GO MODERN ──
+    function goModern() {
+        window.location.href = 'index.html';
+    }
+
+    // Initial taskbar update
+    setTimeout(updateTaskbar, 700);
+</script>
+</body>
+</html>
