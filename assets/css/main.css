@@ -267,7 +267,7 @@ main { grid-column: 2; padding: 2.5rem 3rem 4rem; max-width: 760px; padding-bott
   }
   main { grid-column: 1; padding: 4.5rem 1.25rem 4rem; }
   .desktop-icon { display: none; }
-  .statusbar { display: none; }
+  .ws { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {

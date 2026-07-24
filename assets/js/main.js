@@ -41,9 +41,8 @@ function setTheme(t) {
   document.getElementById('theme-toggle').textContent = t === 'dark' ? 'mocha' : 'latte';
 }
 function initTheme() {
-  const saved = localStorage.getItem('theme');
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-  setTheme(saved || (prefersDark ? 'dark' : 'light'));
+  const current = html.getAttribute('data-theme') || 'light';
+  document.getElementById('theme-toggle').textContent = current === 'dark' ? 'mocha' : 'latte';
 }
 document.getElementById('theme-toggle').addEventListener('click', () => {
   setTheme((html.getAttribute('data-theme') || 'light') === 'dark' ? 'light' : 'dark');
@@ -83,7 +82,7 @@ function toggleTree() {
   document.getElementById('sidebar').classList.toggle('open');
 }
 
-// ─── USER RAGE CLICK (tsundere) ───
+// ─── USER RAGE CLICK (tsundere, hmph...) ───
 let userClicks = 0;
 let userMaxed = false;
 const MAX_RAGE = 8;
