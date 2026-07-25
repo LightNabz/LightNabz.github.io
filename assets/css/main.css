@@ -172,7 +172,13 @@ main { grid-column: 2; padding: 2.5rem 3rem 4rem; max-width: 760px; padding-bott
 
 .neofetch-wrap { display: none; margin-top: 1rem; border: 1px solid var(--surface0); background: var(--mantle); font-size: 11.5px; }
 .neofetch-wrap.visible { display: block; }
+.neofetch-wrap.popped {
+  position: fixed; z-index: 950; margin-top: 0;
+  width: 340px; max-width: calc(100vw - 2rem);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+}
 .neo-titlebar { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border-bottom: 1px solid var(--surface0); }
+.popped .neo-titlebar { cursor: move; user-select: none; }
 .neo-dot { width: 9px; height: 9px; border-radius: 50%; cursor: pointer; }
 .neo-red { background: var(--red); } .neo-yellow { background: var(--yellow); } .neo-green { background: var(--green); }
 .neo-title { margin-left: 6px; color: var(--overlay0); font-size: 11px; }
@@ -268,6 +274,9 @@ main { grid-column: 2; padding: 2.5rem 3rem 4rem; max-width: 760px; padding-bott
   main { grid-column: 1; padding: 4.5rem 1.25rem 4rem; }
   .desktop-icon { display: none; }
   .ws { display: none; }
+
+  .neofetch-wrap.popped { position: static; width: auto; max-width: none; box-shadow: none; }
+  .popped .neo-titlebar { cursor: default; }
 }
 
 @media (prefers-reduced-motion: reduce) {

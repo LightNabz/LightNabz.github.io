@@ -158,16 +158,16 @@ function revealSecret() {
 
 // ─── NEOFETCH ───
 const ARCH_ART = `
-      .
-     / \\
-    /   \\
-   /\\    \\
-  /       \\
- /         \\
-/    .-.    \\
-   |   |   _\\
-_.'   '._   \\
-'         '-._\\`;
+         .
+        / \\
+       /   \\
+      /\\    \\
+     /       \\
+    /         \\
+   /    .-.    \\
+  /     | |   _ \\
+ /   _.'   '._   \\
+/ _.-'        '-._\\`;
 const NEO_LINES = [
   { type: 'header', text: 'nabz@arch-chan' },
   { type: 'uline', text: '--------------' },
@@ -184,7 +184,11 @@ const NEO_LINES = [
 function triggerNeofetch() {
   const wrap = document.getElementById('neofetch-wrap');
   const isOpen = wrap.classList.contains('visible');
-  if (isOpen) { wrap.classList.remove('visible'); return; }
+  if (isOpen) {
+    wrap.classList.remove('visible', 'popped');
+    wrap.style.left = ''; wrap.style.top = '';
+    return;
+  }
   document.getElementById('neo-arch').textContent = ARCH_ART;
   const right = document.getElementById('neo-right');
   right.innerHTML = '';
@@ -206,6 +210,44 @@ function triggerNeofetch() {
     setTimeout(() => div.classList.add('show'), 80 + i * 70);
   });
 }
+
+// drag drag neofetch owo
+const NEO_BREAKPOINT = 860;
+function neoIsDesktop() { return window.innerWidth > NEO_BREAKPOINT; }
+
+const neoTitlebar = document.querySelector('.neo-titlebar');
+neoTitlebar.addEventListener('dblclick', e => {
+  if (!neoIsDesktop()) return;
+  if (e.target.classList.contains('neo-dot')) return;
+  const wrap = document.getElementById('neofetch-wrap');
+  if (wrap.classList.contains('popped')) return;
+  const r = wrap.getBoundingClientRect();
+  wrap.style.left = r.left + 'px';
+  wrap.style.top = r.top + 'px';
+  wrap.classList.add('popped');
+  showToast('window popped out — drag the titlebar', 'neofetch');
+});
+
+let neoDragging = false, neoOffX = 0, neoOffY = 0;
+neoTitlebar.addEventListener('mousedown', e => {
+  const wrap = document.getElementById('neofetch-wrap');
+  if (!wrap.classList.contains('popped')) return;
+  if (e.target.classList.contains('neo-dot')) return;
+  neoDragging = true;
+  const r = wrap.getBoundingClientRect();
+  neoOffX = e.clientX - r.left;
+  neoOffY = e.clientY - r.top;
+});
+document.addEventListener('mousemove', e => {
+  if (!neoDragging) return;
+  const wrap = document.getElementById('neofetch-wrap');
+  const ww = wrap.offsetWidth, wh = wrap.offsetHeight;
+  const nx = Math.min(Math.max(8, e.clientX - neoOffX), window.innerWidth - ww - 8);
+  const ny = Math.min(Math.max(8, e.clientY - neoOffY), window.innerHeight - wh - 8);
+  wrap.style.left = nx + 'px';
+  wrap.style.top = ny + 'px';
+});
+document.addEventListener('mouseup', () => { neoDragging = false; });
 
 // ─── KONAMI CODE ───
 const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
