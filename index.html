@@ -35,17 +35,17 @@
   <!-- ═══ SIDEBAR / FILE TREE ═══ -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-user" id="sb-user" onclick="userClick()">nabz@arch-chan</div>
-    <div class="sb-path">~/<span>portfolio</span></div>
     <button class="mobile-tree-toggle" onclick="toggleTree()">tree ~/</button>
 
     <ul class="tree">
+      <div class="sb-path">~/<span>portfolio</span></div>
       <li><span class="tree-glyph">├──</span> <a href="#whoami">whoami.md</a></li>
       <li><span class="tree-glyph">├──</span> <a href="#about">about.md</a></li>
       <li><span class="tree-glyph">├──</span> <a href="#skills" class="exec">skills.sh</a></li>
       <li><span class="tree-glyph">├──</span> <a href="#projects" class="dir">projects/</a></li>
-      <li class="indent"><span class="tree-glyph">│  ├──</span> <a href="#projects">public-board.md</a></li>
+      <li class="indent"><span class="tree-glyph">│  ├──</span> <a href="#projects">isunux.md</a></li>
       <li class="indent"><span class="tree-glyph">│  ├──</span> <a href="#projects">ngulisim.md</a></li>
-      <li class="indent"><span class="tree-glyph">│  └──</span> <a href="#projects" class="exec">selachii</a></li>
+      <li class="indent"><span class="tree-glyph">│  └──</span> <a href="#projects" class="exec">selachii.md</a></li>
       <li><span class="tree-glyph">├──</span> <a href="#contact">contact.txt</a></li>
       <li class="hidden-file"><span class="tree-glyph">└──</span> <a href="#" onclick="revealSecret(); return false;">.secret</a></li>
     </ul>
@@ -114,9 +114,9 @@
       <div class="proj-tree">
         <div class="proj-row">
           <span class="proj-glyph">├──</span>
-          <span class="proj-name">public-board.md</span>
-          <span class="proj-desc">A shared corkboard-style app where anyone can drop a note. No login, no moderation queue, just vibes.</span>
-          <span class="proj-status live">● live</span>
+          <span class="proj-name" onclick="window.open('https://lightnabz.github.io/isunux', '_blank')">isunux.md</span>
+          <span class="proj-desc">a small x86-64 Unix-like kernel project intended as learning and experimentation platform.</span>
+          <span class="proj-status live">● partially complete</span>
         </div>
         <div class="proj-row">
           <span class="proj-glyph">├──</span>
@@ -126,9 +126,9 @@
         </div>
         <div class="proj-row">
           <span class="proj-glyph">└──</span>
-          <span class="proj-name">selachii*</span>
+          <span class="proj-name">selachii.md</span>
           <span class="proj-desc">Named after the shark family because I googled "cool latin words" for ten minutes. Details TBD.</span>
-          <span class="proj-status">○ cooking</span>
+          <span class="proj-status">● partially complete</span>
         </div>
       </div>
     </section>

@@ -6,30 +6,49 @@ const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').mat
 
 // ─── BOOT SEQUENCE ───
 const bootLines = [
-  '[ OK ] Mounting ~/portfolio',
-  '[ OK ] Starting compositor (hyprland)',
-  '[ OK ] Loading nabz.conf',
-  '[ OK ] Reading dotfiles',
-  '[ OK ] Spawning statusbar',
-  'nabz@arch-chan ~ %',
+  '[  OK  ] Created slice User Slice of UID 1000.',
+  '[  OK  ] Starting User Manager for UID 1000...',
+  '[  OK  ] Started User Manager for UID 1000.',
+  '[  OK  ] Reached target Main Root File System.',
+  '         Mounting ~/portfolio...',
+  '[  OK  ] Mounted ~/portfolio.',
+  '         Starting Configuration Parser...',
+  '[  OK  ] Loading nabz.conf.',
+  '[  OK  ] Reading dotfiles from ~/.config...',
+  '[  OK  ] Successfully parsed custom dotfiles.',
+  '         Starting WebGL Rendering Contexts...',
+  '[  OK  ] Started WebGL Rendering Contexts.',
+  '[  OK  ] Pre-fetching project assets and images...',
+  '[  OK  ] Initializing CSS Grid and animations...',
+  '         Starting Wayland Compositor (hyprland)...',
+  '[  OK  ] Started compositor (hyprland).',
+  '         Spawning statusbar (waybar)...',
+  '[  OK  ] Spawned statusbar.',
+  '[  OK  ] Reached target Graphical Web Interface.',
+  '[  OK  ] Reached target Multi-User Environment.',
+  '',
+  'Arch Linux 6.7.6-folk-7 (tty1)',
+  '',
+  'nabz@arch-chan:~$'
 ];
+
 function runBoot() {
   const boot = document.getElementById('boot');
   if (prefersReduced) { boot.remove(); return; }
   const container = document.getElementById('boot-lines');
   bootLines.forEach((text, i) => {
     const div = document.createElement('div');
-    div.className = 'line' + (text.startsWith('[ OK ]') ? '' : ' dim');
-    div.innerHTML = text.startsWith('[ OK ]')
-      ? `<span class="ok">[ OK ]</span>${text.slice(6)}`
+    div.className = 'line' + (text.startsWith('[  OK  ]') ? '' : ' dim');
+    div.innerHTML = text.startsWith('[  OK  ]')
+      ? `<span class="ok">[  OK  ]</span>${text.slice(8)}`
       : text;
     container.appendChild(div);
-    setTimeout(() => div.classList.add('show'), 120 + i * 160);
+    setTimeout(() => div.classList.add('show'), 50 + i * 60);
   });
   setTimeout(() => {
     boot.classList.add('hide');
     setTimeout(() => boot.remove(), 450);
-  }, 120 + bootLines.length * 160 + 350);
+  }, 120 + bootLines.length * 60 + 80);
 }
 runBoot();
 

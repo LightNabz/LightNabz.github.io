@@ -277,6 +277,8 @@ main { grid-column: 2; padding: 2.5rem 3rem 4rem; max-width: 760px; padding-bott
 
   .neofetch-wrap.popped { position: static; width: auto; max-width: none; box-shadow: none; }
   .popped .neo-titlebar { cursor: default; }
+
+  #konami-hint { display: none !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {

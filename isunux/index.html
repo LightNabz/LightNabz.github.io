@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISUNUX &mdash; a small x86_64 Unix-like kernel</title>
+<meta name="description" content="ISUNUX is a small, from-scratch x86_64 kernel: freestanding, Limine-booted, with syscalls, a VFS, process creation and an ELF loader. A learning and experimentation platform.">
+<style>
+  :root {
+    --bg:      #fbfbf8;
+    --paper:   #ffffff;
+    --ink:     #1b1b18;
+    --ink-dim: #55534c;
+    --rule:    #cfccbf;
+    --link:    #0000cc;
+    --link-visited: #551a8b;
+    --accent:  #7a2e2e;
+    --code-bg: #f1efe6;
+    --tag-bg:  #efe9d8;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Times New Roman", Times, serif;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  pre, code, kbd, tt, .mono {
+    font-family: "Courier New", ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  a { color: var(--link); }
+  a:visited { color: var(--link-visited); }
+  a:hover { color: var(--accent); }
+
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* ---------- masthead ---------- */
+
+  header.masthead {
+    border-bottom: 3px double var(--ink);
+    background: var(--paper);
+  }
+
+  .masthead-inner {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 22px 20px 14px;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 22px;
+    flex-wrap: wrap;
+  }
+
+  .ascii-logo {
+    font-size: 13px;
+    line-height: 1.15;
+    white-space: pre;
+    color: var(--ink);
+  }
+
+  .title-block h1 {
+    font-family: "Courier New", monospace;
+    font-size: 30px;
+    letter-spacing: 1px;
+    margin: 4px 0 2px;
+  }
+
+  .title-block .tagline {
+    color: var(--ink-dim);
+    font-size: 15px;
+    font-style: italic;
+    margin: 0 0 6px;
+  }
+
+  .meta-line {
+    font-family: "Courier New", monospace;
+    font-size: 12.5px;
+    color: var(--ink-dim);
+  }
+
+  .meta-line .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1px solid var(--rule);
+    padding: 1px 6px;
+    margin: 2px 4px 2px 0;
+  }
+
+  nav.toc {
+    font-family: "Courier New", monospace;
+    font-size: 13.5px;
+    padding: 10px 0 4px;
+    border-top: 1px solid var(--rule);
+    margin-top: 14px;
+  }
+
+  nav.toc a { text-decoration: none; }
+  nav.toc a:hover { text-decoration: underline; }
+
+  nav.toc .sep { color: var(--ink-dim); padding: 0 6px; }
+
+  /* ---------- main body ---------- */
+
+  main { padding: 30px 0 10px; }
+
+  h2 {
+    font-family: "Courier New", monospace;
+    font-size: 18px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 4px;
+    margin: 44px 0 14px;
+  }
+
+  section:first-of-type h2 { margin-top: 0; }
+
+  h2 .num {
+    color: var(--ink-dim);
+    font-weight: normal;
+  }
+
+  h3 {
+    font-family: "Courier New", monospace;
+    font-size: 14.5px;
+    margin: 24px 0 8px;
+  }
+
+  p { margin: 0 0 14px; }
+
+  .lede {
+    font-size: 17.5px;
+  }
+
+  ul, ol { margin: 0 0 14px; padding-left: 26px; }
+  li { margin-bottom: 5px; }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--rule);
+    margin: 30px 0;
+  }
+
+  code {
+    background: var(--code-bg);
+    padding: 1px 4px;
+    font-size: 14.5px;
+    border: 1px solid var(--rule);
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--rule);
+    padding: 12px 14px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.5;
+    margin: 0 0 16px;
+  }
+
+  pre code {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0 0 18px;
+    font-size: 14.5px;
+  }
+
+  th, td {
+    border: 1px solid var(--rule);
+    padding: 6px 9px;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--code-bg);
+    font-family: "Courier New", monospace;
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  td.mono, th.mono { font-family: "Courier New", monospace; font-size: 13px; }
+
+  .status {
+    display: inline-block;
+    font-family: "Courier New", monospace;
+    font-size: 11.5px;
+    padding: 1px 6px;
+    border: 1px solid var(--rule);
+  }
+  .status.done   { background: #e6efe0; }
+  .status.partial{ background: #f5f0d8; }
+  .status.todo   { background: #f2e3e0; }
+
+  blockquote {
+    margin: 0 0 16px;
+    padding: 8px 14px;
+    border-left: 3px solid var(--accent);
+    background: var(--code-bg);
+    color: var(--ink-dim);
+    font-size: 15.5px;
+  }
+
+  .callout {
+    border: 1px solid var(--rule);
+    background: var(--paper);
+    padding: 12px 16px;
+    margin: 0 0 18px;
+  }
+  .callout .callout-title {
+    font-family: "Courier New", monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--ink-dim);
+    margin-bottom: 6px;
+  }
+
+  .filetree {
+    font-size: 13px;
+  }
+  .filetree .c { color: var(--ink-dim); }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 30px;
+  }
+  @media (max-width: 620px) {
+    .two-col { grid-template-columns: 1fr; }
+    .ascii-logo { font-size: 11px; }
+    .title-block h1 { font-size: 24px; }
+  }
+
+  footer {
+    border-top: 3px double var(--ink);
+    margin-top: 50px;
+    padding: 18px 0 40px;
+    font-size: 13px;
+    color: var(--ink-dim);
+  }
+  footer a { color: var(--ink-dim); }
+  footer p { margin: 0 0 6px; }
+
+  ::selection { background: #f5e3b3; }
+
+  .backtotop { font-size: 12px; }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="logo-row">
+      <div class="ascii-logo">.-----------.
+| &gt; _       |
+|           |
+'-----------'</div>
+      <div class="title-block">
+        <h1>ISUNUX</h1>
+        <p class="tagline">a small, from-scratch x86_64 kernel &mdash; learning platform, not a product</p>
+        <p class="meta-line">
+          <span class="tag">arch: x86_64</span>
+          <span class="tag">boot: Limine</span>
+          <span class="tag">license: MPL-2.0</span>
+          <span class="tag">status: pre-alpha / research</span>
+        </p>
+      </div>
+    </div>
+    <nav class="toc">
+      <a href="#overview">overview</a><span class="sep">|</span><a href="#status">status</a><span class="sep">|</span><a href="#build">build</a><span class="sep">|</span><a href="#architecture">architecture</a><span class="sep">|</span><a href="#abi">userland ABI</a><span class="sep">|</span><a href="#roadmap">roadmap</a><span class="sep">|</span><a href="#contributing">contributing</a><span class="sep">|</span><a href="#license">license</a>
+    </nav>
+  </div>
+</header>
+
+<div class="wrap">
+<main>
+
+  <section id="overview">
+    <h2><span class="num">1.</span> Overview</h2>
+    <p class="lede">
+      ISUNUX is a small, from-scratch x86_64 kernel project intended as a learning
+      and experimentation platform. It is freestanding, boots via
+      <a href="https://github.com/limine-bootloader/limine">Limine</a>, runs in
+      64-bit long mode, and provides a minimal userspace runtime on top of a
+      small set of kernel services: syscalls, a simple VFS, process creation,
+      and an ELF loader.
+    </p>
+    <p>
+      The project is deliberately small and explicit. The goal is to exercise
+      the plumbing of a Unix-like kernel &mdash; the boot handoff, the memory
+      manager, the scheduler, the syscall boundary, the loader &mdash; rather
+      than to chase feature completeness. Every subsystem here is
+      hand-written and meant to be readable end to end in a sitting, not
+      configured out of a framework.
+    </p>
+    <div class="callout">
+      <div class="callout-title">what this is not</div>
+      <p style="margin:0">
+        Not a daily driver. Not POSIX-complete. Not fast. There is no disk
+        driver yet and nothing survives a reboot &mdash; the whole filesystem
+        is <code>tmpfs</code>, seeded from boot modules. Treat it as a
+        reference kernel to read, break, and extend, not as something to
+        install.
+      </p>
+    </div>
+  </section>
+
+  <section id="status">
+    <h2><span class="num">2.</span> What's actually implemented</h2>
+    <p>
+      Rather than claim features it doesn't have, here is what currently
+      boots and runs, organized the way a systems programmer would want to
+      audit it:
+    </p>
+    <table>
+      <tr><th>Subsystem</th><th>State</th><th>Notes</th></tr>
+      <tr>
+        <td>Boot / long mode</td>
+        <td><span class="status done">working</span></td>
+        <td>Hybrid BIOS+UEFI image via Limine; higher-half kernel</td>
+      </tr>
+      <tr>
+        <td>GDT / IDT / PIC / PIT / IRQ</td>
+        <td><span class="status done">working</span></td>
+        <td>Hand-rolled, see <code>kernel/gdt.c</code>, <code>idt.c</code>, <code>pic.c</code></td>
+      </tr>
+      <tr>
+        <td>Physical &amp; virtual memory (<code>pmm</code>/<code>vmm</code>)</td>
+        <td><span class="status partial">partial</span></td>
+        <td>Basic frame allocator and paging; no swap, no COW yet</td>
+      </tr>
+      <tr>
+        <td>Processes / scheduler</td>
+        <td><span class="status partial">partial</span></td>
+        <td>Cooperative round-robin, single core; <code>fork()</code> copies full address space</td>
+      </tr>
+      <tr>
+        <td>Syscalls</td>
+        <td><span class="status partial">partial</span></td>
+        <td>~18 syscalls: <code>write</code>, <code>read</code>, <code>open</code>, <code>execve</code>, <code>fork</code>, <code>waitpid</code>, <code>exit</code>, <code>readdir</code>, <code>chdir</code>, <code>getcwd</code>, and more</td>
+      </tr>
+      <tr>
+        <td>VFS + tmpfs + devfs</td>
+        <td><span class="status partial">partial</span></td>
+        <td>In-memory only; <code>/dev</code> is an ops-table swap on a tmpfs node</td>
+      </tr>
+      <tr>
+        <td>ELF loader / exec</td>
+        <td><span class="status done">working</span></td>
+        <td>Generic ELF64/x86_64 PT_LOAD loader, doesn't gate on OSABI</td>
+      </tr>
+      <tr>
+        <td>Userspace runtime (<code>mini_libc</code>)</td>
+        <td><span class="status done">working</span></td>
+        <td>Static-linked crt0 + malloc/string/printf subset</td>
+      </tr>
+      <tr>
+        <td>Coreutils</td>
+        <td><span class="status partial">partial</span></td>
+        <td><code>sh</code>, <code>ls</code>, <code>cat</code>, <code>echo</code>, <code>mkdir</code>, <code>pwd</code>, <code>touch</code>, <code>rm</code>, <code>clear</code>, <code>shafetch</code></td>
+      </tr>
+      <tr>
+        <td>Signals / job control</td>
+        <td><span class="status todo">not started</span></td>
+        <td>No <code>SIGINT</code>/<code>SIGCHLD</code> yet &mdash; can't Ctrl-C a hung process</td>
+      </tr>
+      <tr>
+        <td>Disk I/O / persistence</td>
+        <td><span class="status todo">not started</span></td>
+        <td>Everything is RAM-resident and boot-module-seeded</td>
+      </tr>
+      <tr>
+        <td>Permissions (uid/gid)</td>
+        <td><span class="status todo">not started</span></td>
+        <td>One implicit identity, no mode bits</td>
+      </tr>
+    </table>
+    <p style="font-size:14px;color:var(--ink-dim)">
+      This table is kept intentionally blunt. See <a href="#roadmap">roadmap</a>
+      for the tiered plan behind it.
+    </p>
+  </section>
+
+  <section id="build">
+    <h2><span class="num">3.</span> Build &amp; run</h2>
+    <h3>Prerequisites</h3>
+    <ul>
+      <li>Host toolchain: <code>gcc</code>, <code>ld</code>, <code>nasm</code></li>
+      <li>ISO tooling: <code>xorriso</code></li>
+      <li>Emulator: <code>qemu-system-x86_64</code></li>
+      <li><code>make</code> to orchestrate the build</li>
+    </ul>
+    <h3>Commands</h3>
+    <pre><code>make        # build kernel and embedded user programs
+make iso    # build bootable ISO (iso_root/myos.iso)
+make run    # build ISO and boot in QEMU headless (serial -> terminal)
+make gui    # build ISO and boot in QEMU with a visible window
+make clean  # remove build artifacts</code></pre>
+    <p>
+      <code>make run</code> passes <code>-serial stdio -display none</code> so
+      kernel serial output lands directly in your terminal.
+      <code>make gui</code> adds <code>-display sdl</code> but keeps serial
+      on stdio as well, which is usually the more useful combination while
+      debugging.
+    </p>
+  </section>
+
+  <section id="architecture">
+    <h2><span class="num">4.</span> Architecture</h2>
+
+    <h3>Layout</h3>
+    <pre class="filetree"><code>isunux/
+├── boot/               <span class="c"># pinned Limine bootloader binaries + config</span>
+├── kernel/
+│   ├── kernel.c         <span class="c"># boot protocol requests, early init, glue</span>
+│   ├── linker.ld         <span class="c"># higher-half link layout</span>
+│   ├── gdt.c / idt.c / pic.c / pit.c / irq.c
+│   ├── pmm.c / vmm.c     <span class="c"># physical + virtual memory</span>
+│   ├── task.c / process.c / fork.c / exec.c
+│   ├── elf.c             <span class="c"># ELF64 userland loader</span>
+│   ├── vfs.c / tmpfs.c / devfs.c / pipe.c
+│   └── syscall.c
+├── lib/
+│   ├── crt0.asm          <span class="c"># userspace entry point</span>
+│   ├── mini_libc.h        <span class="c"># syscall wrappers exposed to userland</span>
+│   ├── mini_malloc.c / mini_string.c / mini_printf.c
+│   └── user_link.ld      <span class="c"># userspace linker script (base 0x400000)</span>
+└── bin/
+    ├── sh/  ls/  cat/  echo/  mkdir/  pwd/  rm/  touch/  clear/  shafetch/
+    └── hello/           <span class="c"># each dir = one standalone ELF</span></code></pre>
+
+    <h3>How a program gets built and shipped</h3>
+    <p>
+      Every directory under <code>bin/</code> <em>is</em> a program &mdash;
+      the top-level <code>Makefile</code> auto-discovers them, so there is no
+      list to maintain. Each <code>bin/&lt;name&gt;/main.c</code> compiles
+      against the shared runtime in <code>lib/</code> and links with
+      <code>lib/user_link.ld</code> into a standalone ELF at
+      <code>bin/&lt;name&gt;/&lt;name&gt;</code>. That ELF is staged onto the
+      ISO at <code>iso_root/bin/&lt;name&gt;</code> and declared as a Limine
+      boot module &mdash; it is never <code>incbin</code>'d into the kernel
+      image itself.
+    </p>
+
+    <h3>Writing a userspace program</h3>
+    <p>Create <code>bin/&lt;name&gt;/main.c</code> implementing <code>main(argc, argv)</code>. No custom <code>_start</code> &mdash; <code>lib/crt0.asm</code> supplies the entry point and calls <code>main</code> with the standard SysV stack layout:</p>
+    <pre><code>#include "mini_libc.h"
+#include "mini_printf.h"
+
+int main(int argc, char **argv) {
+    printf("hello from %s\n", argv[0]);
+    return 0;
+}</code></pre>
+    <p>
+      Run <code>make</code> &mdash; nothing else needs editing. The binary
+      appears on the ISO and is inspectable on the host with
+      <code>readelf</code> or <code>objdump</code> before you ever boot it.
+    </p>
+  </section>
+
+  <section id="abi">
+    <h2><span class="num">5.</span> Userland ABI notes</h2>
+    <ul>
+      <li>Userspace programs load at a fixed virtual address, <code>0x400000</code> (see <code>lib/user_link.ld</code>) &mdash; no ASLR or PIE yet.</li>
+      <li><code>mini_libc.h</code> exposes syscalls as thin wrappers: <code>sys_write</code>, <code>sys_read</code>, <code>sys_open</code>, <code>sys_execve</code>, <code>sys_fork</code>, <code>sys_waitpid</code>, <code>sys_exit</code>, <code>sys_readdir</code>, <code>sys_chdir</code>, <code>sys_getcwd</code>.</li>
+      <li><code>main</code>'s return value becomes the process exit code.</li>
+      <li>All userspace binaries are statically linked against <code>mini_libc</code> &mdash; there is no shared libc, no dynamic linker.</li>
+      <li>The current syscall numbering is ISUNUX's own; it does not (yet) match the Linux x86_64 ABI. See the roadmap for why that's changing.</li>
+    </ul>
+  </section>
+
+  <section id="roadmap">
+    <h2><span class="num">6.</span> Roadmap</h2>
+    <p>
+      The plan is tiered by what breaks first, not by what's exciting to
+      build. Correctness before features, persistence before polish. This is
+      the honest, currently-maintained priority order:
+    </p>
+
+    <h3>Tier 0 &mdash; correctness foundations</h3>
+    <p>Must land before anything else is worth adding.</p>
+    <ul>
+      <li>Free address spaces and task slots on zombie reap &mdash; every <code>fork()</code>+<code>exit()</code> currently leaks memory permanently.</li>
+      <li>Remove hardcoded buffer ceilings (e.g. a fixed <code>init_elf_buf[65536]</code>) &mdash; silent failure on oversized input isn't Unix-like, it's fragile.</li>
+      <li>Copy-on-write <code>fork()</code> &mdash; without it, the standard shell <code>fork()</code>+<code>exec()</code> pattern copies full address spaces every time.</li>
+    </ul>
+
+    <h3>Tier 1 &mdash; real multitasking, not a demo</h3>
+    <ul>
+      <li>Signals &mdash; <code>SIGINT</code>, <code>SIGKILL</code>, <code>SIGTERM</code>, <code>SIGCHLD</code> at minimum. Right now nothing can Ctrl-C a hung process.</li>
+      <li>Job control (<code>&amp;</code>, foreground, Ctrl-Z) &mdash; needs signals first.</li>
+      <li>Anonymous <code>mmap()</code> &mdash; <code>malloc()</code> currently works off a fixed static arena.</li>
+      <li>Users, groups, and permission bits &mdash; everything today is one implicit identity.</li>
+    </ul>
+
+    <h3>Tier 2 &mdash; persistence and real I/O</h3>
+    <ul>
+      <li>A block device driver (AHCI/ATA) &mdash; zero disk I/O exists today.</li>
+      <li>A real on-disk filesystem (FAT first) and a real <code>mount()</code>.</li>
+      <li>Persistence across reboot &mdash; probably the single most meaningful missing piece.</li>
+      <li>A real console/tty layer with line discipline, instead of every program reimplementing backspace/Ctrl-C handling.</li>
+    </ul>
+
+    <h3>Tier 3 &mdash; shell &amp; userland maturity</h3>
+    <ul>
+      <li>Linux x86_64 syscall-number compatibility, to run unmodified static-linked Linux binaries. The ELF loader already handles generic PT_LOAD segments without gating on <code>e_ident[EI_OSABI]</code>, so this is purely a renumbering exercise while the table is still small (~18 entries).</li>
+      <li>Pipes and redirection wired into the shell (<code>|</code>, <code>&gt;</code>, <code>&lt;</code>) &mdash; <code>pipe.c</code> exists at the kernel level already.</li>
+      <li>Environment variables and a <code>PATH</code>-searching <code>execve()</code>.</li>
+      <li>More coreutils (<code>cp</code>, <code>mv</code>, <code>grep</code>, <code>ln</code>) &mdash; becomes optional once Linux binary compat lands.</li>
+    </ul>
+
+    <h3>Tier 4 &mdash; polish</h3>
+    <ul>
+      <li>Consistent <code>errno</code>-equivalent error codes instead of bare <code>-1</code>.</li>
+      <li>A real init system &mdash; <code>/bin/sh</code> is currently hardcoded and bootstrapped directly in <code>kernel.c</code>.</li>
+      <li>Shell rc-file support.</li>
+      <li>A test harness, so Tier 0&ndash;3 work doesn't silently regress.</li>
+    </ul>
+
+    <h3>Tier 5 and beyond &mdash; legitimacy, not felt gaps</h3>
+    <ul>
+      <li>ASLR + PIE userland, SMP/multicore, swap, dynamic linking, a real clock/RTC subsystem.</li>
+      <li>Self-hosting &mdash; compiling ISUNUX on ISUNUX, in the tradition of projects like ToaruOS.</li>
+      <li>Panic/debugging infrastructure &mdash; kernel backtraces instead of a silent <code>hcf()</code> halt.</li>
+      <li>A syslog / kernel log ring buffer readable from userland.</li>
+    </ul>
+
+    <blockquote>
+      Tier 0 through 2 come first &mdash; they're the fundamentals. Tier 3
+      follows, focused on userland maturity via Linux static-binary
+      compatibility. Tier 4 and beyond happen opportunistically after that.
+    </blockquote>
+  </section>
+
+  <section id="contributing">
+    <h2><span class="num">7.</span> Contributing &amp; feedback</h2>
+    <p>
+      This is a learning project, and feedback is genuinely welcome &mdash;
+      the author is learning alongside it. If you add a userspace program,
+      consider adding a small test case or example input so others can
+      exercise it without guessing at the calling convention.
+    </p>
+    <div class="callout">
+      <div class="callout-title">open question from the maintainer</div>
+      <p style="margin:0">
+        What should ISUNUX's identity be, beyond "just another hobbyist
+        Unix-like"? The initial goal &mdash; well documented, well
+        commented, easy to learn, and a clean reference for anyone poking at
+        kernel internals &mdash; is intact. Suggestions on where it should
+        differentiate from there are wanted.
+      </p>
+    </div>
+    <p>
+      Read <code>kernel/kernel.c</code> first if you want the shortest path
+      to understanding boot-to-shell. From there, <code>kernel/syscall.c</code>
+      and <code>lib/mini_libc.h</code> together define the entire kernel/user
+      boundary.
+    </p>
+  </section>
+
+  <section id="license">
+    <h2><span class="num">8.</span> License</h2>
+    <p>
+      ISUNUX is licensed under the <strong>Mozilla Public License 2.0</strong>.
+      MPL-2.0 is a file-level copyleft: modifications to MPL-licensed files
+      must stay MPL, but the license imposes no terms on separate files you
+      combine it with. See <code>LICENSE</code> in the repository root for
+      the full text.
+    </p>
+    <p style="font-size:14px;color:var(--ink-dim)">
+      Third-party components (the pinned Limine bootloader binaries under
+      <code>boot/limine/</code>) retain their own upstream licenses.
+    </p>
+  </section>
+
+</main>
+</div>
+
+<footer>
+  <div class="wrap">
+    <p>ISUNUX &mdash; a small x86_64 kernel, built to be read.</p>
+    <p>Freestanding kernel &middot; Limine boot &middot; MPL-2.0 &middot; no disk yet, no promises</p>
+    <p class="backtotop"><a href="#overview">^ back to top</a></p>
+  </div>
+</footer>
+
+</body>
+</html>
